@@ -1,66 +1,84 @@
-// script.js
 let cart = [];
 let total = 0;
 
-// Referencias a elementos del DOM
-const addToCartButton = document.getElementById("addToCart");
-const cartItems = document.getElementById("cartItems");
-const totalPrice = document.getElementById("totalPrice");
-const checkoutButton = document.getElementById("checkout");
-
-// Función para añadir un producto al carrito
-addToCartButton.addEventListener("click", () => {
-  const product = {
-    name: "Café Capuchino",
-    price: 1.60
-  };
-
+// Función para añadir producto al carrito
+function addToCart(product) {
   cart.push(product);
   total += product.price;
-
   updateCart();
-});
+  saveCartToStorage();
+  alert(`${product.name} añadido al carrito`);
+}
 
-// Función para actualizar el carrito en la interfaz
+// Actualizar visualización del carrito
 function updateCart() {
-  // Limpiar el carrito actual
-  cartItems.innerHTML = "";
+  const cartItems = document.getElementById("cartItems");
+  const totalPrice = document.getElementById("totalPrice");
+  const checkoutButton = document.getElementById("checkout");
+  const cartCounter = document.getElementById("cartCounter");
 
-  // Mostrar los productos en el carrito
+  if (cartItems) cartItems.innerHTML = "";
+  
   cart.forEach((item, index) => {
     const li = document.createElement("li");
-    li.textContent = `${item.name} - $${item.price.toFixed(2)}`;
-
-    // Crear botón de eliminar
-    const removeButton = document.createElement("button");
-    removeButton.textContent = "Eliminar";
-    removeButton.style.marginLeft = "10px";
-    removeButton.addEventListener("click", () => removeFromCart(index));
-
-    li.appendChild(removeButton);
-    cartItems.appendChild(li);
+    li.className = "cart-item";
+    li.innerHTML = `
+      <span class="item-name">${item.name}</span>
+      <span class="item-price">$${item.price.toFixed(2)}</span>
+      <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
+    `;
+    if (cartItems) cartItems.appendChild(li);
   });
 
-  // Actualizar el precio total
-  totalPrice.textContent = `Total: $${total.toFixed(2)}`;
-
-  // Habilitar o deshabilitar el botón de finalizar compra
-  checkoutButton.disabled = cart.length === 0;
+  if (totalPrice) totalPrice.textContent = `Total: $${total.toFixed(2)}`;
+  if (checkoutButton) checkoutButton.disabled = cart.length === 0;
+  if (cartCounter) cartCounter.textContent = cart.length;
 }
 
-// Función para eliminar un producto del carrito
+// Eliminar producto del carrito
 function removeFromCart(index) {
-  total -= cart[index].price; // Restar el precio del producto eliminado
-  cart.splice(index, 1); // Eliminar el producto del carrito
-  updateCart(); // Actualizar la interfaz
+  total -= cart[index].price;
+  cart.splice(index, 1);
+  updateCart();
+  saveCartToStorage();
 }
 
-// Función para finalizar la compra
-checkoutButton.addEventListener("click", () => {
+// Finalizar compra
+function checkout() {
   if (cart.length > 0) {
     alert("¡Gracias por tu compra!");
     cart = [];
     total = 0;
     updateCart();
+    localStorage.removeItem("cart");
+    localStorage.removeItem("cartTotal");
+  }
+}
+
+// Guardar en localStorage
+function saveCartToStorage() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("cartTotal", total.toString());
+}
+
+// Cargar carrito al iniciar
+function loadCartFromStorage() {
+  const savedCart = localStorage.getItem("cart");
+  const savedTotal = localStorage.getItem("cartTotal");
+  
+  if (savedCart) {
+    cart = JSON.parse(savedCart);
+    total = parseFloat(savedTotal) || 0;
+    updateCart();
+  }
+}
+
+// Inicialización
+document.addEventListener("DOMContentLoaded", () => {
+  loadCartFromStorage();
+  
+  const checkoutButton = document.getElementById("checkout");
+  if (checkoutButton) {
+    checkoutButton.addEventListener("click", checkout);
   }
 });

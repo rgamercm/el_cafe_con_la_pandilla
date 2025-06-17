@@ -33,58 +33,73 @@
         <div class="titulocard">
             <h2>Productos</h2>
             <div class="card-container">
+                <!-- Producto 1 - Café Capuchino -->
                 <div class="card">
-                    <img src="img/cafe/coffee (3).jpg" alt="Imagen 1">
+                    <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
                     <div class="card-text">
-                        <h3>Capuchino con Caritas de Gato</h3>
+                        <h3><a href="p1.php">Capuchino con Caritas de Gato</a></h3>
                         <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <p class="price">Precio: <strong>$1.60</strong></p>
                     </div>
                 </div>
+                
+                <!-- Producto 2 - Pan Artesanal -->
                 <div class="card">
-                    <img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Imagen 2">
+                    <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
                     <div class="card-text">
-                        <h3>Pan Artesanal</h3>
+                        <h3><a href="p2.php">Pan Artesanal</a></h3>
                         <p>Elaborado con técnicas tradicionales, nuestro pan artesanal ofrece un sabor único y una textura esponjosa, perfecto para acompañar cualquier comida.</p>
+                        <p class="price">Precio: <strong>$3.60</strong></p>
                     </div>
                 </div>
+                
+                <!-- Producto 3 - Café Expreso -->
                 <div class="card">
-                    <img src="img/cafe/coffee (4).jpg" alt="Imagen 3">
+                    <a href="p3.php"><img src="img/cafe/coffee (4).jpg" alt="Café Expreso"></a>
                     <div class="card-text">
-                        <h3>Café Expreso</h3>
-                        <p>Miau, miau miau miau miau. Miau miau miau miau, miau miau miau… miau, miau miau.</p>
+                        <h3><a href="p3.php">Café Expreso</a></h3>
+                        <p>Intenso y aromático, nuestro café expreso es perfecto para los amantes del buen café. Disfruta de su sabor robusto y su crema característica.</p>
+                        <p class="price">Precio: <strong>$1.80</strong></p>
                     </div>
                 </div>
+                
+                <!-- Producto 4 - Torta de Chocolate -->
                 <div class="card">
-                    <img src="img/tortas/tortas (4).jpg" alt="Imagen 4">
+                    <a href="p4.php"><img src="img/tortas/tortas (4).jpg" alt="Torta de Chocolate"></a>
                     <div class="card-text">
-                        <h3>Torta de Chocolate</h3>
-                        <p>Elaboradas con los mejores ingredientes, nuestras tortas están pensadas para regalarte dulzura y frescura. Con sabores variados, texturas suaves y una presentación irresistible, estas tortas encantarán cada momento.</p>
+                        <h3><a href="p4.php">Torta de Chocolate</a></h3>
+                        <p>Elaboradas con los mejores ingredientes, nuestras tortas están pensadas para regalarte dulzura y frescura. Con sabores variados, texturas suaves y una presentación irresistible.</p>
+                        <p class="price">Precio: <strong>$10.10</strong></p>
                     </div>
                 </div>
+                
+                <!-- Producto 5 - Pan Con Forma de Gato -->
                 <div class="card">
-                    <img src="img/panes/panes (2).jpg" alt="Imagen 5">
+                    <a href="p5.php"><img src="img/panes/panes (2).jpg" alt="Pan Con Forma de Gato"></a>
                     <div class="card-text">
-                        <h3>Pan Con Forma de Gato</h3>
-                        <p>Miau, miau miau... miau miau pan miau suave miau crujiente, miau miau miau. Miau, miau mordisquito, miau caricias miau miau.</p>
+                        <h3><a href="p5.php">Pan Con Forma de Gato</a></h3>
+                        <p>Divertido y delicioso pan con forma de gatito, perfecto para los amantes de los animales y los panes artesanales. Suave por dentro y crujiente por fuera.</p>
+                        <p class="price">Precio: <strong>$5.00</strong></p>
                     </div>
                 </div>
+                
+                <!-- Producto 6 - Helado Con Oreo -->
                 <div class="card">
-                    <img src="img/tortas/tortas (3).jpg" alt="Imagen 6">
+                    <a href="p6.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
                     <div class="card-text">
-                        <h3>Helado Con Oreo</h3>
+                        <h3><a href="p6.php">Helado Con Oreo</a></h3>
                         <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <p class="price">Precio: <strong>$4.60</strong></p>
                     </div>
                 </div>
             </div>
         </div>
-        
     </main>
 
     <footer class="footer">
         <div class="footer-content">
             <p>2024 El Café Con La Pan-dilla C.A<br>Todos los Derechos Reservados.</p>
-            <p>Contactos<br>Tlf: +58-4244258944<br>Correo: cg9477083@gmail.com 
-            </p>
+            <p>Contactos<br>Tlf: +58-4244258944<br>Correo: cg9477083@gmail.com</p>
             <div class="social-media">
                 <a href="https://www.facebook.com/profile.php?id=100089772800592" class="social-link">Facebook</a>
                 <a href="https://www.instagram.com/carlosgz9477/" class="social-link">Instagram</a>
@@ -96,6 +111,5 @@
         <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
     <script src="js/style.js"></script>
-    
 </body>
 </html>
