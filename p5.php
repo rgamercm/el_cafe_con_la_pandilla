@@ -16,13 +16,26 @@
 </head>
 <body>
     <header class="header">
-        <div class="logo">
-            <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+        <div class="header-container">
+            <div class="logo">
+                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+            </div>
+            
+            <h1 class="header-title">El Café Con La Pan-dilla</h1>
+            
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle">🌙</button>
+                
+                <!-- Icono del carrito mejorado -->
+                <a href="carrito.php" class="cart-icon">
+                    <img src="img/cart-icon.png" alt="Carrito de compras">
+                    <span id="cartCounter">0</span>
+                </a>
+            </div>
         </div>
-        <h1 class="header-title">El Café Con La Pan-dilla</h1>
-        <button class="theme-toggle" id="themeToggle">🌙</button>
+
         <nav class="nav">
-            <a href="index.php" class="nav-link"><span>Inicio</span></a>
+            <a href="index.php" class="nav-link active"><span>Inicio</span></a>
             <a href="catalogo.php" class="nav-link">Productos</a>
             <a href="nosotros.php" class="nav-link">Nosotros</a>
             <a href="registrar.php" class="nav-link">Registrarse</a>

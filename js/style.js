@@ -1,25 +1,15 @@
-const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
-document.body.setAttribute('data-theme', currentTheme);
-
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-
-themeToggle.addEventListener('click', () => {
-    const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.body.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
-});
-
+// Configuración del carrusel
 let currentIndex = 0;
 const slides = document.querySelectorAll('.carousel-slide');
 const totalSlides = slides.length;
 const intervalTime = 5000;
-let autoPlay = setInterval(nextSlide, intervalTime);
+let autoPlay;
 
 function showSlide(index) {
-    document.getElementById('carousel').style.transform = `translateX(-${index * 100}%)`;
+    const carousel = document.getElementById('carousel');
+    if (carousel) {
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+    }
 }
 
 function nextSlide() {
@@ -32,24 +22,29 @@ function prevSlide() {
     showSlide(currentIndex);
 }
 
-document.querySelector('.carousel-container').addEventListener('mouseover', () => {
-    clearInterval(autoPlay);
-});
-
-document.querySelector('.carousel-container').addEventListener('mouseout', () => {
+function startAutoPlay() {
     autoPlay = setInterval(nextSlide, intervalTime);
+}
+
+// Pausar el carrusel cuando el mouse está sobre él
+const carouselContainer = document.querySelector('.carousel-container');
+if (carouselContainer) {
+    carouselContainer.addEventListener('mouseenter', () => {
+        clearInterval(autoPlay);
+    });
+    
+    carouselContainer.addEventListener('mouseleave', startAutoPlay);
+}
+
+// Iniciar el carrusel cuando la página carga
+document.addEventListener('DOMContentLoaded', () => {
+    showSlide(currentIndex);
+    startAutoPlay();
+    
+    // Configurar los botones de navegación
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    
+    if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+    if (nextBtn) nextBtn.addEventListener('click', nextSlide);
 });
-
-const audio = document.getElementById("backgroundMusic");
-
-audio.volume = 0.03;
-
-const lastTime = localStorage.getItem("audioCurrentTime") || 0;
-audio.currentTime = lastTime;
-
-audio.play();
-
-audio.addEventListener("timeupdate", () => {
-    localStorage.setItem("audioCurrentTime", audio.currentTime);
-});
-
