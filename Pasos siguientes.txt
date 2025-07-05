@@ -1,0 +1,75 @@
+1. crear pagina de inventario LISTO
+
+2. opción de añadir o quitar productos en el inventario LISTO
+
+2. base de datos de productos en inventario, misma base de datos para productos
+
+3. productos se añadan a carrito
+
+4. base de datos de productos en carrito
+
+al dar click en finalizar compra se abre otra pagina que diga lugar de envió
+
+se llenan los datos de envio, finalizar.
+
+al dar click en finalizar compra se abre otra pagina que diga pago
+
+métodos de pago, cuenta, cedula, numero de celular.
+
+5. productos se resten de base de datos de inventario al finalizar compra en carrito.
+
+6. marcar producto disponible/ no disponible en pagina de productos, dependiendo de la 
+cantidad en el inventario.
+
+7. añadir en registrarte la opción de empresa(ceo) /cliente
+
+ceo debe tener visualizaciones que no tiene el cliente ni el usuario no registrado
+base de datos, flujo de procesos, inventario, etc...
+
+8. conectar pagina estructura BD con la base de datos actual
+
+9. crear DFD Y DFP en pagina flujos.
+
+
+estructura pagina:
+
+paginaweb:
+ css: registrar.css style.css
+ img:
+	café:
+	panes:
+	postre:
+	tortas: //imágenes de la pagina
+	cart-icon.png
+ js: carrito.js registro.js style.js
+ musica: //musica de la pagina
+ php: actualizar_estado.php, cerrar_sesion.php, checkout.php, conexion_be.php, login_usuario_be.php, obtener_producto.php, operaciones_inventario.php, verificar_disponibilidad.php, registro_usuario_be.php, verificar_sesion.php
+
+ bienvenida_despues_de_iniciarsesion.php
+ carrito.php
+ catalogo.php
+ index.php
+ inventario.php
+ nosotros.php
+ p1.php
+ p2.php
+ p3.php
+ p4.php
+ p5.php
+ p6.php
+ registrar.php
+ test_conexion.php
+
+prompt usado:
+
+primero, creame una tabla llamada "inventario" para mi base de datos en mysql, que luego estara conectada a una pagina de inventarios que crearemos a continuacion:
+
+debe contener producto, nombre, codigo, cantidad, precio, unidades existentes, fecha, mas lo que creas necesario, que sea sencillo de entender
+
+promt 2 modificacion:
+
+busca la manera de darme todos los archivos completos con las modificaciones que indicaste, para asi copiarlos y pegarlos en mi ide sin problema, no indiques que el resto de las funciones permanecen igual, dame literalmente todo el codigo, si se te complica mucho, dame archivo por archivo
+
+
+
+
