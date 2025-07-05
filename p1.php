@@ -3,10 +3,9 @@ require_once 'php/conexion_be.php';
 
 // Obtener el ID del producto basado en el nombre del archivo (p1.php -> ID 1)
 $pagina = basename($_SERVER['PHP_SELF'], '.php'); // Obtiene "p1" desde p1.php
-$id_producto = intval(str_replace('p', '', $pagina)); // Convierte "p1" a 1
 
-// Consultar el producto en inventario
-$query = "SELECT * FROM inventario WHERE id = $id_producto OR pagina = '$pagina'";
+// Consultar el producto en inventario que tenga esta página asociada
+$query = "SELECT * FROM inventario WHERE pagina = '$pagina' LIMIT 1";
 $result = mysqli_query($conexion, $query);
 
 $disponible = false;
@@ -18,11 +17,12 @@ if ($result && mysqli_num_rows($result) > 0) {
 }
 
 // Datos por defecto si no está en inventario
-$nombre = $producto ? $producto['nombre'] : "Café Capuchino";
-$precio = $producto ? $producto['precio'] : 1.60;
-$descripcion = $producto ? $producto['descripcion'] : "Delicioso café capuchino";
+$nombre = $producto ? $producto['nombre'] : "Producto no configurado";
+$precio = $producto ? $producto['precio'] : 0.00;
+$descripcion = $producto ? $producto['descripcion'] : "Este producto no ha sido configurado en el inventario. Por favor, contacte al administrador.";
 $imagen = $producto && file_exists("img/cafe/".$producto['codigo'].".jpg") ? 
-           "img/cafe/".$producto['codigo'].".jpg" : "img/cafe/coffee (3).jpg";
+           "img/cafe/".$producto['codigo'].".jpg" : "img/cafe/default.jpg";
+$id_producto = $producto ? $producto['id'] : 0;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -480,7 +480,7 @@ $imagen = $producto && file_exists("img/cafe/".$producto['codigo'].".jpg") ?
                 <div class="card">
                     <h2><?php echo htmlspecialchars($nombre); ?></h2>
                     <a href="<?php echo $pagina; ?>.php">
-                        <img src="img/cafe/coffee (3).jpg" alt="<?php echo htmlspecialchars($nombre); ?>">
+                        <img src="<?php echo $imagen; ?>" alt="<?php echo htmlspecialchars($nombre); ?>">
                     </a>
                     <div class="card-text">
                         <p><?php echo htmlspecialchars($descripcion); ?></p>
@@ -574,7 +574,7 @@ $imagen = $producto && file_exists("img/cafe/".$producto['codigo'].".jpg") ?
                                 name: "<?php echo addslashes($nombre); ?>",
                                 price: <?php echo $precio; ?>,
                                 quantity: 1,
-                                image: "img/cafe/coffee (3).jpg"
+                                image: "<?php echo $imagen; ?>"
                             };
                             
                             // Verificar si el producto ya está en el carrito
