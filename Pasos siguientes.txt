@@ -72,4 +72,6 @@ busca la manera de darme todos los archivos completos con las modificaciones que
 
 
 
+misión: acomodar rutas de index2.php y para los empleados
+acomodar los headers para clientes, quitar beneficios.
 

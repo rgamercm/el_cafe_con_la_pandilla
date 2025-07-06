@@ -1,15 +1,13 @@
 <?php
-//Esta pagina inicia una vez el usuario haya iniciado sesion.
 require_once 'php/verificar_sesion.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido - El Café Con La Pan-dilla</title>
+    <title>El Café Con La Pan-dilla</title>
     <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,44 +148,87 @@ require_once 'php/verificar_sesion.php';
             width: 80%;
         }
 
-        /* Contenido principal */
-        main {
+        /* Productos destacados */
+        .featured-products {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
+        }
+
+        .featured-products h2 {
             text-align: center;
-        }
-
-        main h1 {
-            color: var(--primary-color);
             font-size: 2rem;
-            margin-bottom: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            position: relative;
         }
 
-        main p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
+        .featured-products h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 0.5rem auto;
         }
 
-        .role-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.03);
+        }
+
+        .card-text {
+            padding: 1rem;
+        }
+
+        .card-text h3 {
+            margin: 0 0 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .card-text p {
+            margin: 0.3rem 0;
+            color: var(--text-color);
+        }
+
+        .price {
+            color: var(--primary-color);
             font-weight: bold;
-            margin-bottom: 1rem;
+            font-size: 1.1rem;
         }
 
-        .role-cliente {
-            background-color: #4CAF50;
-            color: white;
+        .view-more-container {
+            text-align: center;
+            margin: 2rem 0;
         }
 
-        .role-empleado {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .logout-btn {
+        .view-more-button {
             display: inline-block;
             background: var(--primary-color);
             color: white;
@@ -199,7 +240,7 @@ require_once 'php/verificar_sesion.php';
             border: 2px solid var(--primary-color);
         }
 
-        .logout-btn:hover {
+        .view-more-button:hover {
             background: transparent;
             color: var(--primary-color);
         }
@@ -260,6 +301,10 @@ require_once 'php/verificar_sesion.php';
                 padding: 0.3rem 0.5rem;
                 font-size: 0.8rem;
             }
+            
+            .card-container {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
         }
 
         @media (max-width: 480px) {
@@ -269,6 +314,10 @@ require_once 'php/verificar_sesion.php';
             
             .header-title {
                 font-size: 1.1rem;
+            }
+            
+            .card-container {
+                grid-template-columns: 1fr;
             }
             
             .footer-content {
@@ -315,27 +364,80 @@ require_once 'php/verificar_sesion.php';
     </header>
 
     <main>
-        <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?>!</h1>
-        <div class="role-badge role-<?php echo htmlspecialchars($_SESSION['usuario']['rol']); ?>">
-            <?php 
-                echo strtoupper(htmlspecialchars($_SESSION['usuario']['rol']));
-                if ($_SESSION['usuario']['rol'] === 'empleado') {
-                    echo ' (Acceso especial)';
-                }
-            ?>
-        </div>
-        <p>Has iniciado sesión correctamente como <?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?> (<?php echo htmlspecialchars($_SESSION['usuario']['email']); ?>)</p>
-        <a href="php/cerrar_sesion.php" class="logout-btn">Cerrar sesión</a>
+        <section class="featured-products">
+            <h2>Nuestros Productos</h2>
+            <div class="card-container">
+                <!-- Producto 1 - Café Capuchino -->
+                <div class="card">
+                    <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
+                    <div class="card-text">
+                        <h3><a href="p1.php">Capuchino con Caritas de Gato</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <p class="price">Precio: <strong>$1.60</strong></p>
+                    </div>
+                </div>
+                
+                <!-- Producto 2 - Pan Artesanal -->
+                <div class="card">
+                    <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
+                    <div class="card-text">
+                        <h3><a href="p2.php">Pan Artesanal</a></h3>
+                        <p>Elaborado con técnicas tradicionales, nuestro pan artesanal ofrece un sabor único y una textura esponjosa, perfecto para acompañar cualquier comida.</p>
+                        <p class="price">Precio: <strong>$3.60</strong></p>
+                    </div>
+                </div>
+                
+                <!-- Producto 3 - Café Expreso -->
+                <div class="card">
+                    <a href="p3.php"><img src="img/cafe/coffee (4).jpg" alt="Café Expreso"></a>
+                    <div class="card-text">
+                        <h3><a href="p3.php">Café Expreso</a></h3>
+                        <p>Intenso y aromático, nuestro café expreso es perfecto para los amantes del buen café. Disfruta de su sabor robusto y su crema característica.</p>
+                        <p class="price">Precio: <strong>$1.80</strong></p>
+                    </div>
+                </div>
+                
+                <!-- Producto 4 - Torta de Chocolate -->
+                <div class="card">
+                    <a href="p4.php"><img src="img/tortas/tortas (4).jpg" alt="Torta de Chocolate"></a>
+                    <div class="card-text">
+                        <h3><a href="p4.php">Torta de Chocolate</a></h3>
+                        <p>Elaboradas con los mejores ingredientes, nuestras tortas están pensadas para regalarte dulzura y frescura. Con sabores variados, texturas suaves y una presentación irresistible.</p>
+                        <p class="price">Precio: <strong>$10.10</strong></p>
+                    </div>
+                </div>
+                
+                <!-- Producto 5 - Pan Con Forma de Gato -->
+                <div class="card">
+                    <a href="p5.php"><img src="img/panes/panes (2).jpg" alt="Pan Con Forma de Gato"></a>
+                    <div class="card-text">
+                        <h3><a href="p5.php">Pan Con Forma de Gato</a></h3>
+                        <p>Divertido y delicioso pan con forma de gatito, perfecto para los amantes de los animales y los panes artesanales. Suave por dentro y crujiente por fuera.</p>
+                        <p class="price">Precio: <strong>$5.00</strong></p>
+                    </div>
+                </div>
+                
+                <!-- Producto 6 - Helado Con Oreo -->
+                <div class="card">
+                    <a href="p6.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    <div class="card-text">
+                        <h3><a href="p6.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <p class="price">Precio: <strong>$4.60</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="footer">
         <div class="footer-content">
             <p>2024 El Café Con La Pan-dilla C.A<br>Todos los Derechos Reservados.</p>
-            <p>Contactos<br>Tlf: +58-4244258944<br>Correo: cg9477083@gmail.com</p>
+            <p>Contactos<br>Tlf: +58-0000000000<br>Correo: cg9477083@gmail.com</p>
             <div class="social-media">
                 <a href="https://www.facebook.com/profile.php?id=100089772800592" class="social-link">Facebook</a>
                 <a href="https://www.instagram.com/carlosgz9477/" class="social-link">Instagram</a>
-                <a href="https://github.com/NoobCoderMaster69" class="social-link">Github</a>
+                <a href="https://github.com/rgamercm" class="social-link">Github</a>
             </div>
         </div>
     </footer>

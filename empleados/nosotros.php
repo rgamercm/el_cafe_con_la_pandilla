@@ -1,15 +1,10 @@
-<?php
-//Esta pagina inicia una vez el usuario haya iniciado sesion.
-require_once 'php/verificar_sesion.php';
-?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido - El Café Con La Pan-dilla</title>
+    <title>El Café Con La Pan-dilla</title>
     <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,58 +145,56 @@ require_once 'php/verificar_sesion.php';
             width: 80%;
         }
 
-        /* Contenido principal */
-        main {
+        /* Estilos para la sección "Sobre Nosotros" */
+        .titulocard {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
+        }
+
+        .titulocard h2 {
             text-align: center;
-        }
-
-        main h1 {
-            color: var(--primary-color);
             font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        main p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
-
-        .role-cliente {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .role-empleado {
-            background-color: #2196F3;
-            color: white;
-        }
-
-        .logout-btn {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 0.8rem 2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: 2px solid var(--primary-color);
-        }
-
-        .logout-btn:hover {
-            background: transparent;
             color: var(--primary-color);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .titulocard h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 0.5rem auto;
+        }
+
+        .card-all {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .noso-card {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .noso-card img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .noso-card p {
+            flex: 1;
+            line-height: 1.6;
         }
 
         /* Footer */
@@ -260,6 +253,15 @@ require_once 'php/verificar_sesion.php';
                 padding: 0.3rem 0.5rem;
                 font-size: 0.8rem;
             }
+            
+            .noso-card {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .noso-card img {
+                width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -313,19 +315,45 @@ require_once 'php/verificar_sesion.php';
             </div>
         </nav>
     </header>
-
     <main>
-        <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?>!</h1>
-        <div class="role-badge role-<?php echo htmlspecialchars($_SESSION['usuario']['rol']); ?>">
-            <?php 
-                echo strtoupper(htmlspecialchars($_SESSION['usuario']['rol']));
-                if ($_SESSION['usuario']['rol'] === 'empleado') {
-                    echo ' (Acceso especial)';
-                }
-            ?>
+        <div class="titulocard">
+            <h2>Sobre Nosotros</h2>
+            <div class="card-all">
+                <div class="noso-card">
+                    <img src="img/panes/panes.jpg" alt="panes">
+                    <p>En "El Café con La Pan-dilla", creemos que cada bocado cuenta una historia y que cada taza de café
+                        puede ser el inicio de algo especial. Nuestra misión es ofrecer productos frescos y auténticos que hagan
+                        sentir a cada visitante como en casa. Desde panes artesanales y pasteles delicadamente horneados, hasta el café
+                        perfecto para acompañarlos, trabajamos día a día para brindar una experiencia de calidad y calidez.</p>
+                </div>
+                <div class="noso-card">
+                    <p>Nuestra historia comenzó con una pasión compartida por la buena panadería y el placer de reunir a las
+                        personas en torno a una mesa. Con un equipo comprometido y una inspiración en los sabores de siempre, creamos un
+                        espacio donde la tradición se encuentra con la innovación, ofreciendo productos que mezclan recetas clásicas con
+                        un toque contemporáneo.</p>
+                    <img src="img/postre/postre (3).jpg" alt="postre">
+                </div>
+                <div class="noso-card">
+                    <img src="img/cafe/cafe (1).jpg" alt="cafe">
+                    <p>Nuestros valores están en la calidad, la frescura, y el compromiso de entregar siempre lo mejor. Nos
+                        enorgullece trabajar con ingredientes seleccionados cuidadosamente, muchos de ellos locales, para apoyar la
+                        economía de nuestra comunidad y reducir nuestro impacto ambiental.</p>
+                </div>
+                <div class="noso-card">
+                    <p>Además, somos una familia unida por el amor a lo que hacemos. Cada miembro de nuestro equipo aporta
+                        su entusiasmo y dedicación, asegurándose de que cada detalle esté a la altura de nuestros estándares. Creemos en
+                        el poder de una sonrisa, y en que el mejor ingrediente es siempre la pasión por nuestro oficio.</p>
+                    <img src="img/cafe/cafe (2).jpg" alt="cafe">
+                </div>
+                <div class="noso-card">
+                    <img src="img/postre/postre.jpg" alt="cafe">
+                    <p>Estamos comprometidos con nuestra comunidad, participando en eventos locales y colaborando con
+                        proveedores sostenibles. En El Café con La Pan-dilla, no solo ofrecemos café y pan, sino un rincón
+                        acogedor para todos. Además, hemos ampliado nuestro menú con postres especiales, incluyendo tortas y
+                        dulces Oreo, para brindar a cada cliente una experiencia dulce y memorable en cada visita.</p>
+                </div>
+            </div>
         </div>
-        <p>Has iniciado sesión correctamente como <?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?> (<?php echo htmlspecialchars($_SESSION['usuario']['email']); ?>)</p>
-        <a href="php/cerrar_sesion.php" class="logout-btn">Cerrar sesión</a>
     </main>
 
     <footer class="footer">

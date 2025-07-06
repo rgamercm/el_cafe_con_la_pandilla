@@ -1,15 +1,13 @@
 <?php
-//Esta pagina inicia una vez el usuario haya iniciado sesion.
 require_once 'php/verificar_sesion.php';
+$usuario_logeado = isset($_SESSION['usuario']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido - El Café Con La Pan-dilla</title>
+    <title>Carrito de Compras - El Café Con La Pan-dilla</title>
     <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -150,58 +148,159 @@ require_once 'php/verificar_sesion.php';
             width: 80%;
         }
 
-        /* Contenido principal */
-        main {
+        /* Estilos para el carrito */
+        .cart-page {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1rem;
+        }
+
+        .cart-container {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .cart-container h2 {
             text-align: center;
-        }
-
-        main h1 {
             color: var(--primary-color);
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        main p {
-            font-size: 1.1rem;
             margin-bottom: 1.5rem;
+            font-size: 2rem;
         }
 
-        .role-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+        .cart-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        #cartItems {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        #cartItems li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--background-color-card);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        #cartItems li:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-name {
             font-weight: bold;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .role-cliente {
-            background-color: #4CAF50;
-            color: white;
+        .cart-item-price {
+            color: var(--primary-color);
         }
 
-        .role-empleado {
-            background-color: #2196F3;
-            color: white;
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .logout-btn {
-            display: inline-block;
+        .quantity-btn {
             background: var(--primary-color);
             color: white;
-            padding: 0.8rem 2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: 2px solid var(--primary-color);
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
         }
 
-        .logout-btn:hover {
-            background: transparent;
+        .quantity-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        .remove-btn {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            background: #cc0000;
+        }
+
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #ddd;
+            margin-top: 1rem;
+        }
+
+        #totalPrice {
+            font-size: 1.2rem;
+            font-weight: bold;
             color: var(--primary-color);
+        }
+
+        #checkout {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        #checkout:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        #checkout:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .continue-shopping {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .continue-btn {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: var(--transition);
+        }
+
+        .continue-btn:hover {
+            text-decoration: underline;
         }
 
         /* Footer */
@@ -260,6 +359,18 @@ require_once 'php/verificar_sesion.php';
                 padding: 0.3rem 0.5rem;
                 font-size: 0.8rem;
             }
+            
+            #cartItems li {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .cart-summary {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
         }
 
         @media (max-width: 480px) {
@@ -269,6 +380,10 @@ require_once 'php/verificar_sesion.php';
             
             .header-title {
                 font-size: 1.1rem;
+            }
+            
+            .cart-container {
+                padding: 1rem;
             }
             
             .footer-content {
@@ -314,18 +429,25 @@ require_once 'php/verificar_sesion.php';
         </nav>
     </header>
 
-    <main>
-        <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?>!</h1>
-        <div class="role-badge role-<?php echo htmlspecialchars($_SESSION['usuario']['rol']); ?>">
-            <?php 
-                echo strtoupper(htmlspecialchars($_SESSION['usuario']['rol']));
-                if ($_SESSION['usuario']['rol'] === 'empleado') {
-                    echo ' (Acceso especial)';
-                }
-            ?>
+    <main class="cart-page">
+        <div class="cart-container">
+            <h2>Tu Carrito de Compras</h2>
+            
+            <?php if($usuario_logeado): ?>
+                <div class="cart-content">
+                    <ul id="cartItems"></ul>
+                    <div class="cart-summary">
+                        <p id="totalPrice">Total: $0.00</p>
+                        <button id="checkout">Finalizar Compra</button>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="login-required">
+                    <p>Debes iniciar sesión para acceder al carrito</p>
+                    <a href="registrar.php">Iniciar Sesión</a>
+                </div>
+            <?php endif; ?>
         </div>
-        <p>Has iniciado sesión correctamente como <?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?> (<?php echo htmlspecialchars($_SESSION['usuario']['email']); ?>)</p>
-        <a href="php/cerrar_sesion.php" class="logout-btn">Cerrar sesión</a>
     </main>
 
     <footer class="footer">
@@ -345,6 +467,43 @@ require_once 'php/verificar_sesion.php';
     </audio>
 
     <script>
+    // [Mantener scripts de tema y música iguales]
+
+    // Funcionalidad del carrito
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCartFromStorage();
+        
+        document.getElementById('checkout').addEventListener('click', function() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if (cart.length === 0) {
+                alert('El carrito está vacío');
+                return;
+            }
+
+            fetch('php/checkout.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({cart: cart})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Compra realizada con éxito');
+                    localStorage.removeItem('cart');
+                    loadCartFromStorage();
+                } else {
+                    alert('Error: ' + (data.message || 'Error al procesar la compra'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al procesar la compra');
+            });
+        });
+    });
         // Tema oscuro/claro
         const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
@@ -373,6 +532,92 @@ require_once 'php/verificar_sesion.php';
                 localStorage.setItem("audioCurrentTime", audio.currentTime);
             });
         }
+
+        // Funcionalidad del carrito
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartFromStorage();
+            
+            // Configurar botón de checkout
+            const checkoutButton = document.getElementById('checkout');
+            if (checkoutButton) {
+                checkoutButton.addEventListener('click', checkout);
+            }
+        });
+
+        function loadCartFromStorage() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartItemsList = document.getElementById('cartItems');
+            const totalPriceElement = document.getElementById('totalPrice');
+            const cartCounter = document.getElementById('cartCounter');
+            
+            cartItemsList.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '<li>Tu carrito está vacío</li>';
+                totalPriceElement.textContent = 'Total: $0.00';
+                document.getElementById('checkout').disabled = true;
+                cartCounter.textContent = '0';
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">$${item.price.toFixed(2)} c/u</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
+                    <button class="remove-btn" onclick="removeItem(${index})">Eliminar</button>
+                `;
+                
+                cartItemsList.appendChild(li);
+            });
+            
+            totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
+            document.getElementById('checkout').disabled = false;
+            cartCounter.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        function updateQuantity(index, change) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (index >= 0 && index < cart.length) {
+                cart[index].quantity += change;
+                
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCartFromStorage();
+            }
+        }
+
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (index >= 0 && index < cart.length) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCartFromStorage();
+            }
+        }
+
+        function checkout() {
+            alert('¡Compra finalizada con éxito! Gracias por tu compra.');
+            localStorage.removeItem('cart');
+            loadCartFromStorage();
+        }
+    // [Resto de funciones del carrito iguales]
     </script>
 </body>
 </html>
