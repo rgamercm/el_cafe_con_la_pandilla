@@ -1,36 +1,9 @@
-<?php
-require_once 'php/conexion_be.php';
-
-// Obtener el ID del producto basado en el nombre del archivo (p1.php -> ID 1)
-$pagina = basename($_SERVER['PHP_SELF'], '.php'); // Obtiene "p1" desde p1.php
-
-// Consultar el producto en inventario que tenga esta página asociada
-$query = "SELECT * FROM inventario WHERE pagina = '$pagina' LIMIT 1";
-$result = mysqli_query($conexion, $query);
-
-$disponible = false;
-$producto = null;
-
-if ($result && mysqli_num_rows($result) > 0) {
-    $producto = mysqli_fetch_assoc($result);
-    $disponible = ($producto['unidades_existentes'] > 0 && $producto['estado'] == 'activo');
-}
-
-// Datos por defecto si no está en inventario
-$nombre = $producto ? $producto['nombre'] : "Producto no configurado";
-$precio = $producto ? $producto['precio'] : 0.00;
-$descripcion = $producto ? $producto['descripcion'] : "Este producto no ha sido configurado en el inventario. Por favor, contacte al administrador.";
-$imagen = $producto && file_exists("img/cafe/".$producto['codigo'].".jpg") ? 
-           "img/cafe/".$producto['codigo'].".jpg" : "img/cafe/default.jpg";
-$id_producto = $producto ? $producto['id'] : 0;
-?>
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($nombre); ?> - El Café Con La Pan-dilla</title>
+    <title>Producto - El Café Con La Pan-dilla</title>
     <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -441,9 +414,9 @@ $id_producto = $producto ? $producto['id'] : 0;
         }
     </style>
 </head>
-
 <body>
     <header class="header">
+        <!-- Header original de p1.php -->
         <div class="container header-container">
             <div class="logo">
                 <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
@@ -464,218 +437,12 @@ $id_producto = $producto ? $producto['id'] : 0;
             <div class="container">
                 <a href="index.php" class="nav-link"><span>Inicio</span></a>
                 <a href="catalogo.php" class="nav-link">Productos</a>
-                <a href="inventario.php" class="nav-link active">Inventario</a>
                 <a href="nosotros.php" class="nav-link">Nosotros</a>
                 <a href="registrar.php" class="nav-link">Registrarse</a>
-                <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
-                <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
             </div>
         </nav>
     </header>
 
-    <main>
-        <div class="titulocard">
-            <h2>Compra lo mejor</h2>
-            <div class="card-container">
-                <div class="card">
-                    <h2><?php echo htmlspecialchars($nombre); ?></h2>
-                    <a href="<?php echo $pagina; ?>.php">
-                        <img src="<?php echo $imagen; ?>" alt="<?php echo htmlspecialchars($nombre); ?>">
-                    </a>
-                    <div class="card-text">
-                        <p><?php echo htmlspecialchars($descripcion); ?></p>
-                        <p>Precio: <strong>$<?php echo number_format($precio, 2); ?></strong></p>
-                        <p>Estado: <span id="estadoProducto"><?php echo $disponible ? 'Disponible' : 'Agotado'; ?></span></p>
-                        <button id="addToCart" <?php echo $disponible ? '' : 'disabled'; ?>>
-                            <?php echo $disponible ? 'Añadir al carrito' : 'Agotado'; ?>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            
-            <section class="cart">
-                <h2>Carrito de Compras</h2>
-                <ul id="cartItems"></ul>
-                <p id="totalPrice">Total: $0.00</p>
-                <button id="checkout" disabled>Finalizar Compra</button>
-            </section>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <p>2024 El Café Con La Pan-dilla C.A<br>Todos los Derechos Reservados.</p>
-            <p>Contactos<br>Tlf: +58-4244258944<br>Correo: cg9477083@gmail.com</p>
-            <div class="social-media">
-                <a href="https://www.facebook.com/profile.php?id=100089772800592" class="social-link">Facebook</a>
-                <a href="https://www.instagram.com/carlosgz9477/" class="social-link">Instagram</a>
-                <a href="https://github.com/rgamercm" class="social-link">Github</a>
-            </div>
-        </div>
-    </footer>
-
-    <audio id="backgroundMusic" loop>
-        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
-    </audio>
-
-    <script>
-        // Tema oscuro/claro
-        const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
-        document.body.setAttribute('data-theme', currentTheme);
-
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.textContent = currentTheme === 'dark' ? '🌙' : '☀️';
-
-            themeToggle.addEventListener('click', () => {
-                const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                document.body.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeToggle.textContent = newTheme === 'dark' ? '🌙' : '☀️';
-            });
-        }
-
-        // Música de fondo
-        const audio = document.getElementById("backgroundMusic");
-        if (audio) {
-            audio.volume = 0.03;
-            const lastTime = localStorage.getItem("audioCurrentTime") || 0;
-            audio.currentTime = lastTime;
-            audio.play();
-            audio.addEventListener("timeupdate", () => {
-                localStorage.setItem("audioCurrentTime", audio.currentTime);
-            });
-        }
-
-        // Funcionalidad del carrito
-        document.addEventListener('DOMContentLoaded', function() {
-            const addToCartBtn = document.getElementById('addToCart');
-            const cartItemsList = document.getElementById('cartItems');
-            const totalPriceElement = document.getElementById('totalPrice');
-            const checkoutBtn = document.getElementById('checkout');
-            const cartCounter = document.getElementById('cartCounter');
-            const estadoProducto = document.getElementById('estadoProducto');
-            
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
-            // Actualizar el carrito al cargar la página
-            updateCartDisplay();
-            
-            // Añadir producto al carrito
-            addToCartBtn.addEventListener('click', function() {
-                // Verificar disponibilidad antes de añadir
-                fetch(`php/verificar_disponibilidad.php?id=<?php echo $id_producto; ?>`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.disponible) {
-                            const product = {
-                                id: <?php echo $id_producto; ?>,
-                                name: "<?php echo addslashes($nombre); ?>",
-                                price: <?php echo $precio; ?>,
-                                quantity: 1,
-                                image: "<?php echo $imagen; ?>"
-                            };
-                            
-                            // Verificar si el producto ya está en el carrito
-                            const existingItem = cart.find(item => item.id === product.id);
-                            
-                            if (existingItem) {
-                                existingItem.quantity += 1;
-                            } else {
-                                cart.push(product);
-                            }
-                            
-                            localStorage.setItem('cart', JSON.stringify(cart));
-                            updateCartDisplay();
-                            
-                            // Actualizar estado en la página
-                            fetch(`php/actualizar_estado.php?id=<?php echo $id_producto; ?>`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (!data.disponible) {
-                                        estadoProducto.textContent = 'Agotado';
-                                        addToCartBtn.textContent = 'Agotado';
-                                        addToCartBtn.disabled = true;
-                                    }
-                                });
-                        } else {
-                            alert('Lo sentimos, este producto ya no está disponible');
-                            estadoProducto.textContent = 'Agotado';
-                            addToCartBtn.textContent = 'Agotado';
-                            addToCartBtn.disabled = true;
-                        }
-                    });
-            });
-            
-            // Finalizar compra
-            checkoutBtn.addEventListener('click', function() {
-                alert('¡Compra finalizada con éxito! Gracias por tu compra.');
-                cart = [];
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartDisplay();
-            });
-            
-            // Actualizar visualización del carrito
-            function updateCartDisplay() {
-                cartItemsList.innerHTML = '';
-                
-                if (cart.length === 0) {
-                    cartItemsList.innerHTML = '<li>Tu carrito está vacío</li>';
-                    totalPriceElement.textContent = 'Total: $0.00';
-                    checkoutBtn.disabled = true;
-                    cartCounter.textContent = '0';
-                    return;
-                }
-                
-                let total = 0;
-                
-                cart.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    const itemTotal = item.price * item.quantity;
-                    total += itemTotal;
-                    
-                    li.innerHTML = `
-                        <span>${item.name}</span>
-                        <div class="cart-item-controls">
-                            <button class="remove-one" data-index="${index}">-</button>
-                            <span class="item-quantity">x${item.quantity}</span>
-                            <button class="remove-all" data-index="${index}">×</button>
-                            <span>$${itemTotal.toFixed(2)}</span>
-                        </div>
-                    `;
-                    
-                    cartItemsList.appendChild(li);
-                });
-                
-                // Agregar event listeners a los botones de eliminar
-                document.querySelectorAll('.remove-one').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = parseInt(this.getAttribute('data-index'));
-                        if (cart[index].quantity > 1) {
-                            cart[index].quantity -= 1;
-                        } else {
-                            cart.splice(index, 1);
-                        }
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        updateCartDisplay();
-                    });
-                });
-                
-                document.querySelectorAll('.remove-all').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const index = parseInt(this.getAttribute('data-index'));
-                        cart.splice(index, 1);
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        updateCartDisplay();
-                    });
-                });
-                
-                totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
-                checkoutBtn.disabled = false;
-                cartCounter.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-            }
-        });
-    </script>
+    <?php include 'php/contenido_producto.php'; ?>
 </body>
 </html>

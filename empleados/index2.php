@@ -778,7 +778,7 @@ verificarAutenticacion('empleado');
 
         <nav class="nav">
             <div class="container">
-                <a href="index.php" class="nav-link"><span>Inicio</span></a>
+                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
                 <a href="catalogo.php" class="nav-link">Productos</a>
                 <a href="inventario.php" class="nav-link active">Inventario</a>
                 <a href="nosotros.php" class="nav-link">Nosotros</a>
@@ -951,7 +951,7 @@ verificarAutenticacion('empleado');
                 <div class="footer-column">
                     <h3>Enlaces rápidos</h3>
                     <ul class="footer-links">
-                        <li><a href="index.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                        <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
                         <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
                         <li><a href="nosotros.php"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
                         <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>

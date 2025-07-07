@@ -507,7 +507,7 @@ if(isset($_SESSION['usuario'])){
         </div>
 
         <nav class="nav">
-            <a href="index.php" class="nav-link active"><span>Inicio</span></a>
+            <a href="index2.php" class="nav-link active"><span>Inicio</span></a>
             <a href="catalogo.php" class="nav-link">Productos</a>
             <a href="nosotros.php" class="nav-link">Nosotros</a>
             <a href="registrar.php" class="nav-link">Registrarse</a>
@@ -523,7 +523,7 @@ if(isset($_SESSION['usuario'])){
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <!-- Dentro del formulario de registro -->
-            <form action="php/registro_usuario_be.php" method="POST">
+            <form action="../php/registro_usuario_be.php" method="POST">
                 <h1>Crear Cuenta</h1>
                 <input type="text" placeholder="Nombre" name="nombre" required>
                 <input type="text" placeholder="Apellido" name="apellido" required>
@@ -542,7 +542,7 @@ if(isset($_SESSION['usuario'])){
             </form>
         </div>
         <div class="form-container sign-in-container">
-            <form action="php/login_usuario_be.php" method="POST">
+            <form action="../php/login_usuario_be.php" method="POST">
                 <h1>Iniciar Sesión</h1>
                 <div class="social-container">
                     <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>

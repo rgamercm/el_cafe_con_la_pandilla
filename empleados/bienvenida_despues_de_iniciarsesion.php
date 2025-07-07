@@ -1,6 +1,6 @@
 <?php
 //Esta pagina inicia una vez el usuario haya iniciado sesion.
-require_once './verificar_sesion.php';
+require_once '../php/verificar_sesion.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -303,7 +303,7 @@ require_once './verificar_sesion.php';
 
         <nav class="nav">
             <div class="container">
-                <a href="index.php" class="nav-link"><span>Inicio</span></a>
+                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
                 <a href="catalogo.php" class="nav-link">Productos</a>
                 <a href="inventario.php" class="nav-link active">Inventario</a>
                 <a href="nosotros.php" class="nav-link">Nosotros</a>
@@ -325,7 +325,7 @@ require_once './verificar_sesion.php';
             ?>
         </div>
         <p>Has iniciado sesión correctamente como <?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?> (<?php echo htmlspecialchars($_SESSION['usuario']['email']); ?>)</p>
-        <a href="./cerrar_sesion.php" class="logout-btn">Cerrar sesión</a>
+        <a href="../php/cerrar_sesion.php" class="logout-btn">Cerrar sesión</a>
     </main>
 
     <footer class="footer">

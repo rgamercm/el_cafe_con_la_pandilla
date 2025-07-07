@@ -77,8 +77,12 @@ $query = "INSERT INTO usuarios(nombre, apellido, usuario, correo, contrasena, fe
           VALUES ('$nombre', '$apellido', '$usuario', '$correo', '$contrasena_hash', '$fecha_reg', '$rol')";
 
 if (mysqli_query($conexion, $query)) {
+    // Obtener el ID del usuario recién insertado
+    $id = mysqli_insert_id($conexion);
+    
     // Iniciar sesión automáticamente después del registro
     $_SESSION['usuario'] = array(
+        'id' => $id,
         'nombre' => $nombre,
         'apellido' => $apellido,
         'usuario' => $usuario,
@@ -86,12 +90,11 @@ if (mysqli_query($conexion, $query)) {
         'rol' => $rol
     );
     
-    // Redirigir según el rol - AQUÍ ESTABA EL ERROR PRINCIPAL
-    // Usamos rutas absolutas desde la raíz del sitio
+    // Redirigir según el rol
     if ($rol === 'empleado') {
-        header("Location: /paginaweb/empleados/index2.php");
+        header("Location: ../empleados/bienvenida_despues_de_iniciarsesion.php");
     } else {
-        header("Location: /paginaweb/empleados/index2.php");
+        header("Location: ../bienvenida_despues_de_iniciarsesion.php");
     }
     exit();
 } else {

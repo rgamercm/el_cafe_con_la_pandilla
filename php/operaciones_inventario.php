@@ -51,6 +51,12 @@ function agregarProducto($conexion) {
     $unidades_minimas = intval($_POST['unidades_minimas'] ?? 10);
     $estado = mysqli_real_escape_string($conexion, trim($_POST['estado'] ?? 'activo'));
 
+    // Validar formato de página
+    if (!preg_match('/^p\d+$/', $pagina)) {
+        echo json_encode(['success' => false, 'message' => 'El formato de página debe ser p1, p2, etc.']);
+        exit();
+    }
+
     $fecha_ingreso = date('Y-m-d');
     if (!empty($_POST['fecha_ingreso']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['fecha_ingreso'])) {
         $fecha_ingreso = $_POST['fecha_ingreso'];
@@ -113,6 +119,12 @@ function editarProducto($conexion) {
     $unidades_existentes = intval($_POST['unidades_existentes'] ?? $cantidad);
     $unidades_minimas = intval($_POST['unidades_minimas'] ?? 10);
     $estado = mysqli_real_escape_string($conexion, trim($_POST['estado'] ?? 'activo'));
+
+    // Validar formato de página
+    if (!preg_match('/^p\d+$/', $pagina)) {
+        echo json_encode(['success' => false, 'message' => 'El formato de página debe ser p1, p2, etc.']);
+        exit();
+    }
 
     if ($precio <= 0) {
         echo json_encode(['success' => false, 'message' => 'El precio debe ser mayor a cero']);

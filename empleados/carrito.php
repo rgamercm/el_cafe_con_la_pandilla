@@ -1,5 +1,5 @@
 <?php
-require_once 'php/verificar_sesion.php';
+require_once '../php/verificar_sesion.php';
 $usuario_logeado = isset($_SESSION['usuario']);
 ?>
 <!DOCTYPE html>
@@ -418,7 +418,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
 
         <nav class="nav">
             <div class="container">
-                <a href="index.php" class="nav-link"><span>Inicio</span></a>
+                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
                 <a href="catalogo.php" class="nav-link">Productos</a>
                 <a href="inventario.php" class="nav-link active">Inventario</a>
                 <a href="nosotros.php" class="nav-link">Nosotros</a>
@@ -481,7 +481,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 return;
             }
 
-            fetch('php/checkout.php', {
+            fetch('../php/checkout.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

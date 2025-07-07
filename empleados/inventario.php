@@ -1,10 +1,10 @@
 <?php
-require_once 'php/verificar_sesion.php';
+require_once '../php/verificar_sesion.php';
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['usuario'])) {
     // Si no hay sesión activa, redirigir al login
-    header("Location: login_usuario_be.php");
+    header("Location:../php/login_usuario_be.php");
     exit();
 }
 ?>
@@ -519,7 +519,7 @@ if (!isset($_SESSION['usuario'])) {
 
         <nav class="nav">
             <div class="container">
-                <a href="index.php" class="nav-link"><span>Inicio</span></a>
+                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
                 <a href="catalogo.php" class="nav-link">Productos</a>
                 <a href="inventario.php" class="nav-link active">Inventario</a>
                 <a href="nosotros.php" class="nav-link">Nosotros</a>
@@ -581,7 +581,7 @@ if (!isset($_SESSION['usuario'])) {
                     </thead>
                     <tbody>
                         <?php
-                        include 'php/conexion_be.php';
+                        include '../php/conexion_be.php';
                         
                         $query = "SELECT * FROM inventario ORDER BY categoria, nombre";
                         $result = mysqli_query($conexion, $query);
@@ -647,7 +647,7 @@ if (!isset($_SESSION['usuario'])) {
                 <div class="footer-column">
                     <h3>Enlaces rápidos</h3>
                     <ul class="footer-links">
-                        <li><a href="index.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                        <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
                         <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
                         <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
                         <li><a href="nosotros.php"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
@@ -840,7 +840,7 @@ if (!isset($_SESSION['usuario'])) {
                 const formData = new FormData();
                 formData.append('action', 'agregar_ejemplos');
                 
-                fetch('php/operaciones_inventario.php', {
+                fetch('../php/operaciones_inventario.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -911,7 +911,7 @@ if (!isset($_SESSION['usuario'])) {
                 formData.append('id', productId);
             }
             
-            fetch('php/operaciones_inventario.php', {
+            fetch('../php/operaciones_inventario.php', {
                 method: 'POST',
                 body: formData
             })
@@ -942,7 +942,7 @@ if (!isset($_SESSION['usuario'])) {
                 const formData = new FormData();
                 formData.append('action', 'quitar_todos');
                 
-                fetch('php/operaciones_inventario.php', {
+                fetch('../php/operaciones_inventario.php', {
                     method: 'POST',
                     body: formData
                 })
@@ -979,7 +979,7 @@ if (!isset($_SESSION['usuario'])) {
                     formData.append('action', 'quitar');
                     formData.append('id', productId);
                     
-                    fetch('php/operaciones_inventario.php', {
+                    fetch('../php/operaciones_inventario.php', {
                         method: 'POST',
                         body: formData
                     })
@@ -1016,7 +1016,7 @@ if (!isset($_SESSION['usuario'])) {
             btn.addEventListener('click', function() {
                 const productId = this.getAttribute('data-id');
                 
-                fetch(`php/obtener_producto.php?id=${productId}`)
+                fetch(`../php/obtener_producto.php?id=${productId}`)
                 .then(response => {
                     if (!response.ok) {
                         return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });

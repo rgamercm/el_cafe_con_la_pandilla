@@ -501,6 +501,7 @@ if (!isset($_SESSION['usuario'])) {
 
 <body>
     <header class="header">
+        <!-- Header original de p1.php -->
         <div class="container header-container">
             <div class="logo">
                 <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
@@ -521,11 +522,8 @@ if (!isset($_SESSION['usuario'])) {
             <div class="container">
                 <a href="index.php" class="nav-link"><span>Inicio</span></a>
                 <a href="catalogo.php" class="nav-link">Productos</a>
-                <a href="inventario.php" class="nav-link active">Inventario</a>
                 <a href="nosotros.php" class="nav-link">Nosotros</a>
                 <a href="registrar.php" class="nav-link">Registrarse</a>
-                <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
-                <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
             </div>
         </nav>
     </header>
