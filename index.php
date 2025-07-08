@@ -17,14 +17,14 @@
             --secondary-color: #5a3921;
             --bg-color: #f8f5f2;
             --text-color: #333;
-            --header-bg: #ffffff;
+            --header-bg: #000000;
+            --header-text: #ffffff;
             --card-bg: #fff;
             --transition: all 0.3s ease;
             --background-color--registrar: #e0ecfa;
             --background-color-card: #ffffff;
             --background-color-carusel: #c7c7c7a9;
             --background-color: #f8f5f2;
-            --header-text-color: black;
             --hover-color: #747474;
             --dropdown-background: #f9f9f9;
             --dropdown-hover: #ddd;
@@ -36,7 +36,7 @@
         [data-theme="dark"] {
             --bg-color: #1a1a1a;
             --text-color: #f0f0f0;
-            --header-bg: #2a2a2a;
+            --header-bg: #000000;
             --card-bg: #333;
             --background-color--registrar: #878c91;
             --background-color-card: #2e2c27;
@@ -131,7 +131,7 @@
             margin: 20px auto;
         }
 
-        /* Header */
+        /* Header Rediseñado */
         .header {
             background-color: var(--header-bg);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -169,20 +169,70 @@
             transform: scale(1.05);
         }
 
-        .header-title {
-            font-size: 24px;
-            margin: 0;
-            color: var(--primary-color);
-            font-family: "Playfair Display", serif;
-            font-weight: 700;
-        }
-
+        /* Controles del header */
         .header-controls {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-menu.active {
+            transform: translateX(0);
+        }
+
+        .nav-link {
+            padding: 8px 0;
+            font-size: 16px;
+            position: relative;
+            text-decoration: none;
+            color: var(--header-text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        /* Carrito y tema */
         .theme-toggle {
             background: transparent;
             border: none;
@@ -190,7 +240,7 @@
             cursor: pointer;
             padding: 8px;
             transition: transform 0.3s ease;
-            color: var(--text-color);
+            color: var(--header-text);
         }
 
         .theme-toggle:hover {
@@ -200,7 +250,7 @@
 
         .cart-icon {
             position: relative;
-            color: var(--text-color);
+            color: var(--header-text);
             font-size: 20px;
             transition: all 0.3s ease;
         }
@@ -225,78 +275,42 @@
             font-weight: bold;
         }
 
-        /* Navegación */
-        .nav {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            padding: 15px 0;
-            background-color: rgba(212, 167, 106, 0.1);
-        }
-
-        .nav-link {
-            padding: 8px 0;
-            font-size: 16px;
-            position: relative;
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-color);
-        }
-
-        /* Hero Section */
+        /* Hero Section - Carrusel Mejorado */
         .hero {
             height: 80vh;
             min-height: 600px;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/panes/1167653.jpg') no-repeat center center/cover;
-            display: flex;
-            align-items: center;
-            color: white;
-            text-align: center;
             position: relative;
+            overflow: hidden;
+            width: 100%;
         }
 
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-buttons {
+        .hero-slides-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             display: flex;
-            gap: 20px;
-            justify-content: center;
+            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .hero-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transform: translateX(0);
+            transition: transform 0.5s ease-out;
+        }
+
+        .hero-slide::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
         }
 
         /* About Section */
@@ -691,13 +705,34 @@
         }
 
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 15px;
+            /* Menú hamburguesa para móviles */
+            .menu-toggle {
+                display: block;
             }
             
-            .nav {
-                flex-wrap: wrap;
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--header-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                padding: 20px;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .header-container {
                 gap: 15px;
             }
             
@@ -707,13 +742,9 @@
                 min-height: auto;
             }
             
-            .hero-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .btn {
-                width: 100%;
+            .hero-content {
+                padding-top: 80px;
+                padding-bottom: 80px;
             }
             
             .newsletter-form {
@@ -750,6 +781,14 @@
             .social-media {
                 justify-content: center;
             }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -759,7 +798,6 @@
         <div class="container header-container">
             <div class="logo">
                 <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title">El Café Con La Pan-dilla</h1>
             </div>
             
             <div class="header-controls">
@@ -769,28 +807,25 @@
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index.php" class="nav-link"><span>Inicio</span></a>
+                    <a href="catalogo.php" class="nav-link">Productos</a>
+                    <a href="nosotros.php" class="nav-link">Nosotros</a>
+                    <a href="registrar.php" class="nav-link">Registrarse</a>
+                </nav>
             </div>
         </div>
-
-        <nav class="nav">
-            <div class="container">
-                <a href="index.php" class="nav-link"><span>Inicio</span></a>
-                <a href="catalogo.php" class="nav-link">Productos</a>
-                <a href="nosotros.php" class="nav-link">Nosotros</a>
-                <a href="registrar.php" class="nav-link">Registrarse</a>
-            </div>
-        </nav>
     </header>
     <main>
-        <!-- Hero Section -->
+        <!-- Hero Section con Carrusel Mejorado -->
         <section class="hero">
-            <div class="hero-content">
-                <h1>Descubre el auténtico sabor artesanal</h1>
-                <p>Pan recién horneado y café de especialidad para empezar tu día con energía</p>
-                <div class="hero-buttons">
-                    <a href="catalogo.php" class="btn">Ver Productos</a>
-                    <a href="nosotros.php" class="btn btn-outline">Conócenos</a>
-                </div>
+            <div class="hero-slides-container" id="heroSlidesContainer">
+                <!-- Las imágenes se cargarán automáticamente desde JavaScript -->
             </div>
         </section>
 
@@ -1068,6 +1103,119 @@
             const randomCount = Math.floor(Math.random() * 5) + 1;
             cartCounter.textContent = randomCount;
         }
+
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Cerrar menú al hacer clic en un enlace (para móviles)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
+
+        // Carrusel Hero Section Mejorado con efecto de deslizamiento continuo
+        const heroSlidesContainer = document.getElementById('heroSlidesContainer');
+        
+        // Configuración del carrusel - AQUÍ DEBES AGREGAR TUS IMÁGENES Y AJUSTAR LA VELOCIDAD
+        const carouselSettings = {
+            images: [
+                'img/carrusel/1.jpg',
+                'img/carrusel/2.jpg',
+                'img/carrusel/3.jpg',
+                // Añade más rutas de imágenes aquí según necesites
+                // Ejemplo: 'img/carrusel/4.jpg', 'img/carrusel/5.jpg'
+            ],
+            transitionSpeed: 1000, // Velocidad de transición en milisegundos (1 segundo)
+            slideDuration: 5000    // Duración de cada slide en milisegundos (5 segundos)
+        };
+        
+        // Crear slides dinámicamente
+        function createSlides() {
+            heroSlidesContainer.innerHTML = '';
+            
+            // Duplicamos las imágenes para crear un efecto de bucle infinito
+            const allImages = [...carouselSettings.images, ...carouselSettings.images];
+            
+            allImages.forEach((image, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'hero-slide';
+                slide.style.backgroundImage = `url('${image}')`;
+                heroSlidesContainer.appendChild(slide);
+            });
+            
+            // Iniciar el carrusel
+            startCarousel();
+        }
+        
+        // Iniciar el carrusel con efecto de deslizamiento continuo
+        function startCarousel() {
+            const slides = document.querySelectorAll('.hero-slide');
+            let currentIndex = 0;
+            const totalSlides = carouselSettings.images.length;
+            let isAnimating = false;
+            
+            // Posicionamos el carrusel al inicio
+            heroSlidesContainer.style.transform = 'translateX(0)';
+            
+            // Función para cambiar de slide
+            function goToNextSlide() {
+                if (isAnimating) return;
+                
+                isAnimating = true;
+                currentIndex++;
+                
+                // Aplicamos la transición
+                heroSlidesContainer.style.transition = `transform ${carouselSettings.transitionSpeed}ms cubic-bezier(0.645, 0.045, 0.355, 1)`;
+                heroSlidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // Cuando llegamos al final (que es el inicio duplicado), reiniciamos sin animación
+                if (currentIndex >= totalSlides) {
+                    setTimeout(() => {
+                        heroSlidesContainer.style.transition = 'none';
+                        heroSlidesContainer.style.transform = 'translateX(0)';
+                        currentIndex = 0;
+                        isAnimating = false;
+                    }, carouselSettings.transitionSpeed);
+                } else {
+                    setTimeout(() => {
+                        isAnimating = false;
+                    }, carouselSettings.transitionSpeed);
+                }
+            }
+            
+            // Configurar intervalo para cambio automático
+            let carouselInterval = setInterval(goToNextSlide, carouselSettings.slideDuration);
+            
+            // Pausar al hacer hover
+            heroSlidesContainer.addEventListener('mouseenter', () => {
+                clearInterval(carouselInterval);
+            });
+            
+            // Reanudar al salir del hover
+            heroSlidesContainer.addEventListener('mouseleave', () => {
+                carouselInterval = setInterval(goToNextSlide, carouselSettings.slideDuration);
+            });
+            
+            // Manejar el evento de cambio de tamaño de ventana
+            window.addEventListener('resize', () => {
+                heroSlidesContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+            });
+        }
+        
+        // Inicializar el carrusel cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', createSlides);
     </script>
 </body>
 </html>
