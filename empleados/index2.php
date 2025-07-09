@@ -1,5 +1,5 @@
 <?php
-require_once '../php/verificar_sesion.php';
+include '../php/verificar_sesion.php';
 verificarAutenticacion('empleado');
 ?>
 <!DOCTYPE html>
@@ -8,8 +8,8 @@ verificarAutenticacion('empleado');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Café Con La Pan-dilla</title>
-    <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
+    <title>Panel Empleados - El Café Con La Pan-dilla</title>
+    <link rel="shortcut icon" href="../img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -21,14 +21,14 @@ verificarAutenticacion('empleado');
             --secondary-color: #5a3921;
             --bg-color: #f8f5f2;
             --text-color: #333;
-            --header-bg: #ffffff;
+            --header-bg: #000000;
+            --header-text: #ffffff;
             --card-bg: #fff;
             --transition: all 0.3s ease;
             --background-color--registrar: #e0ecfa;
             --background-color-card: #ffffff;
             --background-color-carusel: #c7c7c7a9;
             --background-color: #f8f5f2;
-            --header-text-color: black;
             --hover-color: #747474;
             --dropdown-background: #f9f9f9;
             --dropdown-hover: #ddd;
@@ -40,7 +40,7 @@ verificarAutenticacion('empleado');
         [data-theme="dark"] {
             --bg-color: #1a1a1a;
             --text-color: #f0f0f0;
-            --header-bg: #2a2a2a;
+            --header-bg: #000000;
             --card-bg: #333;
             --background-color--registrar: #878c91;
             --background-color-card: #2e2c27;
@@ -135,7 +135,7 @@ verificarAutenticacion('empleado');
             margin: 20px auto;
         }
 
-        /* Header */
+        /* Header Rediseñado */
         .header {
             background-color: var(--header-bg);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -181,12 +181,70 @@ verificarAutenticacion('empleado');
             font-weight: 700;
         }
 
+        /* Controles del header */
         .header-controls {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-menu.active {
+            transform: translateX(0);
+        }
+
+        .nav-link {
+            padding: 8px 0;
+            font-size: 16px;
+            position: relative;
+            text-decoration: none;
+            color: var(--header-text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        /* Carrito y tema */
         .theme-toggle {
             background: transparent;
             border: none;
@@ -194,7 +252,7 @@ verificarAutenticacion('empleado');
             cursor: pointer;
             padding: 8px;
             transition: transform 0.3s ease;
-            color: var(--text-color);
+            color: var(--header-text);
         }
 
         .theme-toggle:hover {
@@ -204,7 +262,7 @@ verificarAutenticacion('empleado');
 
         .cart-icon {
             position: relative;
-            color: var(--text-color);
+            color: var(--header-text);
             font-size: 20px;
             transition: all 0.3s ease;
         }
@@ -229,329 +287,41 @@ verificarAutenticacion('empleado');
             font-weight: bold;
         }
 
-        /* Navegación */
-        .nav {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            padding: 15px 0;
-            background-color: rgba(212, 167, 106, 0.1);
-        }
-
-        .nav-link {
-            padding: 8px 0;
-            font-size: 16px;
-            position: relative;
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-color);
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 80vh;
-            min-height: 600px;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('img/panes/1167653.jpg') no-repeat center center/cover;
-            display: flex;
-            align-items: center;
-            color: white;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 20px;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        /* About Section */
-        .about-section {
+        /* Panel de Empleados */
+        .dashboard {
             padding: var(--section-padding);
-            background-color: var(--background-color-card);
         }
 
-        .about-container {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .about-image {
-            flex: 1;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--box-shadow);
-        }
-
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .about-image:hover img {
-            transform: scale(1.05);
-        }
-
-        .about-content {
-            flex: 1;
-        }
-
-        .about-content h2 {
-            font-size: 36px;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-        }
-
-        .about-content p {
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-
-        /* Productos destacados */
-        .featured-products {
-            padding: var(--section-padding);
-            background-color: var(--bg-color);
-        }
-
-        .card-container {
+        .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
+            margin-top: 40px;
         }
 
-        .card {
+        .dashboard-card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            overflow: hidden;
+            padding: 30px;
             box-shadow: var(--box-shadow);
             transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .card-image {
-            height: 250px;
-            overflow: hidden;
-        }
-
-        .card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .card:hover img {
-            transform: scale(1.1);
-        }
-
-        .card-text {
-            padding: 25px;
-        }
-
-        .card-text h3 {
-            margin: 0 0 15px;
-            font-size: 22px;
-            color: var(--primary-color);
-        }
-
-        .card-text p {
-            margin: 10px 0;
-            color: var(--text-color);
-        }
-
-        .price {
-            color: var(--primary-color);
-            font-weight: bold;
-            font-size: 20px;
-            margin: 15px 0;
-            display: block;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--primary-color);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 30px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            z-index: 1;
-        }
-
-        .view-more-container {
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        /* Testimonials */
-        .testimonials {
-            padding: var(--section-padding);
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('img/cafe/cafe-background.jpg') no-repeat center center/cover;
-            color: white;
             text-align: center;
         }
 
-        .testimonials .section-title h2,
-        .testimonials .section-title p {
-            color: white;
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .testimonials .section-title::after {
-            background: white;
-        }
-
-        .testimonial-container {
-            display: flex;
-            gap: 30px;
-            overflow-x: auto;
-            padding: 20px 0;
-            scroll-snap-type: x mandatory;
-        }
-
-        .testimonial-card {
-            min-width: 300px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            scroll-snap-align: start;
-            transition: all 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .testimonial-text {
-            font-style: italic;
+        .dashboard-card i {
+            font-size: 50px;
+            color: var(--primary-color);
             margin-bottom: 20px;
         }
 
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            justify-content: center;
-        }
-
-        .author-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-        }
-
-        .author-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .author-info h4 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .author-info p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            opacity: 0.8;
-        }
-
-        /* Newsletter */
-        .newsletter {
-            padding: var(--section-padding);
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-        }
-
-        .newsletter h2 {
-            margin-bottom: 20px;
-        }
-
-        .newsletter p {
-            max-width: 600px;
-            margin: 0 auto 30px;
-        }
-
-        .newsletter-form {
-            display: flex;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .newsletter-input {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 30px 0 0 30px;
-            font-size: 16px;
-        }
-
-        .newsletter-btn {
-            padding: 15px 30px;
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            border-radius: 0 30px 30px 0;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .newsletter-btn:hover {
-            background: #3a2515;
+        .dashboard-card h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
         }
 
         /* Footer */
@@ -681,64 +451,51 @@ verificarAutenticacion('empleado');
 
         /* Media Queries */
         @media (max-width: 992px) {
-            .about-container {
-                flex-direction: column;
-            }
-            
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero p {
-                font-size: 18px;
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 768px) {
+            /* Menú hamburguesa para móviles */
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--header-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                padding: 20px;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
             .header-container {
-                flex-direction: column;
                 gap: 15px;
             }
             
-            .nav {
-                flex-wrap: wrap;
-                gap: 15px;
-            }
-            
-            .hero {
-                height: auto;
-                padding: 100px 0;
-                min-height: auto;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-            
-            .newsletter-form {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .newsletter-input,
-            .newsletter-btn {
-                border-radius: 30px;
-                width: 100%;
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 576px) {
             .section-title h2 {
                 font-size: 28px;
-            }
-            
-            .card-container {
-                grid-template-columns: 1fr;
             }
             
             .footer-content {
@@ -762,178 +519,81 @@ verificarAutenticacion('empleado');
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title">El Café Con La Pan-dilla</h1>
+                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <h1 class="header-title"></h1>
             </div>
             
             <div class="header-controls">
                 <button class="theme-toggle" id="themeToggle">🌙</button>
                 
-                <a href="carrito.php" class="cart-icon">
+                <a href="../carrito.php" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index2.php" class="nav-link"><span>Inicio</span></a>
+                    <a href="catalogo.php" class="nav-link">Productos</a>
+                    <a href="nosotros.php" class="nav-link">Nosotros</a>
+                    <a href="registrar.php" class="nav-link">Registrarse</a>
+                    <a href="inventario.php" class="nav-link">Inventario</a>
+                    <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
+                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
+                    <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                </nav>
             </div>
         </div>
-
-        <nav class="nav">
-            <div class="container">
-                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
-                <a href="catalogo.php" class="nav-link">Productos</a>
-                <a href="inventario.php" class="nav-link active">Inventario</a>
-                <a href="nosotros.php" class="nav-link">Nosotros</a>
-                <a href="registrar.php" class="nav-link">Registrarse</a>
-                <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
-                <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
-            </div>
-        </nav>
     </header>
-    <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Descubre el auténtico sabor artesanal</h1>
-                <p>Pan recién horneado y café de especialidad para empezar tu día con energía</p>
-                <div class="hero-buttons">
-                    <a href="catalogo.php" class="btn">Ver Productos</a>
-                    <a href="nosotros.php" class="btn btn-outline">Conócenos</a>
-                </div>
-            </div>
-        </section>
 
-        <!-- About Section -->
-        <section class="about-section">
-            <div class="container">
-                <div class="about-container">
-                    <div class="about-image">
-                        <img src="img/cafe/cafe-shop.jpg" alt="Nuestra cafetería">
-                    </div>
-                    <div class="about-content">
-                        <h2>Nuestra Historia</h2>
-                        <p>Desde 2010, "El Café Con La Pan-dilla" ha sido un refugio para los amantes del buen café y el pan artesanal. Lo que comenzó como un pequeño local familiar se ha convertido en un referente de calidad y tradición en nuestra comunidad.</p>
-                        <p>Nuestros maestros panaderos trabajan durante la noche para que puedas disfrutar de pan recién horneado cada mañana, mientras que nuestros baristas seleccionan los mejores granos de café para ofrecerte una experiencia única.</p>
-                        <a href="nosotros.php" class="btn">Más sobre nosotros</a>
-                    </div>
-                </div>
+    <main class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Panel de Empleados</h2>
+                <p>Bienvenido al sistema de gestión interno</p>
             </div>
-        </section>
-
-        <!-- Productos destacados -->
-        <section class="featured-products">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Nuestros Productos Destacados</h2>
-                    <p>Descubre nuestras creaciones más populares, elaboradas con ingredientes de la más alta calidad y mucho amor.</p>
-                </div>
-                <div class="card-container">
-                    <div class="card">
-                        <div class="card-badge">Más vendido</div>
-                        <div class="card-image">
-                            <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p1.php">Café Capuchino</a></h3>
-                            <p>Delicioso café con espuma cremosa y aroma irresistible, perfecto para empezar el día.</p>
-                            <span class="price">$1.60</span>
-                            <a href="p1.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-badge">Recomendado</div>
-                        <div class="card-image">
-                            <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p2.php">Pan Artesanal</a></h3>
-                            <p>Pan recién horneado con ingredientes naturales, masa madre y larga fermentación.</p>
-                            <span class="price">$3.60</span>
-                            <a href="p2.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-badge">Novedad</div>
-                        <div class="card-image">
-                            <a href="p3.php"><img src="img/tortas/tortas (3).jpg" alt="Helado con Oreo"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p3.php">Helado con Oreo</a></h3>
-                            <p>Delicioso helado artesanal con trozos de galleta Oreo, ideal para días calurosos.</p>
-                            <span class="price">$4.60</span>
-                            <a href="p3.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="view-more-container">
-                    <a href="catalogo.php" class="btn">Ver Todos los Productos</a>
-                </div>
+            
+            <div class="dashboard-grid">
+                <a href="inventario.php" class="dashboard-card">
+                    <i class="fas fa-boxes"></i>
+                    <h3>Inventario</h3>
+                    <p>Gestiona los productos y existencias</p>
+                </a>
+                
+                <a href="registro_empleado.php" class="dashboard-card">
+                    <i class="fas fa-user-plus"></i>
+                    <h3>Generar Acceso</h3>
+                    <p>Registra nuevos empleados</p>
+                </a>
+                
+                <a href="usuarios_registrados.php" class="dashboard-card">
+                    <i class="fas fa-users"></i>
+                    <h3>Usuarios Registrados</h3>
+                    <p>Administra los usuarios del sistema</p>
+                </a>
+                
+                <a href="../diagrama_procesos.php" class="dashboard-card">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>Flujo de Productos</h3>
+                    <p>Visualiza el proceso de producción</p>
+                </a>
+                
+                <a href="../diagrama_bd.php" class="dashboard-card">
+                    <i class="fas fa-database"></i>
+                    <h3>Estructura BD</h3>
+                    <p>Consulta el diseño de la base de datos</p>
+                </a>
+                
+                <a href="../carrito.php" class="dashboard-card">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>Pedidos</h3>
+                    <p>Gestiona los pedidos de clientes</p>
+                </a>
             </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section class="testimonials">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Lo que dicen nuestros clientes</h2>
-                    <p>La satisfacción de nuestros clientes es nuestra mejor recompensa</p>
-                </div>
-                <div class="testimonial-container">
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">
-                            "El mejor café de la ciudad, sin duda. Cada vez que paso por aquí me llevo un pan recién hecho y un capuchino. ¡Insuperable!"
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-image">
-                                <img src="img/testimonials/person1.jpg" alt="María González">
-                            </div>
-                            <div class="author-info">
-                                <h4>María González</h4>
-                                <p>Cliente frecuente</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">
-                            "El ambiente es acogedor y el personal muy amable. Sus croissants son adictivos, los mejores que he probado fuera de Francia."
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-image">
-                                <img src="img/testimonials/person2.jpg" alt="Carlos Rodríguez">
-                            </div>
-                            <div class="author-info">
-                                <h4>Carlos Rodríguez</h4>
-                                <p>Food Blogger</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-card">
-                        <div class="testimonial-text">
-                            "Siempre que tengo una reunión de trabajo, la programo aquí. El café es excelente y el wifi funciona perfectamente. ¡Muy recomendado!"
-                        </div>
-                        <div class="testimonial-author">
-                            <div class="author-image">
-                                <img src="img/testimonials/person3.jpg" alt="Laura Méndez">
-                            </div>
-                            <div class="author-info">
-                                <h4>Laura Méndez</h4>
-                                <p>Empresaria</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Newsletter Section -->
-        <section class="newsletter">
-            <div class="container">
-                <h2>Suscríbete a nuestro newsletter</h2>
-                <p>Recibe nuestras promociones, novedades y consejos directamente en tu correo electrónico.</p>
-                <form class="newsletter-form">
-                    <input type="email" class="newsletter-input" placeholder="Tu correo electrónico" required>
-                    <button type="submit" class="newsletter-btn">Suscribirse</button>
-                </form>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="footer">
@@ -952,9 +612,9 @@ verificarAutenticacion('empleado');
                     <h3>Enlaces rápidos</h3>
                     <ul class="footer-links">
                         <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
-                        <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
-                        <li><a href="nosotros.php"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
-                        <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>
+                        <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
+                        <li><a href="registro_empleado.php"><i class="fas fa-chevron-right"></i> Generar Acceso</a></li>
+                        <li><a href="../diagrama_procesos.php"><i class="fas fa-chevron-right"></i> Flujo Productos</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -978,7 +638,7 @@ verificarAutenticacion('empleado');
     </div>
     
     <audio id="backgroundMusic" loop>
-        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
+        <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -1026,36 +686,6 @@ verificarAutenticacion('empleado');
             });
         });
 
-        // Testimonials carousel
-        const testimonialContainer = document.querySelector('.testimonial-container');
-        if (testimonialContainer) {
-            let isDown = false;
-            let startX;
-            let scrollLeft;
-
-            testimonialContainer.addEventListener('mousedown', (e) => {
-                isDown = true;
-                startX = e.pageX - testimonialContainer.offsetLeft;
-                scrollLeft = testimonialContainer.scrollLeft;
-            });
-
-            testimonialContainer.addEventListener('mouseleave', () => {
-                isDown = false;
-            });
-
-            testimonialContainer.addEventListener('mouseup', () => {
-                isDown = false;
-            });
-
-            testimonialContainer.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
-                e.preventDefault();
-                const x = e.pageX - testimonialContainer.offsetLeft;
-                const walk = (x - startX) * 2;
-                testimonialContainer.scrollLeft = scrollLeft - walk;
-            });
-        }
-
         // Música de fondo
         const audio = document.getElementById("backgroundMusic");
         if (audio) {
@@ -1075,6 +705,27 @@ verificarAutenticacion('empleado');
             const randomCount = Math.floor(Math.random() * 5) + 1;
             cartCounter.textContent = randomCount;
         }
+
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Cerrar menú al hacer clic en un enlace (para móviles)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
     </script>
 </body>
 </html>

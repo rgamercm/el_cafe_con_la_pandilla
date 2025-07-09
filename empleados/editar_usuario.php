@@ -1,5 +1,4 @@
 <?php
-session_start();
 include '../php/verificar_sesion.php';
 verificarAutenticacion('empleado');
 include '../php/conexion_be.php';
