@@ -526,7 +526,7 @@ verificarAutenticacion('empleado');
             <div class="header-controls">
                 <button class="theme-toggle" id="themeToggle">🌙</button>
                 
-                <a href="../carrito.php" class="cart-icon">
+                <a href="carrito.php" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
@@ -587,7 +587,7 @@ verificarAutenticacion('empleado');
                     <p>Consulta el diseño de la base de datos</p>
                 </a>
                 
-                <a href="../carrito.php" class="dashboard-card">
+                <a href="carrito.php" class="dashboard-card">
                     <i class="fas fa-shopping-cart"></i>
                     <h3>Pedidos</h3>
                     <p>Gestiona los pedidos de clientes</p>

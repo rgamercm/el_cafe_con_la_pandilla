@@ -15,25 +15,26 @@ if (!isset($_SESSION['usuario'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario - El Café Con La Pan-dilla</title>
-    <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
+    <link rel="shortcut icon" href="../img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Variables y estilos base */
         :root {
             --primary-color: #D4A76A;
             --secondary-color: #5a3921;
             --bg-color: #f8f5f2;
             --text-color: #333;
-            --header-bg: #ffffff;
+            --header-bg: #000000;
+            --header-text: #ffffff;
             --card-bg: #fff;
             --transition: all 0.3s ease;
             --background-color--registrar: #e0ecfa;
             --background-color-card: #ffffff;
             --background-color-carusel: #c7c7c7a9;
             --background-color: #f8f5f2;
-            --header-text-color: black;
             --hover-color: #747474;
             --dropdown-background: #f9f9f9;
             --dropdown-hover: #ddd;
@@ -45,7 +46,7 @@ if (!isset($_SESSION['usuario'])) {
         [data-theme="dark"] {
             --bg-color: #1a1a1a;
             --text-color: #f0f0f0;
-            --header-bg: #2a2a2a;
+            --header-bg: #000000;
             --card-bg: #333;
             --background-color--registrar: #878c91;
             --background-color-card: #2e2c27;
@@ -58,6 +59,7 @@ if (!isset($_SESSION['usuario'])) {
             --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
+        /* Estilos generales */
         body {
             font-family: "Montserrat", sans-serif;
             margin: 0;
@@ -79,6 +81,67 @@ if (!isset($_SESSION['usuario'])) {
             padding: 0 20px;
         }
 
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 20px auto;
+        }
+
+        /* Header Rediseñado */
         .header {
             background-color: var(--header-bg);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -124,33 +187,38 @@ if (!isset($_SESSION['usuario'])) {
             font-weight: 700;
         }
 
+        /* Controles del header */
         .header-controls {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
-        .theme-toggle {
-            background: transparent;
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            background: none;
             border: none;
-            font-size: 20px;
+            color: var(--header-text);
+            font-size: 24px;
             cursor: pointer;
+            transition: all 0.3s ease;
             padding: 8px;
-            transition: transform 0.3s ease;
-            color: var(--text-color);
+            z-index: 1001;
         }
 
-        .theme-toggle:hover {
-            transform: scale(1.1);
+        .menu-toggle:hover {
             color: var(--primary-color);
         }
 
-        .nav {
+        .nav-menu {
             display: flex;
-            justify-content: center;
-            gap: 30px;
-            padding: 15px 0;
-            background-color: rgba(212, 167, 106, 0.1);
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-menu.active {
+            transform: translateX(0);
         }
 
         .nav-link {
@@ -158,7 +226,7 @@ if (!isset($_SESSION['usuario'])) {
             font-size: 16px;
             position: relative;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--header-text);
             font-weight: 500;
             transition: all 0.3s ease;
         }
@@ -182,30 +250,53 @@ if (!isset($_SESSION['usuario'])) {
             color: var(--primary-color);
         }
 
+        /* Carrito y tema */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+            transition: transform 0.3s ease;
+            color: var(--header-text);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            color: var(--primary-color);
+        }
+
+        .cart-icon {
+            position: relative;
+            color: var(--header-text);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Inventario */
         .inventory-section {
             padding: var(--section-padding);
             background-color: var(--background-color-card);
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-        }
-
-        .section-title h2 {
-            font-size: 36px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 3px;
-            background: var(--primary-color);
-            margin: 20px auto;
         }
 
         .inventory-table {
@@ -246,39 +337,14 @@ if (!isset($_SESSION['usuario'])) {
             margin-bottom: 30px;
         }
 
-        .btn {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
-        }
-
-        .btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary-color);
+        .user-welcome {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
             color: var(--primary-color);
         }
 
-        .btn-outline:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
+        /* Footer */
         .footer {
             background: var(--header-bg);
             padding: 80px 0 30px;
@@ -372,6 +438,38 @@ if (!isset($_SESSION['usuario'])) {
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -442,6 +540,7 @@ if (!isset($_SESSION['usuario'])) {
             color: #ff6b6b;
         }
 
+        /* Media Queries */
         @media (max-width: 992px) {
             .inventory-table {
                 display: block;
@@ -450,13 +549,34 @@ if (!isset($_SESSION['usuario'])) {
         }
 
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                gap: 15px;
+            /* Menú hamburguesa para móviles */
+            .menu-toggle {
+                display: block;
             }
             
-            .nav {
-                flex-wrap: wrap;
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--header-bg);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                padding: 20px;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .header-container {
                 gap: 15px;
             }
             
@@ -503,8 +623,8 @@ if (!isset($_SESSION['usuario'])) {
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title">El Café Con La Pan-dilla</h1>
+                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <h1 class="header-title"></h1>
             </div>
             
             <div class="header-controls">
@@ -514,122 +634,123 @@ if (!isset($_SESSION['usuario'])) {
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index2.php" class="nav-link"><span>Inicio</span></a>
+                    <a href="catalogo.php" class="nav-link">Productos</a>
+                    <a href="nosotros.php" class="nav-link">Nosotros</a>
+                    <a href="registrar.php" class="nav-link">Registrarse</a>
+                    <a href="inventario.php" class="nav-link">Inventario</a>
+                    <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
+                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
+                    <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                </nav>
             </div>
         </div>
-
-        <nav class="nav">
-            <div class="container">
-                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
-                <a href="catalogo.php" class="nav-link">Productos</a>
-                <a href="inventario.php" class="nav-link active">Inventario</a>
-                <a href="nosotros.php" class="nav-link">Nosotros</a>
-                <a href="registrar.php" class="nav-link">Registrarse</a>
-                <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
-                <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
-            </div>
-        </nav>
     </header>
 
-    <main>
-        <section class="inventory-section">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Gestión de Inventario</h2>
-                    <p>Administra los productos disponibles en tu cafetería</p>
-                </div>
-                
-                <div class="user-welcome">
-                    <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']) . ' ' . htmlspecialchars($_SESSION['usuario']['apellido']); ?></p>
-                </div>
-                
-                <div class="inventory-actions">
-                    <button class="btn" id="addProductBtn">
-                        <i class="fas fa-plus"></i> Agregar Producto
-                    </button>
-
-                    <button class="btn btn-outline" id="addSampleBtn">
-                        <i class="fas fa-vial"></i> Agregar Ejemplos
-                    </button>
-
-                    <button class="btn btn-outline" id="removeAllBtn">
-                        <i class="fas fa-minus"></i> Quitar Todos
-                    </button>
-
-                    <div>
-                        <button class="btn btn-outline" id="exportBtn">
-                            <i class="fas fa-file-export"></i> Exportar
-                        </button>
-                        <button class="btn btn-outline" id="printBtn">
-                            <i class="fas fa-print"></i> Imprimir
-                        </button>
-                    </div>
-                </div>
-                
-                <table class="inventory-table">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Nombre</th>
-                            <th>Descripción</th>
-                            <th>Categoría</th>
-                            <th>Precio</th>
-                            <th>Existencias</th>
-                            <th>Mínimo</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        include '../php/conexion_be.php';
-                        
-                        $query = "SELECT * FROM inventario ORDER BY categoria, nombre";
-                        $result = mysqli_query($conexion, $query);
-                        
-                        if(mysqli_num_rows($result) > 0) {
-                            while($row = mysqli_fetch_assoc($result)) {
-                                $lowStockClass = ($row['unidades_existentes'] < $row['unidades_minimas']) ? 'low-stock' : '';
-                                $statusClass = '';
-                                
-                                if($row['estado'] == 'inactivo') {
-                                    $statusClass = 'text-muted';
-                                } elseif($row['estado'] == 'agotado') {
-                                    $statusClass = 'text-danger';
-                                }
-                                
-                                echo "<tr>
-                                    <td>{$row['codigo']}</td>
-                                    <td>{$row['nombre']}</td>
-                                    <td>{$row['descripcion']}</td>
-                                    <td>{$row['categoria']}</td>
-                                    <td>\${$row['precio']}</td>
-                                    <td class='{$lowStockClass}'>{$row['unidades_existentes']}";
-                                
-                                if($row['unidades_existentes'] < $row['unidades_minimas']) {
-                                    echo " <i class='fas fa-exclamation-triangle'></i>";
-                                }
-                                
-                                echo "</td>
-                                    <td>{$row['unidades_minimas']}</td>
-                                    <td class='{$statusClass}'>{$row['estado']}</td>
-                                    <td>
-                                        <button class='btn btn-outline btn-sm edit-btn' data-id='{$row['id']}'>
-                                            <i class='fas fa-edit'></i>
-                                        </button>
-                                        <button class='btn btn-outline btn-sm delete-btn' data-id='{$row['id']}'>
-                                            <i class='fas fa-trash'></i>
-                                        </button>              
-                                    </td>
-                                </tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='9' style='text-align: center;'>No hay productos en el inventario</td></tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
+    <main class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Gestión de Inventario</h2>
+                <p>Administra los productos disponibles en tu cafetería</p>
             </div>
-        </section>
+            
+            <div class="user-welcome">
+                <p>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']) . ' ' . htmlspecialchars($_SESSION['usuario']['apellido']); ?></p>
+            </div>
+            
+            <div class="inventory-actions">
+                <button class="btn" id="addProductBtn">
+                    <i class="fas fa-plus"></i> Agregar Producto
+                </button>
+
+                <button class="btn btn-outline" id="addSampleBtn">
+                    <i class="fas fa-vial"></i> Agregar Ejemplos
+                </button>
+
+                <button class="btn btn-outline" id="removeAllBtn">
+                    <i class="fas fa-minus"></i> Quitar Todos
+                </button>
+
+                <div>
+                    <button class="btn btn-outline" id="exportBtn">
+                        <i class="fas fa-file-export"></i> Exportar
+                    </button>
+                    <button class="btn btn-outline" id="printBtn">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+            
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Existencias</th>
+                        <th>Mínimo</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    include '../php/conexion_be.php';
+                    
+                    $query = "SELECT * FROM inventario ORDER BY categoria, nombre";
+                    $result = mysqli_query($conexion, $query);
+                    
+                    if(mysqli_num_rows($result) > 0) {
+                        while($row = mysqli_fetch_assoc($result)) {
+                            $lowStockClass = ($row['unidades_existentes'] < $row['unidades_minimas']) ? 'low-stock' : '';
+                            $statusClass = '';
+                            
+                            if($row['estado'] == 'inactivo') {
+                                $statusClass = 'text-muted';
+                            } elseif($row['estado'] == 'agotado') {
+                                $statusClass = 'text-danger';
+                            }
+                            
+                            echo "<tr>
+                                <td>{$row['codigo']}</td>
+                                <td>{$row['nombre']}</td>
+                                <td>{$row['descripcion']}</td>
+                                <td>{$row['categoria']}</td>
+                                <td>\${$row['precio']}</td>
+                                <td class='{$lowStockClass}'>{$row['unidades_existentes']}";
+                            
+                            if($row['unidades_existentes'] < $row['unidades_minimas']) {
+                                echo " <i class='fas fa-exclamation-triangle'></i>";
+                            }
+                            
+                            echo "</td>
+                                <td>{$row['unidades_minimas']}</td>
+                                <td class='{$statusClass}'>{$row['estado']}</td>
+                                <td>
+                                    <button class='btn btn-outline btn-sm edit-btn' data-id='{$row['id']}'>
+                                        <i class='fas fa-edit'></i>
+                                    </button>
+                                    <button class='btn btn-outline btn-sm delete-btn' data-id='{$row['id']}'>
+                                        <i class='fas fa-trash'></i>
+                                    </button>              
+                                </td>
+                            </tr>";
+                        }
+                    } else {
+                        echo "<tr><td colspan='9' style='text-align: center;'>No hay productos en el inventario</td></tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </main>
 
     <footer class="footer">
@@ -668,6 +789,10 @@ if (!isset($_SESSION['usuario'])) {
             </div>
         </div>
     </footer>
+    
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
     
     <!-- Modal para agregar/editar productos -->
     <div id="productModal" class="modal">
@@ -770,7 +895,7 @@ if (!isset($_SESSION['usuario'])) {
     </div>
     
     <audio id="backgroundMusic" loop>
-        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
+        <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
 
     <script>
@@ -791,6 +916,33 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
+        // Header scroll effect
+        const header = document.querySelector('.header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Back to top button
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopButton.classList.add('active');
+            } else {
+                backToTopButton.classList.remove('active');
+            }
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
         // Música de fondo
         const audio = document.getElementById("backgroundMusic");
         if (audio) {
@@ -803,12 +955,34 @@ if (!isset($_SESSION['usuario'])) {
             });
         }
 
-        // Contador del carrito
+        // Contador del carrito (simulado)
         const cartCounter = document.getElementById('cartCounter');
         if (cartCounter) {
+            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
             const randomCount = Math.floor(Math.random() * 5) + 1;
             cartCounter.textContent = randomCount;
         }
+
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Cerrar menú al hacer clic en un enlace (para móviles)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
 
         // Modal para agregar/editar productos
         const modal = document.getElementById("productModal");

@@ -4,6 +4,7 @@ verificarAutenticacion('empleado');
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,14 +21,14 @@ verificarAutenticacion('empleado');
             --secondary-color: #5a3921;
             --bg-color: #f8f5f2;
             --text-color: #333;
-            --header-bg: #ffffff;
+            --header-bg: #000000;
+            --header-text: #ffffff;
             --card-bg: #fff;
             --transition: all 0.3s ease;
             --background-color--registrar: #e0ecfa;
             --background-color-card: #ffffff;
             --background-color-carusel: #c7c7c7a9;
             --background-color: #f8f5f2;
-            --header-text-color: black;
             --hover-color: #747474;
             --dropdown-background: #f9f9f9;
             --dropdown-hover: #ddd;
@@ -39,7 +40,7 @@ verificarAutenticacion('empleado');
         [data-theme="dark"] {
             --bg-color: #1a1a1a;
             --text-color: #f0f0f0;
-            --header-bg: #2a2a2a;
+            --header-bg: #000000;
             --card-bg: #333;
             --background-color--registrar: #878c91;
             --background-color-card: #2e2c27;
@@ -69,12 +70,9 @@ verificarAutenticacion('empleado');
         }
 
         .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 40px;
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         .btn {
@@ -91,7 +89,6 @@ verificarAutenticacion('empleado');
             text-transform: uppercase;
             font-size: 14px;
             letter-spacing: 1px;
-            margin: 10px 5px;
         }
 
         .btn:hover {
@@ -100,7 +97,45 @@ verificarAutenticacion('empleado');
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Header */
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 20px auto;
+        }
+
+        /* Header Rediseñado */
         .header {
             background-color: var(--header-bg);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -120,9 +155,6 @@ verificarAutenticacion('empleado');
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
 
         .logo {
@@ -149,12 +181,70 @@ verificarAutenticacion('empleado');
             font-weight: 700;
         }
 
+        /* Controles del header */
         .header-controls {
             display: flex;
             align-items: center;
             gap: 20px;
         }
 
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--header-text);
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+            z-index: 1001;
+        }
+
+        .menu-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-menu.active {
+            transform: translateX(0);
+        }
+
+        .nav-link {
+            padding: 8px 0;
+            font-size: 16px;
+            position: relative;
+            text-decoration: none;
+            color: var(--header-text);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color);
+        }
+
+        /* Carrito y tema */
         .theme-toggle {
             background: transparent;
             border: none;
@@ -162,7 +252,7 @@ verificarAutenticacion('empleado');
             cursor: pointer;
             padding: 8px;
             transition: transform 0.3s ease;
-            color: var(--text-color);
+            color: var(--header-text);
         }
 
         .theme-toggle:hover {
@@ -172,7 +262,7 @@ verificarAutenticacion('empleado');
 
         .cart-icon {
             position: relative;
-            color: var(--text-color);
+            color: var(--header-text);
             font-size: 20px;
             transition: all 0.3s ease;
         }
@@ -197,45 +287,16 @@ verificarAutenticacion('empleado');
             font-weight: bold;
         }
 
-        /* Navegación */
-        .nav {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            padding: 15px 0;
-            background-color: rgba(212, 167, 106, 0.1);
-        }
-
-        .nav-link {
-            padding: 8px 0;
-            font-size: 16px;
-            position: relative;
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover::after, .nav-link.active::after {
-            width: 100%;
-        }
-
-        .nav-link:hover, .nav-link.active {
-            color: var(--primary-color);
-        }
-
         /* Formulario */
+        .form-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
         .form-group {
             margin-bottom: 20px;
         }
@@ -288,28 +349,26 @@ verificarAutenticacion('empleado');
             justify-content: space-between;
             margin-top: 30px;
             flex-wrap: wrap;
+            gap: 15px;
         }
 
         /* Footer */
         .footer {
             background: var(--header-bg);
-            padding: 40px 0 20px;
+            padding: 80px 0 30px;
             color: var(--text-color);
-            margin-top: 60px;
         }
 
         .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            padding: 0 20px;
+            gap: 40px;
+            margin-bottom: 50px;
         }
 
         .footer-column h3 {
             font-size: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             color: var(--primary-color);
             position: relative;
             padding-bottom: 10px;
@@ -330,6 +389,34 @@ verificarAutenticacion('empleado');
             line-height: 1.6;
         }
 
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+            padding-left: 5px;
+        }
+
+        .footer-links i {
+            width: 20px;
+            text-align: center;
+        }
+
         .social-media {
             display: flex;
             gap: 15px;
@@ -346,7 +433,6 @@ verificarAutenticacion('empleado');
             color: white;
             border-radius: 50%;
             transition: all 0.3s ease;
-            text-decoration: none;
         }
 
         .social-link:hover {
@@ -357,7 +443,6 @@ verificarAutenticacion('empleado');
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
-            margin-top: 30px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
@@ -380,7 +465,6 @@ verificarAutenticacion('empleado');
             visibility: hidden;
             transition: all 0.3s ease;
             z-index: 999;
-            border: none;
         }
 
         .back-to-top.active {
@@ -395,31 +479,45 @@ verificarAutenticacion('empleado');
 
         /* Media Queries */
         @media (max-width: 992px) {
-            .container {
+            .form-container {
                 padding: 30px;
             }
         }
 
         @media (max-width: 768px) {
-            .header-container {
+            /* Menú hamburguesa para móviles */
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--header-bg);
                 flex-direction: column;
-                gap: 15px;
-            }
-            
-            .nav {
-                flex-wrap: wrap;
-                gap: 15px;
-                padding: 10px 0;
-            }
-            
-            .container {
-                margin: 20px;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                transition: all 0.5s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
                 padding: 20px;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .header-container {
+                gap: 15px;
             }
             
             .form-actions {
                 flex-direction: column;
-                gap: 15px;
             }
             
             .btn {
@@ -429,6 +527,10 @@ verificarAutenticacion('empleado');
         }
 
         @media (max-width: 576px) {
+            .form-title h2 {
+                font-size: 28px;
+            }
+            
             .footer-content {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -443,7 +545,7 @@ verificarAutenticacion('empleado');
                 justify-content: center;
             }
             
-            .container {
+            .form-container {
                 margin: 10px;
                 padding: 15px;
             }
@@ -456,76 +558,81 @@ verificarAutenticacion('empleado');
         <div class="container header-container">
             <div class="logo">
                 <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title">El Café Con La Pan-dilla</h1>
+                <h1 class="header-title"></h1>
             </div>
             
             <div class="header-controls">
                 <button class="theme-toggle" id="themeToggle">🌙</button>
                 
-                <a href="../carrito.php" class="cart-icon">
+                <a href="carrito.php" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
+                
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav class="nav-menu" id="navMenu">
+                    <a href="index2.php" class="nav-link"><span>Inicio</span></a>
+                    <a href="catalogo.php" class="nav-link">Productos</a>
+                    <a href="nosotros.php" class="nav-link">Nosotros</a>
+                    <a href="registrar.php" class="nav-link">Registrarse</a>
+                    <a href="inventario.php" class="nav-link">Inventario</a>
+                    <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
+                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
+                    <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                </nav>
             </div>
         </div>
-
-        <nav class="nav">
-            <div class="container">
-                <a href="index2.php" class="nav-link"><span>Inicio</span></a>
-                <a href="catalogo.php" class="nav-link">Productos</a>
-                <a href="inventario.php" class="nav-link">Inventario</a>
-                <a href="nosotros.php" class="nav-link">Nosotros</a>
-                <a href="registrar.php" class="nav-link">Registrarse</a>
-                <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
-                <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
-            </div>
-        </nav>
     </header>
 
-    <div class="container">
-        <h2 class="form-title">Registro de Nuevo Empleado</h2>
-        <form action="../php/registro_usuario_be.php" method="POST">
-            <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="apellido">Apellido:</label>
-                <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="usuario">Usuario:</label>
-                <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuario" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="correo">Correo electrónico:</label>
-                <input type="email" id="correo" name="correo" class="form-control" placeholder="Email" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="contrasena">Contraseña:</label>
-                <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Contraseña" minlength="8" required>
-            </div>
-            
-            <input type="hidden" name="rol" value="empleado">
-            
-            <div class="form-actions">
-                <button type="submit" class="btn">Registrar Empleado</button>
-                <a href="usuarios_registrados.php" class="btn">Ver Usuarios Registrados</a>
-                <a href="index2.php" class="btn">Volver al Panel</a>
-            </div>
-        </form>
-    </div>
+    <main>
+        <div class="form-container">
+            <h2 class="form-title">Registro de Nuevo Empleado</h2>
+            <form action="../php/registro_usuario_be.php" method="POST">
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="usuario">Usuario:</label>
+                    <input type="text" id="usuario" name="usuario" class="form-control" placeholder="Usuario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="correo">Correo electrónico:</label>
+                    <input type="email" id="correo" name="correo" class="form-control" placeholder="Email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contrasena">Contraseña:</label>
+                    <input type="password" id="contrasena" name="contrasena" class="form-control" placeholder="Contraseña" minlength="8" required>
+                </div>
+                
+                <input type="hidden" name="rol" value="empleado">
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn">Registrar Empleado</button>
+                    <a href="usuarios_registrados.php" class="btn">Ver Usuarios Registrados</a>
+                    <a href="index2.php" class="btn">Volver al Panel</a>
+                </div>
+            </form>
+        </div>
+    </main>
 
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>El Café Con La Pan-dilla</h3>
-                    <p>2024 El Café Con La Pan-dilla C.A<br>Todos los Derechos Reservados.</p>
+                    <p>Desde 2010 ofreciendo los mejores productos artesanales de panadería y cafetería, elaborados con ingredientes naturales y mucho amor.</p>
                     <div class="social-media">
                         <a href="https://www.facebook.com/profile.php?id=100089772800592" class="social-link"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/carlosgz9477/" class="social-link"><i class="fab fa-instagram"></i></a>
@@ -533,9 +640,22 @@ verificarAutenticacion('empleado');
                     </div>
                 </div>
                 <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                        <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
+                        <li><a href="registro_empleado.php"><i class="fas fa-chevron-right"></i> Generar Acceso</a></li>
+                        <li><a href="diagrama_procesos.php"><i class="fas fa-chevron-right"></i> Flujo Productos</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
                     <h3>Contacto</h3>
-                    <p><i class="fas fa-phone"></i> +58-4244258944</p>
-                    <p><i class="fas fa-envelope"></i> cg9477083@gmail.com</p>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Ciudad</a></li>
+                        <li><a href="tel:+584244258944"><i class="fas fa-phone"></i> +58 424-4258944</a></li>
+                        <li><a href="mailto:cg9477083@gmail.com"><i class="fas fa-envelope"></i> cg9477083@gmail.com</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> Lunes a Domingo: 7am - 8pm</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -544,9 +664,9 @@ verificarAutenticacion('empleado');
         </div>
     </footer>
     
-    <button class="back-to-top" id="backToTop">
+    <div class="back-to-top" id="backToTop">
         <i class="fas fa-arrow-up"></i>
-    </button>
+    </div>
     
     <audio id="backgroundMusic" loop>
         <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
@@ -616,6 +736,27 @@ verificarAutenticacion('empleado');
             const randomCount = Math.floor(Math.random() * 5) + 1;
             cartCounter.textContent = randomCount;
         }
+
+        // Menú hamburguesa
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.innerHTML = navMenu.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        // Cerrar menú al hacer clic en un enlace (para móviles)
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                }
+            });
+        });
     </script>
 </body>
 </html>
