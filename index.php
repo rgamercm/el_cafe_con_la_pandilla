@@ -1134,6 +1134,7 @@
                 'img/carrusel/1.jpg',
                 'img/carrusel/2.jpg',
                 'img/carrusel/3.jpg',
+                'img/carrusel/5.png',
                 // Añade más rutas de imágenes aquí según necesites
                 // Ejemplo: 'img/carrusel/4.jpg', 'img/carrusel/5.jpg'
             ],

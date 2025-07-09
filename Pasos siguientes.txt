@@ -58,13 +58,13 @@ paginaweb:
  p5.php
  p6.php
  registrar.php
+ test_conexion.php
 
 
  bienvenida_despues_de_iniciarsesion.php
  carrito.php
  catalogo.php
  index.php
- inventario.php
  nosotros.php
  p1.php
  p2.php
