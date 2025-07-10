@@ -35,7 +35,6 @@ estructura pagina:
 
 paginaweb:
 //las palabras con (:) dos puntos son carpetas.
- css: registrar.css style.css
  img:
 	café:
 	panes:
