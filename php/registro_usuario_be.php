@@ -25,7 +25,27 @@ $contrasena = trim($_POST['contrasena']);
 $rol = mysqli_real_escape_string($conexion, trim($_POST['rol']));
 $fecha_reg = date("d/m/y");
 
-// Validaciones adicionales
+// Validar que nombre y apellido solo contengan letras y espacios
+if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/", $nombre)) {
+    echo '
+        <script> 
+            alert("El nombre solo puede contener letras y espacios");
+            window.location = "../registrar.php";
+        </script>
+    ';
+    exit();
+}
+
+if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/", $apellido)) {
+    echo '
+        <script> 
+            alert("El apellido solo puede contener letras y espacios");
+            window.location = "../registrar.php";
+        </script>
+    ';
+    exit();
+}
+
 if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
     echo '
         <script> 

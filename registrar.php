@@ -1156,6 +1156,40 @@ if(isset($_SESSION['usuario'])){
                 input.style.boxShadow = '';
             });
         });
+        // Validación en tiempo real para nombre y apellido
+document.querySelectorAll('input[name="nombre"], input[name="apellido"]').forEach(input => {
+    input.addEventListener('input', function() {
+        const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$/;
+        if (!letrasRegex.test(this.value)) {
+            this.style.borderColor = 'red';
+            // Eliminar caracteres no permitidos
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+        } else {
+            this.style.borderColor = '';
+        }
+    });
+});
+
+    // Validación al enviar el formulario
+    document.querySelector('form[action="php/registro_usuario_be.php"]').addEventListener('submit', function(e) {
+        const nombre = document.querySelector('input[name="nombre"]').value;
+        const apellido = document.querySelector('input[name="apellido"]').value;
+        const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+        
+        if (!letrasRegex.test(nombre)) {
+            e.preventDefault();
+            alert('El nombre solo puede contener letras y espacios');
+            document.querySelector('input[name="nombre"]').focus();
+            return;
+        }
+        
+        if (!letrasRegex.test(apellido)) {
+            e.preventDefault();
+            alert('El apellido solo puede contener letras y espacios');
+            document.querySelector('input[name="apellido"]').focus();
+            return;
+        }
+    });
     </script>
 </body>
 </html>
