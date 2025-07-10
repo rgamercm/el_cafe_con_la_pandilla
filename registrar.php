@@ -5,7 +5,6 @@ if(isset($_SESSION['usuario'])){
     header("location: bienvenida_despues_de_iniciarsesion.php");
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -476,7 +475,8 @@ if(isset($_SESSION['usuario'])){
             transition: all 0.6s ease-in-out;
         }
 
-        input {
+        /* MODIFICACIONES PARA TEXTO VISIBLE */
+        input, select {
             background-color: #eee;
             border: none;
             padding: 12px 15px;
@@ -485,6 +485,16 @@ if(isset($_SESSION['usuario'])){
             border-radius: 5px;
             transition: all 0.3s ease;
             font-size: 14px;
+            color: #000000 !important; /* Fuerza texto negro */
+        }
+
+        input::placeholder {
+            color: #666 !important; /* Color gris oscuro para placeholders */
+        }
+
+        select option {
+            color: #000000 !important; /* Fuerza texto negro en opciones */
+            background-color: #ffffff !important; /* Fondo blanco para opciones */
         }
 
         input:focus {
@@ -660,6 +670,7 @@ if(isset($_SESSION['usuario'])){
             background-position: right 8px center;
             background-size: 12px;
             cursor: pointer;
+            color: #000000 !important; /* Fuerza texto negro */
         }
 
         .tipo-cedula:focus {
@@ -696,7 +707,7 @@ if(isset($_SESSION['usuario'])){
             width: 100%;
             border-radius: 5px;
             font-size: 14px;
-            color: var(--text-color);
+            color: #000000 !important; /* Fuerza texto negro */
             transition: all 0.3s ease;
         }
 
@@ -944,7 +955,7 @@ if(isset($_SESSION['usuario'])){
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
                 <h1 class="header-title"></h1>
             </div>
             
@@ -965,6 +976,10 @@ if(isset($_SESSION['usuario'])){
                     <a href="catalogo.php" class="nav-link">Productos</a>
                     <a href="nosotros.php" class="nav-link">Nosotros</a>
                     <a href="registrar.php" class="nav-link active">Registrarse</a>
+                    <a href="inventario.php" class="nav-link">Inventario</a>
+                    <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
+                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
+                    <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
                 </nav>
             </div>
         </div>

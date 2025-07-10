@@ -1,5 +1,5 @@
 <?php
-//Esta pagina inicia una vez el usuario haya iniciado sesion.
+// Esta página inicia una vez el usuario haya iniciado sesión.
 require_once '../php/verificar_sesion.php';
 ?>
 <!DOCTYPE html>
@@ -287,35 +287,36 @@ require_once '../php/verificar_sesion.php';
             font-weight: bold;
         }
 
-        /* Contenido principal */
+        /* Panel de Bienvenida */
         .welcome-section {
             padding: var(--section-padding);
             text-align: center;
         }
 
-        .welcome-content {
+        .welcome-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
             max-width: 800px;
             margin: 0 auto;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
         }
 
-        .welcome-section h1 {
-            color: var(--primary-color);
-            margin-bottom: 20px;
+        .welcome-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
         .role-badge {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 30px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin: 20px 0;
+            font-size: 16px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            font-size: 14px;
         }
 
         .role-cliente {
@@ -332,16 +333,16 @@ require_once '../php/verificar_sesion.php';
             display: inline-block;
             background: var(--primary-color);
             color: white;
-            padding: 12px 30px;
+            padding: 15px 40px;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s ease;
             border: 2px solid var(--primary-color);
+            margin-top: 30px;
             text-transform: uppercase;
             font-size: 14px;
             letter-spacing: 1px;
-            margin-top: 20px;
         }
 
         .logout-btn:hover {
@@ -478,8 +479,8 @@ require_once '../php/verificar_sesion.php';
 
         /* Media Queries */
         @media (max-width: 992px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .welcome-card {
+                padding: 30px;
             }
         }
 
@@ -514,11 +515,15 @@ require_once '../php/verificar_sesion.php';
             .header-container {
                 gap: 15px;
             }
+            
+            .section-title h2 {
+                font-size: 28px;
+            }
         }
 
         @media (max-width: 576px) {
-            .section-title h2 {
-                font-size: 28px;
+            .welcome-card {
+                padding: 20px;
             }
             
             .footer-content {
@@ -533,10 +538,6 @@ require_once '../php/verificar_sesion.php';
             
             .social-media {
                 justify-content: center;
-            }
-            
-            .welcome-content {
-                padding: 30px 20px;
             }
         }
     </style>
@@ -571,6 +572,10 @@ require_once '../php/verificar_sesion.php';
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
                     <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                    <?php if ($_SESSION['usuario']['rol'] === 'empleado'): ?>
+                        <a href="inventario.php" class="nav-link">Inventario</a>
+                        <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
+                    <?php endif; ?>
                 </nav>
             </div>
         </div>
@@ -578,8 +583,12 @@ require_once '../php/verificar_sesion.php';
 
     <main class="welcome-section">
         <div class="container">
-            <div class="welcome-content">
-                <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?>!</h1>
+            <div class="welcome-card">
+                <div class="section-title">
+                    <h2>Bienvenido, <?php echo htmlspecialchars($_SESSION['usuario']['nombre']); ?>!</h2>
+                    <p>Has iniciado sesión correctamente en nuestro sistema</p>
+                </div>
+                
                 <div class="role-badge role-<?php echo htmlspecialchars($_SESSION['usuario']['rol']); ?>">
                     <?php 
                         echo strtoupper(htmlspecialchars($_SESSION['usuario']['rol']));
@@ -588,7 +597,10 @@ require_once '../php/verificar_sesion.php';
                         }
                     ?>
                 </div>
-                <p>Has iniciado sesión correctamente como <?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?> (<?php echo htmlspecialchars($_SESSION['usuario']['email']); ?>)</p>
+                
+                <p>Usuario: <?php echo htmlspecialchars($_SESSION['usuario']['usuario']); ?></p>
+                <p>Email: <?php echo htmlspecialchars($_SESSION['usuario']['email']); ?></p>
+                
                 <a href="../php/cerrar_sesion.php" class="logout-btn">Cerrar sesión</a>
             </div>
         </div>
@@ -610,9 +622,11 @@ require_once '../php/verificar_sesion.php';
                     <h3>Enlaces rápidos</h3>
                     <ul class="footer-links">
                         <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
-                        <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
+                        <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
                         <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>
-                        <li><a href="diagrama_procesos.php"><i class="fas fa-chevron-right"></i> Flujo Productos</a></li>
+                        <?php if ($_SESSION['usuario']['rol'] === 'empleado'): ?>
+                            <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -636,7 +650,7 @@ require_once '../php/verificar_sesion.php';
     </div>
     
     <audio id="backgroundMusic" loop>
-        <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
+        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
 
     <script>

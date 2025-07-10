@@ -55,9 +55,9 @@ if(mysqli_num_rows($resultado) > 0) {
     
     // Redirección basada en el rol del usuario
     if($usuario['rol'] === 'empleado') {
-        header("Location: ../empleados/index2.php");  // Redirige a la interfaz de empleados
+        header("Location: ../empleados/bienvenida_despues_de_iniciarsesion.php");  // Redirige a la interfaz de empleados
     } else {
-        header("Location: ../index.php");           // Redirige a la interfaz normal
+        header("Location: ../bienvenida_despues_de_iniciarsesion.php");           // Redirige a la interfaz normal
     }
     exit();
 } else {
