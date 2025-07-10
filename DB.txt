@@ -1,0 +1,86 @@
+//PARA BORRAR UNA TABLA
+TRUNCATE TABLE usuarios;
+
+//para añadir nuevos elementos a una tabla
+ALTER TABLE usuarios 
+ADD COLUMN codigo_acceso VARCHAR(32) DEFAULT NULL AFTER rol,
+ADD UNIQUE KEY (codigo_acceso);
+
+//crear tabla usuarios
+CREATE TABLE IF NOT EXISTS usuarios(
+  id int(11) NOT NULL AUTO_INCREMENT,
+  nombre varchar(70) NOT NULL,
+  apellido varchar(70) NOT NULL,
+  correo varchar(30) NOT NULL,
+  usuario varchar(20) NOT NULL,
+  contrasena varchar(128) NOT NULL,
+  fecha_reg varchar(20) NOT NULL,
+  rol ENUM('administrador','cliente', 'empleado') NOT NULL DEFAULT 'cliente',
+  codigo_acceso varchar(32) DEFAULT NULL,
+  cedula VARCHAR(15) NOT NULL,
+  tipo_cedula ENUM('V', 'E') NOT NULL DEFAULT 'V',
+  PRIMARY KEY (id),
+  UNIQUE KEY (cedula),
+  UNIQUE KEY (correo),
+  UNIQUE KEY (usuario),
+  UNIQUE KEY (codigo_acceso),
+  UNIQUE INDEX idx_cedula (cedula)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+SELECT * from usuarios 
+
+
+//alteral una tabla modificanso su campo rol
+ALTER TABLE usuarios MODIFY rol ENUM('admin','administrador','cliente','empleado') NOT NULL DEFAULT 'cliente';
+
+
+//PARA INGRESAR NUEVOS USUARIOS CON CONTRASEÑA HASH
+INSERT INTO usuarios(nombre, apellido, correo, usuario, contrasena, fecha_reg, rol) 
+VALUES ('Nombre', 'Apellido', 'email@ejemplo.com', 'usuario', 
+SHA2('contraseña', 512), '2023-11-15', 'empleado');
+
+//no usado código acceso
+CREATE TABLE IF NOT EXISTS codigos_acceso (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  codigo varchar(32) NOT NULL,
+  usado tinyint(1) NOT NULL DEFAULT 0,
+  fecha_creacion datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  fecha_uso datetime DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY (codigo)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+
+//NO USADO
+INSERT INTO codigos_acceso (codigo) VALUES 
+('EMP1234567890'),
+('EMP0987654321'),
+('EMP1122334455');
+
+CREATE TABLE inventario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    codigo VARCHAR(20) NOT NULL UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    categoria VARCHAR(50),
+    cantidad INT NOT NULL DEFAULT 0,
+    precio DECIMAL(10, 2) NOT NULL,
+    unidades_existentes INT NOT NULL DEFAULT 0,
+    unidades_minimas INT DEFAULT 10,
+    fecha_ingreso DATE NOT NULL,
+    fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    estado ENUM('activo', 'inactivo', 'agotado') DEFAULT 'activo'
+);
+
+INSERT INTO inventario 
+(codigo, nombre, descripcion, categoria, cantidad, precio, unidades_existentes, unidades_minimas, fecha_ingreso, estado) 
+VALUES
+('CAFE-001', 'Café Capuchino', 'Café espresso con leche vaporizada y espuma', 'Bebidas', 100, 1.60, 100, 20, '2023-01-15', 'activo'),
+('PAN-001', 'Pan Artesanal', 'Pan elaborado con masa madre y fermentación lenta', 'Panadería', 50, 3.60, 50, 15, '2023-01-10', 'activo'),
+('POST-001', 'Torta de Chocolate', 'Torta de chocolate con relleno cremoso', 'Postres', 30, 10.10, 30, 10, '2023-01-05', 'activo');
+
+DROP table inventario;
+
+
+
+
