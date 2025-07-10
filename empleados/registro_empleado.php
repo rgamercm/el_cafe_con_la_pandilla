@@ -587,18 +587,31 @@ verificarAutenticacion('empleado');
         </div>
     </header>
 
-    <main>
+ <main>
         <div class="form-container">
             <h2 class="form-title">Registro de Nuevo Empleado</h2>
             <form action="../php/registro_usuario_be.php" method="POST">
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
                 </div>
                 
                 <div class="form-group">
                     <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required>
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tipo_cedula">Tipo de Cédula:</label>
+                    <select id="tipo_cedula" name="tipo_cedula" class="form-control" required>
+                        <option value="V">V - Venezolano</option>
+                        <option value="E">E - Extranjero</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cedula">Número de Cédula:</label>
+                    <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ej: 12345678" required pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)">
                 </div>
                 
                 <div class="form-group">
@@ -626,7 +639,6 @@ verificarAutenticacion('empleado');
             </form>
         </div>
     </main>
-
     <footer class="footer">
         <div class="container">
             <div class="footer-content">

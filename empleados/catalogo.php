@@ -1,5 +1,6 @@
 <?php
-require_once '../php/verificar_sesion.php';
+include '../php/verificar_sesion.php';
+verificarAutenticacion('empleado');
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -7,8 +8,8 @@ require_once '../php/verificar_sesion.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Café Con La Pan-dilla</title>
-    <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
+    <title>Productos - El Café Con La Pan-dilla</title>
+    <link rel="shortcut icon" href="../img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -173,9 +174,11 @@ require_once '../php/verificar_sesion.php';
         }
 
         .header-title {
-            color: var(--header-text);
-            font-family: "Playfair Display", serif;
+            font-size: 24px;
             margin: 0;
+            color: var(--primary-color);
+            font-family: "Playfair Display", serif;
+            font-weight: 700;
         }
 
         /* Controles del header */
@@ -285,18 +288,17 @@ require_once '../php/verificar_sesion.php';
         }
 
         /* Productos destacados */
-        .featured-products {
+        .products-section {
             padding: var(--section-padding);
-            background-color: var(--bg-color);
         }
 
-        .card-container {
+        .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 30px;
         }
 
-        .card {
+        .product-card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
             overflow: hidden;
@@ -305,51 +307,53 @@ require_once '../php/verificar_sesion.php';
             position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .card-image {
-            height: 250px;
+        .product-image {
+            height: 200px;
             overflow: hidden;
         }
 
-        .card img {
+        .product-card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .card:hover img {
-            transform: scale(1.1);
+        .product-card:hover img {
+            transform: scale(1.05);
         }
 
-        .card-text {
-            padding: 25px;
+        .product-content {
+            padding: 20px;
         }
 
-        .card-text h3 {
-            margin: 0 0 15px;
-            font-size: 22px;
+        .product-content h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
             color: var(--primary-color);
         }
 
-        .card-text p {
+        .product-content p {
             margin: 10px 0;
             color: var(--text-color);
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         .price {
             color: var(--primary-color);
             font-weight: bold;
-            font-size: 20px;
+            font-size: 18px;
             margin: 15px 0;
             display: block;
         }
 
-        .card-badge {
+        .product-badge {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -372,7 +376,7 @@ require_once '../php/verificar_sesion.php';
         .footer {
             background: var(--header-bg);
             padding: 80px 0 30px;
-            color: var(--header-text);
+            color: var(--text-color);
         }
 
         .footer-content {
@@ -415,7 +419,7 @@ require_once '../php/verificar_sesion.php';
         }
 
         .footer-links a {
-            color: var(--header-text);
+            color: var(--text-color);
             text-decoration: none;
             transition: all 0.3s ease;
             display: flex;
@@ -459,7 +463,7 @@ require_once '../php/verificar_sesion.php';
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         /* Back to top button */
@@ -495,12 +499,8 @@ require_once '../php/verificar_sesion.php';
 
         /* Media Queries */
         @media (max-width: 992px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-            
-            .hero p {
-                font-size: 18px;
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -535,17 +535,6 @@ require_once '../php/verificar_sesion.php';
             .header-container {
                 gap: 15px;
             }
-            
-            .newsletter-form {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .newsletter-input,
-            .newsletter-btn {
-                border-radius: 30px;
-                width: 100%;
-            }
         }
 
         @media (max-width: 576px) {
@@ -553,7 +542,7 @@ require_once '../php/verificar_sesion.php';
                 font-size: 28px;
             }
             
-            .card-container {
+            .products-grid {
                 grid-template-columns: 1fr;
             }
             
@@ -578,14 +567,14 @@ require_once '../php/verificar_sesion.php';
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
                 <h1 class="header-title"></h1>
             </div>
             
             <div class="header-controls">
                 <button class="theme-toggle" id="themeToggle">🌙</button>
                 
-                <a href="carrito.php" class="cart-icon">
+                <a href="../carrito.php" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
@@ -608,103 +597,229 @@ require_once '../php/verificar_sesion.php';
         </div>
     </header>
 
-    <main>
-        <section class="featured-products">
-            <div class="container">
-                <div class="section-title">
-                    <h2>Nuestros Productos</h2>
-                    <p>Descubre nuestras deliciosas creaciones, elaboradas con ingredientes de la más alta calidad y mucho amor.</p>
-                </div>
-                <div class="card-container">
-                    <!-- Producto 1 - Café Capuchino -->
-                    <div class="card">
-                        <div class="card-badge">Popular</div>
-                        <div class="card-image">
-                            <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p1.php">Capuchino con Caritas de Gato</a></h3>
-                            <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                            <span class="price">$1.60</span>
-                            <a href="p1.php" class="btn">Ver detalles</a>
-                        </div>
+    <main class="products-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nuestros Productos</h2>
+                <p>Descubre nuestras deliciosas creaciones, elaboradas con ingredientes de la más alta calidad y mucho amor.</p>
+            </div>
+            
+            <div class="products-grid">
+                <!-- Producto 1 - Café Capuchino -->
+                <div class="product-card">
+                    <div class="product-badge">Popular</div>
+                    <div class="product-image">
+                        <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
                     </div>
-                    
-                    <!-- Producto 2 - Pan Artesanal -->
-                    <div class="card">
-                        <div class="card-badge">Recomendado</div>
-                        <div class="card-image">
-                            <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p2.php">Pan Artesanal</a></h3>
-                            <p>Elaborado con técnicas tradicionales, nuestro pan artesanal ofrece un sabor único y una textura esponjosa, perfecto para acompañar cualquier comida.</p>
-                            <span class="price">$3.60</span>
-                            <a href="p2.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Producto 3 - Café Expreso -->
-                    <div class="card">
-                        <div class="card-badge">Especial</div>
-                        <div class="card-image">
-                            <a href="p3.php"><img src="img/cafe/coffee (4).jpg" alt="Café Expreso"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p3.php">Café Expreso</a></h3>
-                            <p>Intenso y aromático, nuestro café expreso es perfecto para los amantes del buen café. Disfruta de su sabor robusto y su crema característica.</p>
-                            <span class="price">$1.80</span>
-                            <a href="p3.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Producto 4 - Torta de Chocolate -->
-                    <div class="card">
-                        <div class="card-badge">Nuevo</div>
-                        <div class="card-image">
-                            <a href="p4.php"><img src="img/tortas/tortas (4).jpg" alt="Torta de Chocolate"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p4.php">Torta de Chocolate</a></h3>
-                            <p>Elaboradas con los mejores ingredientes, nuestras tortas están pensadas para regalarte dulzura y frescura. Con sabores variados, texturas suaves y una presentación irresistible.</p>
-                            <span class="price">$10.10</span>
-                            <a href="p4.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Producto 5 - Pan Con Forma de Gato -->
-                    <div class="card">
-                        <div class="card-badge">Divertido</div>
-                        <div class="card-image">
-                            <a href="p5.php"><img src="img/panes/panes (2).jpg" alt="Pan Con Forma de Gato"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p5.php">Pan Con Forma de Gato</a></h3>
-                            <p>Divertido y delicioso pan con forma de gatito, perfecto para los amantes de los animales y los panes artesanales. Suave por dentro y crujiente por fuera.</p>
-                            <span class="price">$5.00</span>
-                            <a href="p5.php" class="btn">Ver detalles</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Producto 6 - Helado Con Oreo -->
-                    <div class="card">
-                        <div class="card-badge">Fresco</div>
-                        <div class="card-image">
-                            <a href="p6.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
-                        </div>
-                        <div class="card-text">
-                            <h3><a href="p6.php">Helado Con Oreo</a></h3>
-                            <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                            <span class="price">$4.60</span>
-                            <a href="p6.php" class="btn">Ver detalles</a>
-                        </div>
+                    <div class="product-content">
+                        <h3><a href="p1.php">Capuchino con Caritas de Gato</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$1.60</span>
+                        <a href="p1.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
-                <div class="view-more-container">
-                    <a href="catalogo.php" class="btn">Ver Todos los Productos</a>
+                
+                <!-- Producto 2 - Pan Artesanal -->
+                <div class="product-card">
+                    <div class="product-badge">Recomendado</div>
+                    <div class="product-image">
+                        <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p2.php">Pan Artesanal</a></h3>
+                        <p>Elaborado con técnicas tradicionales, nuestro pan artesanal ofrece un sabor único y una textura esponjosa, perfecto para acompañar cualquier comida.</p>
+                        <span class="price">$3.60</span>
+                        <a href="p2.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 3 - Café Expreso -->
+                <div class="product-card">
+                    <div class="product-badge">Especial</div>
+                    <div class="product-image">
+                        <a href="p3.php"><img src="img/cafe/coffee (4).jpg" alt="Café Expreso"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p3.php">Café Expreso</a></h3>
+                        <p>Intenso y aromático, nuestro café expreso es perfecto para los amantes del buen café. Disfruta de su sabor robusto y su crema característica.</p>
+                        <span class="price">$1.80</span>
+                        <a href="p3.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 4 - Torta de Chocolate -->
+                <div class="product-card">
+                    <div class="product-badge">Nuevo</div>
+                    <div class="product-image">
+                        <a href="p4.php"><img src="img/tortas/tortas (4).jpg" alt="Torta de Chocolate"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p4.php">Torta de Chocolate</a></h3>
+                        <p>Elaboradas con los mejores ingredientes, nuestras tortas están pensadas para regalarte dulzura y frescura. Con sabores variados, texturas suaves y una presentación irresistible.</p>
+                        <span class="price">$10.10</span>
+                        <a href="p4.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 5 - Pan Con Forma de Gato -->
+                <div class="product-card">
+                    <div class="product-badge">Divertido</div>
+                    <div class="product-image">
+                        <a href="p5.php"><img src="img/panes/panes (2).jpg" alt="Pan Con Forma de Gato"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p5.php">Pan Con Forma de Gato</a></h3>
+                        <p>Divertido y delicioso pan con forma de gatito, perfecto para los amantes de los animales y los panes artesanales. Suave por dentro y crujiente por fuera.</p>
+                        <span class="price">$5.00</span>
+                        <a href="p5.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 6 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p6.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p6.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p6.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 7 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p7.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p7.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p7.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 8 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p8.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p8.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p8.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 9 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p9.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p9.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p9.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 10 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p10.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p10.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p10.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 11 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p11.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p11.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p11.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 12 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p12.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p12.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p12.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 13 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p13.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p13.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p13.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 14 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p14.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p14.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p14.php" class="btn">Ver detalles</a>
+                    </div>
+                </div>
+                
+                <!-- Producto 15 - Helado Con Oreo -->
+                <div class="product-card">
+                    <div class="product-badge">Fresco</div>
+                    <div class="product-image">
+                        <a href="p15.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                    </div>
+                    <div class="product-content">
+                        <h3><a href="p15.php">Helado Con Oreo</a></h3>
+                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <span class="price">$4.60</span>
+                        <a href="p15.php" class="btn">Ver detalles</a>
+                    </div>
                 </div>
             </div>
-        </section>
+            
+            <div class="view-more-container">
+                <a href="catalogo.php" class="btn">Ver Todos los Productos</a>
+            </div>
+        </div>
     </main>
 
     <footer class="footer">
@@ -751,7 +866,7 @@ require_once '../php/verificar_sesion.php';
     </div>
     
     <audio id="backgroundMusic" loop>
-        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
+        <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
 
     <script>

@@ -100,6 +100,44 @@ if(isset($_SESSION['usuario'])){
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .section-title p {
+            color: var(--text-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: var(--primary-color);
+            margin: 20px auto;
+        }
+
         /* Header Rediseñado */
         .header {
             background-color: var(--header-bg);
@@ -215,7 +253,7 @@ if(isset($_SESSION['usuario'])){
             border: none;
             font-size: 20px;
             cursor: pointer;
-            padding: 8 8px;
+            padding: 8px;
             transition: transform 0.3s ease;
             color: var(--header-text);
         }
@@ -253,12 +291,12 @@ if(isset($_SESSION['usuario'])){
         }
 
         /* Estilos específicos del formulario de registro/login - MEJORADOS */
-        .bienvenido {
+        .auth-section {
+            padding: var(--section-padding);
             text-align: center;
-            margin: 4rem 0;
         }
 
-        .bienvenido h2 {
+        .auth-title {
             font-size: 2.5rem;
             color: var(--primary-color);
             margin-bottom: 2rem;
@@ -266,7 +304,7 @@ if(isset($_SESSION['usuario'])){
             display: inline-block;
         }
 
-        .bienvenido h2::after {
+        .auth-title::after {
             content: '';
             position: absolute;
             bottom: -10px;
@@ -284,9 +322,9 @@ if(isset($_SESSION['usuario'])){
             box-shadow: var(--box-shadow);
             position: relative;
             overflow: hidden;
-            width: 768px;
+            width: 800px;
             max-width: 100%;
-            min-height: 550px; /* Aumentado para mejor legibilidad */
+            min-height: 600px;
             margin: 2rem auto;
             transition: all 0.6s ease-in-out;
         }
@@ -510,6 +548,20 @@ if(isset($_SESSION['usuario'])){
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
+        .input-group {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .input-group select {
+            flex: 0 0 auto;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
         .social-container {
             margin: 20px 0;
         }
@@ -587,6 +639,38 @@ if(isset($_SESSION['usuario'])){
             margin: 15px 0;
             transition: all 0.3s ease;
             position: relative;
+        }
+
+        /* Estilos para el grupo de cédula */
+        .cedula-group {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .tipo-cedula {
+            width: 60px !important;
+            padding: 12px 5px !important;
+            text-align: center;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 12px;
+            cursor: pointer;
+        }
+
+        .tipo-cedula:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        /* Ajuste para el input de cédula */
+        .cedula-group input {
+            flex: 1;
+            margin: 10px 0 !important;
         }
 
         form a::after {
@@ -805,7 +889,7 @@ if(isset($_SESSION['usuario'])){
                 transform: none;
             }
 
-            .bienvenido h2 {
+            .auth-title {
                 font-size: 2rem;
             }
 
@@ -820,7 +904,7 @@ if(isset($_SESSION['usuario'])){
         }
 
         @media (max-width: 576px) {
-            .bienvenido h2 {
+            .auth-title {
                 font-size: 1.8rem;
             }
             
@@ -861,7 +945,7 @@ if(isset($_SESSION['usuario'])){
         <div class="container header-container">
             <div class="logo">
                 <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title"></h1>
+                <h1 class="header-title">El Café Con La Pan-dilla</h1>
             </div>
             
             <div class="header-controls">
@@ -880,68 +964,77 @@ if(isset($_SESSION['usuario'])){
                     <a href="index.php" class="nav-link"><span>Inicio</span></a>
                     <a href="catalogo.php" class="nav-link">Productos</a>
                     <a href="nosotros.php" class="nav-link">Nosotros</a>
-                    <a href="registrar.php" class="nav-link">Registrarse</a>
+                    <a href="registrar.php" class="nav-link active">Registrarse</a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <div class="bienvenido">
-        <h2>Bienvenid@s a <br>El Café Con La Pan-dilla</h2>
-    </div>
-
-    <div class="form-container" id="formContainer">
-        <div class="form-container-inner sign-up-container">
-            <form action="php/registro_usuario_be.php" method="POST">
-                <h1>Crear Cuenta</h1>
-                <input type="text" placeholder="Nombre" name="nombre" required>
-                <input type="text" placeholder="Apellido" name="apellido" required>
-                <input type="text" placeholder="Usuario" name="usuario" required>
-                <input type="email" placeholder="Email" name="correo" required>
-                <input type="password" placeholder="Contraseña" name="contrasena" minlength="8" required>
-                
-                <select name="rol" required>
-                    <option value="" disabled selected>Seleccione su rol</option>
-                    <option value="cliente">Cliente</option>
-                    <option value="empleado">Empleado</option>
-                </select>
-                
-                <button type="submit">Crear cuenta</button>
-            </form>
-        </div>
-        <div class="form-container-inner sign-in-container">
-            <form action="php/login_usuario_be.php" method="POST">
-                <h1>Iniciar Sesión</h1>
-                <div class="social-container">
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+    <main class="auth-section">
+        <div class="container">
+            <h2 class="auth-title">Bienvenid@s a <br>El Café Con La Pan-dilla</h2>
+            
+            <div class="form-container" id="formContainer">
+                <div class="form-container-inner sign-up-container">
+                    <form action="php/registro_usuario_be.php" method="POST">
+                        <h1>Crear Cuenta</h1>
+                        <input type="text" placeholder="Nombre" name="nombre" required>
+                        <input type="text" placeholder="Apellido" name="apellido" required>
+                        <div class="cedula-group">
+                            <select name="tipo_cedula" class="tipo-cedula" required>
+                                <option value="V">V</option>
+                                <option value="E">E</option>
+                            </select>
+                            <input type="text" name="cedula" placeholder="Cédula" pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)" required>
+                        </div>
+                        <input type="text" placeholder="Usuario" name="usuario" required>
+                        <input type="email" placeholder="Email" name="correo" required>
+                        <input type="password" placeholder="Contraseña" name="contrasena" minlength="8" required>
+                        
+                        <select name="rol" required>
+                            <option value="" disabled selected>Seleccione su rol</option>
+                            <option value="cliente">Cliente</option>
+                            <option value="empleado">Empleado</option>
+                        </select>
+                        
+                        <button type="submit">Crear cuenta</button>
+                    </form>
                 </div>
-                <span>O utiliza tu cuenta</span>
-                <input type="email" placeholder="Email" name="email" required>
-                <input type="password" placeholder="Contraseña" name="contrasena" required>
-                <div class="remember-me">
-                    <input type="checkbox" id="recordar" name="recordar">
-                    <label for="recordar">Recordar mi sesión</label>
+                <div class="form-container-inner sign-in-container">
+                    <form action="php/login_usuario_be.php" method="POST">
+                        <h1>Iniciar Sesión</h1>
+                        <div class="social-container">
+                            <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                        </div>
+                        <span>O utiliza tu cuenta</span>
+                        <input type="email" placeholder="Email" name="email" required>
+                        <input type="password" placeholder="Contraseña" name="contrasena" required>
+                        <div class="remember-me">
+                            <input type="checkbox" id="recordar" name="recordar">
+                            <label for="recordar">Recordar mi sesión</label>
+                        </div>
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                        <button type="submit">Iniciar sesión</button>
+                    </form>
                 </div>
-                <a href="#">¿Olvidaste tu contraseña?</a>
-                <button type="submit">Iniciar sesión</button>
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>¡Bienvenido de nuevo!</h1>
-                    <p>Para mantenerse conectado con nosotros, inicie sesión con su información personal.</p>
-                    <button class="ghost" id="signIn">Iniciar sesión</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hola amig@</h1>
-                    <p>Introduce tus datos personales para comenzar tu experiencia con nosotros</p>
-                    <button class="ghost" id="signUp">Crear cuenta</button>
+                <div class="overlay-container">
+                    <div class="overlay">
+                        <div class="overlay-panel overlay-left">
+                            <h1>¡Bienvenido de nuevo!</h1>
+                            <p>Para mantenerse conectado con nosotros, inicie sesión con su información personal.</p>
+                            <button class="ghost" id="signIn">Iniciar sesión</button>
+                        </div>
+                        <div class="overlay-panel overlay-right">
+                            <h1>Hola amig@</h1>
+                            <p>Introduce tus datos personales para comenzar tu experiencia con nosotros</p>
+                            <button class="ghost" id="signUp">Crear cuenta</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <footer class="footer">
         <div class="container">
@@ -1073,7 +1166,7 @@ if(isset($_SESSION['usuario'])){
             });
         });
 
-        // Funcionalidad del formulario de registro/login - MEJORADA
+        // Funcionalidad del formulario de registro/login
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');
         const formContainer = document.getElementById('formContainer');
@@ -1094,7 +1187,6 @@ if(isset($_SESSION['usuario'])){
             animateButton(signUpButton);
             formContainer.classList.add("right-panel-active");
             
-            // Mejorar la legibilidad durante la transición
             setTimeout(() => {
                 document.querySelector('.sign-up-container h1').style.animation = 'fadeIn 0.6s ease-out';
                 document.querySelector('.sign-up-container form').style.animation = 'fadeIn 0.6s ease-out 0.2s';
@@ -1106,7 +1198,6 @@ if(isset($_SESSION['usuario'])){
             animateButton(signInButton);
             formContainer.classList.remove("right-panel-active");
             
-            // Mejorar la legibilidad durante la transición
             setTimeout(() => {
                 document.querySelector('.sign-in-container h1').style.animation = 'fadeIn 0.6s ease-out';
                 document.querySelector('.sign-in-container form').style.animation = 'fadeIn 0.6s ease-out 0.2s';
@@ -1128,6 +1219,71 @@ if(isset($_SESSION['usuario'])){
                     button.style.boxShadow = '';
                 }
             });
+        });
+
+        // Validación en tiempo real para nombre y apellido (solo letras)
+        document.querySelectorAll('input[name="nombre"], input[name="apellido"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$/;
+                if (!letrasRegex.test(this.value)) {
+                    this.style.borderColor = 'red';
+                    // Eliminar caracteres no permitidos
+                    this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+                } else {
+                    this.style.borderColor = '';
+                }
+            });
+        });
+
+        // Validación de cédula en tiempo real (solo números)
+        document.querySelector('input[name="cedula"]').addEventListener('input', function() {
+            // Eliminar cualquier caracter que no sea número
+            this.value = this.value.replace(/[^0-9]/g, '');
+            
+            // Validar longitud
+            if (this.value.length > 15) {
+                this.value = this.value.slice(0, 15);
+            }
+            
+            // Cambiar color del borde según validación
+            if (this.value.length < 6) {
+                this.style.borderColor = 'red';
+            } else {
+                this.style.borderColor = 'green';
+            }
+        });
+
+        // Validación al enviar el formulario de registro
+        document.querySelector('form[action="php/registro_usuario_be.php"]').addEventListener('submit', function(e) {
+            const nombre = document.querySelector('input[name="nombre"]').value;
+            const apellido = document.querySelector('input[name="apellido"]').value;
+            const cedula = document.querySelector('input[name="cedula"]').value;
+            const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+            
+            // Validar nombre y apellido
+            if (!letrasRegex.test(nombre)) {
+                e.preventDefault();
+                alert('El nombre solo puede contener letras y espacios');
+                return;
+            }
+            
+            if (!letrasRegex.test(apellido)) {
+                e.preventDefault();
+                alert('El apellido solo puede contener letras y espacios');
+                return;
+            }
+            
+            // Validar cédula
+            if (!/^[0-9]{6,15}$/.test(cedula)) {
+                e.preventDefault();
+                alert('La cédula debe contener entre 6 y 15 dígitos numéricos');
+                return;
+            }
+        });
+
+        // Validación al enviar el formulario de login
+        document.querySelector('form[action="php/login_usuario_be.php"]').addEventListener('submit', function(e) {
+            // Aquí puedes agregar validaciones adicionales para el login si es necesario
         });
 
         // Efectos de entrada para los formularios
@@ -1156,40 +1312,6 @@ if(isset($_SESSION['usuario'])){
                 input.style.boxShadow = '';
             });
         });
-        // Validación en tiempo real para nombre y apellido
-document.querySelectorAll('input[name="nombre"], input[name="apellido"]').forEach(input => {
-    input.addEventListener('input', function() {
-        const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]*$/;
-        if (!letrasRegex.test(this.value)) {
-            this.style.borderColor = 'red';
-            // Eliminar caracteres no permitidos
-            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
-        } else {
-            this.style.borderColor = '';
-        }
-    });
-});
-
-    // Validación al enviar el formulario
-    document.querySelector('form[action="php/registro_usuario_be.php"]').addEventListener('submit', function(e) {
-        const nombre = document.querySelector('input[name="nombre"]').value;
-        const apellido = document.querySelector('input[name="apellido"]').value;
-        const letrasRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
-        
-        if (!letrasRegex.test(nombre)) {
-            e.preventDefault();
-            alert('El nombre solo puede contener letras y espacios');
-            document.querySelector('input[name="nombre"]').focus();
-            return;
-        }
-        
-        if (!letrasRegex.test(apellido)) {
-            e.preventDefault();
-            alert('El apellido solo puede contener letras y espacios');
-            document.querySelector('input[name="apellido"]').focus();
-            return;
-        }
-    });
     </script>
 </body>
 </html>

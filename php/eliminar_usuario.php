@@ -22,7 +22,7 @@ $query = "DELETE FROM usuarios WHERE id = '$id'";
 if(mysqli_query($conexion, $query)) {
     header("Location: ../empleados/usuarios_registrados.php?success=Usuario eliminado");
 } else {
-    header("Location: ../empleados/usuarios_registrados.php?error=Error al eliminar");
+    header("Location: ../empleados/usuarios_registrados.php?error=Error al eliminar: " . mysqli_error($conexion));
 }
 
 mysqli_close($conexion);

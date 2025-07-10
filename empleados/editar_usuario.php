@@ -637,12 +637,31 @@ if(!$usuario) {
                 
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" class="form-control" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
+                    <input type="text" class="form-control" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required 
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
                 </div>
                 
                 <div class="form-group">
                     <label for="apellido">Apellido:</label>
-                    <input type="text" class="form-control" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required>
+                    <input type="text" class="form-control" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
+                </div>
+                
+                <!-- Nuevo campo para tipo de cédula -->
+                <div class="form-group">
+                    <label for="tipo_cedula">Tipo de Cédula:</label>
+                    <select class="form-control tipo-cedula" name="tipo_cedula" required>
+                        <option value="V" <?php echo ($usuario['tipo_cedula'] ?? 'V') == 'V' ? 'selected' : ''; ?>>V</option>
+                        <option value="E" <?php echo ($usuario['tipo_cedula'] ?? 'V') == 'E' ? 'selected' : ''; ?>>E</option>
+                    </select>
+                </div>
+                
+                <!-- Nuevo campo para número de cédula -->
+                <div class="form-group">
+                    <label for="cedula">Número de Cédula:</label>
+                    <input type="text" class="form-control numero-cedula" name="cedula" 
+                           value="<?php echo htmlspecialchars($usuario['cedula'] ?? ''); ?>" required
+                           pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)">
                 </div>
                 
                 <div class="form-group">
@@ -677,7 +696,6 @@ if(!$usuario) {
             </form>
         </div>
     </main>
-
     <footer class="footer">
         <div class="container">
             <div class="footer-content">

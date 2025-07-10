@@ -1,27 +1,17 @@
-<?php
-include '../php/verificar_sesion.php';
-verificarAutenticacion('empleado');
-include '../php/conexion_be.php';
-
-// Obtener todos los usuarios
-$query = "SELECT * FROM usuarios ORDER BY fecha_reg DESC";
-$resultado = mysqli_query($conexion, $query);
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios Registrados - El Café Con La Pan-dilla</title>
-    <link rel="shortcut icon" href="../img/cafe.png" type="image/x-icon">
+    <title>Producto - El Café Con La Pan-dilla</title>
+    <link rel="shortcut icon" href="img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Variables y estilos base del CÓDIGO ORIGINAL */
+        /* Variables y estilos base */
         :root {
             --primary-color: #D4A76A;
             --secondary-color: #5a3921;
@@ -78,7 +68,7 @@ $resultado = mysqli_query($conexion, $query);
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
 
         .btn {
@@ -103,155 +93,6 @@ $resultado = mysqli_query($conexion, $query);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
-                .btn-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-text {
-            white-space: nowrap;
-        }
-
-        @media (max-width: 400px) {
-            .btn-text {
-                display: none;
-            }
-            
-            .btn-action {
-                padding: 8px 10px;
-                min-width: auto;
-            }
-            
-            .btn-action i {
-                margin-right: 0;
-            }
-        }
-
-        /* Estilos para la tabla de usuarios */
-        .usuarios-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 40px 0;
-            box-shadow: var(--box-shadow);
-            border-radius: var(--border-radius);
-            overflow: hidden;
-        }
-
-        .usuarios-table th, .usuarios-table td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid var(--dropdown-hover);
-        }
-
-        .usuarios-table th {
-            background-color: var(--primary-color);
-            color: white;
-            font-weight: 600;
-        }
-
-        .usuarios-table tr {
-            background-color: var(--card-bg);
-            transition: var(--transition);
-        }
-
-        .usuarios-table tr:nth-child(even) {
-            background-color: var(--dropdown-background);
-        }
-
-        .usuarios-table tr:hover {
-            background-color: var(--dropdown-hover);
-        }
-
-       /* Reemplaza las clases .action-buttons, .editar y .eliminar existentes con estas: */
-
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .action-buttons a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: var(--border-radius);
-            font-size: 14px;
-            transition: var(--transition);
-            min-width: 80px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .editar {
-            background-color: #4CAF50;
-            color: white;
-            border: 1px solid #3e8e41;
-        }
-
-        .editar:hover {
-            background-color: #3e8e41;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .eliminar {
-            background-color: #f44336;
-            color: white;
-            border: 1px solid #d32f2f;
-        }
-
-        .eliminar:hover {
-            background-color: #d32f2f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .action-buttons i {
-            margin-right: 5px;
-            font-size: 12px;
-        }
-
-        /* Para dispositivos móviles */
-        @media (max-width: 576px) {
-            .action-buttons {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .action-buttons a {
-                width: 100%;
-                padding: 6px 10px;
-            }
-        }
-
-        .panel-link {
-            display: inline-block;
-            margin: 20px 10px;
-            text-align: center;
-            padding: 12px 25px;
-            background: var(--primary-color);
-            color: white;
-            border-radius: var(--border-radius);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .panel-link:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .links-container {
-            text-align: center;
-            margin: 30px 0;
-        }
-
         /* Header Rediseñado */
         .header {
             background-color: var(--header-bg);
@@ -272,9 +113,6 @@ $resultado = mysqli_query($conexion, $query);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
 
         .logo {
@@ -291,14 +129,6 @@ $resultado = mysqli_query($conexion, $query);
 
         .logo-image:hover {
             transform: scale(1.05);
-        }
-
-        .header-title {
-            font-size: 24px;
-            margin: 0;
-            color: var(--primary-color);
-            font-family: "Playfair Display", serif;
-            font-weight: 700;
         }
 
         /* Controles del header */
@@ -407,6 +237,143 @@ $resultado = mysqli_query($conexion, $query);
             font-weight: bold;
         }
 
+        /* Producto Section */
+        .product-section {
+            padding: var(--section-padding);
+        }
+
+        .product-container {
+            display: flex;
+            gap: 50px;
+            margin-bottom: 50px;
+        }
+
+        .product-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .product-image:hover img {
+            transform: scale(1.02);
+        }
+
+        .product-content {
+            flex: 1;
+        }
+
+        .product-content h1 {
+            font-size: 36px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .product-price {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .product-content p {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .product-status {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        /* Carrito */
+        .cart-section {
+            background: var(--background-color-card);
+            padding: 40px 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .cart-section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        #cartItems {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+        }
+
+        #cartItems li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .remove-one, .remove-all {
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-one {
+            background: #ff7676;
+            color: white;
+        }
+
+        .remove-all {
+            background: #cc0000;
+            color: white;
+        }
+
+        .remove-one:hover, .remove-all:hover {
+            opacity: 0.9;
+        }
+
+        .item-quantity {
+            min-width: 30px;
+            text-align: center;
+        }
+
+        #totalPrice {
+            font-weight: bold;
+            font-size: 24px;
+            color: var(--primary-color);
+            text-align: right;
+            margin: 20px 0;
+        }
+
+        #checkout {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
         /* Footer */
         .footer {
             background: var(--header-bg);
@@ -419,9 +386,6 @@ $resultado = mysqli_query($conexion, $query);
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 40px;
             margin-bottom: 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
         }
 
         .footer-column h3 {
@@ -502,8 +466,6 @@ $resultado = mysqli_query($conexion, $query);
             text-align: center;
             padding-top: 30px;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
-            max-width: 1200px;
-            margin: 0 auto;
         }
 
         /* Back to top button */
@@ -539,8 +501,8 @@ $resultado = mysqli_query($conexion, $query);
 
         /* Media Queries */
         @media (max-width: 992px) {
-            .usuarios-table {
-                font-size: 14px;
+            .product-container {
+                flex-direction: column;
             }
         }
 
@@ -575,11 +537,6 @@ $resultado = mysqli_query($conexion, $query);
             .header-container {
                 gap: 15px;
             }
-            
-            .usuarios-table {
-                display: block;
-                overflow-x: auto;
-            }
         }
 
         @media (max-width: 576px) {
@@ -596,15 +553,6 @@ $resultado = mysqli_query($conexion, $query);
             .social-media {
                 justify-content: center;
             }
-            
-            .links-container {
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .panel-link {
-                margin: 10px 0;
-            }
         }
     </style>
 </head>
@@ -613,8 +561,7 @@ $resultado = mysqli_query($conexion, $query);
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title"></h1>
+                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
             </div>
             
             <div class="header-controls">
@@ -630,113 +577,24 @@ $resultado = mysqli_query($conexion, $query);
                 </button>
                 
                 <nav class="nav-menu" id="navMenu">
-                    <a href="index2.php" class="nav-link"><span>Inicio</span></a>
+                    <a href="index.php" class="nav-link"><span>Inicio</span></a>
                     <a href="catalogo.php" class="nav-link">Productos</a>
                     <a href="nosotros.php" class="nav-link">Nosotros</a>
                     <a href="registrar.php" class="nav-link">Registrarse</a>
-                    <a href="inventario.php" class="nav-link">Inventario</a>
-                    <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
-                    <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
                 </nav>
             </div>
         </div>
     </header>
 
-    <main class="dashboard">
-        <div class="container">
-            <div class="section-title">
-                <h2>Usuarios Registrados</h2>
-                <p>Administra los usuarios del sistema</p>
-            </div>
-            
-            <table class="usuarios-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Cédula</th>
-                        <th>Usuario</th>
-                        <th>Correo</th>
-                        <th>Fecha Registro</th>
-                        <th>Rol</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while($usuario = mysqli_fetch_assoc($resultado)): ?>
-                    <tr>
-                        <td><?php echo $usuario['id']; ?></td>
-                        <td><?php echo htmlspecialchars($usuario['nombre']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['apellido']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['tipo_cedula'].'-'.$usuario['cedula']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['usuario']); ?></td>
-                        <td><?php echo htmlspecialchars($usuario['correo']); ?></td>
-                        <td><?php echo $usuario['fecha_reg']; ?></td>
-                        <td><?php echo ucfirst($usuario['rol']); ?></td>
-                        <td class="action-buttons">
-                            <a href="editar_usuario.php?id=<?php echo $usuario['id']; ?>" class="editar btn-action" title="Editar usuario">
-                                <i class="fas fa-edit"></i> 
-                                <span class="btn-text">Editar</span>
-                            </a>
-                            <a href="../php/eliminar_usuario.php?id=<?php echo $usuario['id']; ?>" class="eliminar btn-action" title="Eliminar usuario" onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">
-                                <i class="fas fa-trash-alt"></i> 
-                                <span class="btn-text">Eliminar</span>
-                            </a>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-            
-            <div class="links-container">
-                <a href="registro_empleado.php" class="panel-link"><i class="fas fa-user-plus"></i> Registrar Nuevo Empleado</a>
-                <a href="index2.php" class="panel-link"><i class="fas fa-arrow-left"></i> Volver al Panel de Empleado</a>
-            </div>
-        </div>
-    </main>
+    <?php include 'php/contenido_producto.php'; ?>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>El Café Con La Pan-dilla</h3>
-                    <p>Desde 2010 ofreciendo los mejores productos artesanales de panadería y cafetería, elaborados con ingredientes naturales y mucho amor.</p>
-                    <div class="social-media">
-                        <a href="https://www.facebook.com/profile.php?id=100089772800592" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/carlosgz9477/" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="https://github.com/NoobCoderMaster69" class="social-link"><i class="fab fa-github"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Enlaces rápidos</h3>
-                    <ul class="footer-links">
-                        <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
-                        <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
-                        <li><a href="registro_empleado.php"><i class="fas fa-chevron-right"></i> Generar Acceso</a></li>
-                        <li><a href="diagrama_procesos.php"><i class="fas fa-chevron-right"></i> Flujo Productos</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contacto</h3>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Ciudad</a></li>
-                        <li><a href="tel:+584244258944"><i class="fas fa-phone"></i> +58 424-4258944</a></li>
-                        <li><a href="mailto:cg9477083@gmail.com"><i class="fas fa-envelope"></i> cg9477083@gmail.com</a></li>
-                        <li><a href="#"><i class="fas fa-clock"></i> Lunes a Domingo: 7am - 8pm</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 El Café Con La Pan-dilla C.A. Todos los Derechos Reservados.</p>
-            </div>
-        </div>
-    </footer>
-    
     <div class="back-to-top" id="backToTop">
         <i class="fas fa-arrow-up"></i>
     </div>
+    
+    <audio id="backgroundMusic" loop>
+        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
+    </audio>
 
     <script>
         // Configuración del tema oscuro/claro
@@ -782,6 +640,18 @@ $resultado = mysqli_query($conexion, $query);
                 behavior: 'smooth'
             });
         });
+
+        // Música de fondo
+        const audio = document.getElementById("backgroundMusic");
+        if (audio) {
+            audio.volume = 0.03;
+            const lastTime = localStorage.getItem("audioCurrentTime") || 0;
+            audio.currentTime = lastTime;
+            audio.play().catch(e => console.log("Autoplay prevented:", e));
+            audio.addEventListener("timeupdate", () => {
+                localStorage.setItem("audioCurrentTime", audio.currentTime);
+            });
+        }
 
         // Contador del carrito (simulado)
         const cartCounter = document.getElementById('cartCounter');
