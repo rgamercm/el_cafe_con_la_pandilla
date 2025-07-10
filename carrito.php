@@ -15,6 +15,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
     <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* [MANTENER TODOS TUS ESTILOS ACTUALES] */
+        /* SOLO AÑADE ESTOS NUEVOS ESTILOS AL FINAL DE TU SECCIÓN CSS */
         /* Variables y estilos base */
         :root {
             --primary-color: #D4A76A;
@@ -675,10 +677,130 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 justify-content: center;
             }
         }
+        /* Nuevos estilos para el proceso de pago */
+        .checkout-form {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 30px;
+            display: none; /* Inicialmente oculto */
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .payment-method {
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .payment-method:hover, .payment-method.selected {
+            border-color: var(--primary-color);
+        }
+        
+        .payment-method.selected {
+            background-color: rgba(212, 167, 106, 0.1);
+        }
+        
+        .payment-details {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.05);
+            border-radius: var(--border-radius);
+        }
+        
+        .payment-details.active {
+            display: block;
+        }
+        
+        .receipt {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .receipt.active {
+            display: block;
+        }
+        
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 20px;
+        }
+        
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .receipt-totals {
+            border-top: 2px solid var(--primary-color);
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .receipt-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .receipt-total.grand {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
     </style>
 </head>
 
 <body>
+    <!-- [MANTENER TU HEADER ACTUAL] -->
     <header class="header">
         <div class="container header-container">
             <div class="logo">
@@ -714,23 +836,158 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 <h2>Tu Carrito de Compras</h2>
                 
                 <?php if($usuario_logeado): ?>
-                    <div class="cart-content">
+                    <div class="cart-content" id="cartContent">
                         <ul id="cartItems"></ul>
                         <div class="cart-summary">
                             <p id="totalPrice">Total: $0.00</p>
-                            <button id="checkout" class="btn">Finalizar Compra</button>
+                            <button id="proceedToCheckout" class="btn">Proceder al Pago</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Formulario de pago (inicialmente oculto) -->
+                    <div class="checkout-form" id="checkoutForm">
+                        <h3>Información de Pago</h3>
+                        
+                        <div class="form-group">
+                            <label>Método de Pago</label>
+                            <div class="payment-methods">
+                                <div class="payment-method selected" onclick="selectPaymentMethod('tarjeta')">
+                                    <input type="radio" name="paymentMethod" id="tarjeta" value="tarjeta" checked>
+                                    <label for="tarjeta">Tarjeta de Crédito/Débito</label>
+                                </div>
+                                <div class="payment-method" onclick="selectPaymentMethod('transferencia')">
+                                    <input type="radio" name="paymentMethod" id="transferencia" value="transferencia">
+                                    <label for="transferencia">Transferencia Bancaria</label>
+                                </div>
+                                <div class="payment-method" onclick="selectPaymentMethod('pago_movil')">
+                                    <input type="radio" name="paymentMethod" id="pago_movil" value="pago_movil">
+                                    <label for="pago_movil">Pago Móvil</label>
+                                </div>
+                                <div class="payment-method" onclick="selectPaymentMethod('efectivo')">
+                                    <input type="radio" name="paymentMethod" id="efectivo" value="efectivo">
+                                    <label for="efectivo">Efectivo</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalles de pago con tarjeta -->
+                        <div class="payment-details active" id="tarjetaDetails">
+                            <div class="form-group">
+                                <label for="cardNumber">Número de Tarjeta</label>
+                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="16">
+                            </div>
+                            <div class="form-group">
+                                <label for="cardName">Nombre en la Tarjeta</label>
+                                <input type="text" id="cardName" class="form-control" placeholder="Nombre Apellido">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cardExpiry">Fecha de Expiración</label>
+                                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cardCvv">CVV</label>
+                                    <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Detalles de transferencia bancaria -->
+                        <div class="payment-details" id="transferenciaDetails">
+                            <p>Por favor realiza una transferencia a la siguiente cuenta:</p>
+                            <p><strong>Banco:</strong> Banco Nacional</p>
+                            <p><strong>Cuenta:</strong> 1234-5678-9012-3456</p>
+                            <p><strong>A nombre de:</strong> El Café Con La Pan-dilla C.A.</p>
+                            <p><strong>RIF:</strong> J-123456789</p>
+                            <p>Envía el comprobante a cg9477083@gmail.com</p>
+                        </div>
+                        
+                        <!-- Detalles de pago móvil -->
+                        <div class="payment-details" id="pago_movilDetails">
+                            <div class="form-group">
+                                <label for="mobileNumber">Número de Teléfono</label>
+                                <input type="text" id="mobileNumber" class="form-control" placeholder="0424-1234567">
+                            </div>
+                            <div class="form-group">
+                                <label for="mobileBank">Banco</label>
+                                <select id="mobileBank" class="form-control">
+                                    <option value="banco_nacional">Banco Nacional</option>
+                                    <option value="banco_provincial">Banco Provincial</option>
+                                    <option value="banco_venezuela">Banco de Venezuela</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="mobileId">Cédula/Pasaporte</label>
+                                <input type="text" id="mobileId" class="form-control" placeholder="V-12345678">
+                            </div>
+                        </div>
+                        
+                        <!-- Detalles de pago en efectivo -->
+                        <div class="payment-details" id="efectivoDetails">
+                            <p>Puedes pagar en efectivo al momento de recibir tu pedido.</p>
+                            <p>Por favor ten el monto exacto o cercano para facilitar el proceso.</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="deliveryAddress">Dirección de Envío (opcional)</label>
+                            <textarea id="deliveryAddress" class="form-control" rows="3" placeholder="Si deseas delivery, por favor indica tu dirección completa"></textarea>
+                        </div>
+                        
+                        <button id="completePurchase" class="btn">Completar Compra</button>
+                        <button id="backToCart" class="btn btn-outline" onclick="backToCart()">Volver al Carrito</button>
+                    </div>
+                    
+                    <!-- Recibo (inicialmente oculto) -->
+                    <div class="receipt" id="receipt">
+                        <div class="receipt-header">
+                            <h3>El Café Con La Pan-dilla C.A.</h3>
+                            <p>Av. Principal 123, Ciudad</p>
+                            <p>RIF: J-123456789</p>
+                            <p>Teléfono: +58 424-4258944</p>
+                            <p>Fecha: <span id="receiptDate"></span></p>
+                            <p>Pedido #<span id="receiptOrderId"></span></p>
+                        </div>
+                        
+                        <div class="receipt-items" id="receiptItems">
+                            <!-- Los ítems se agregarán dinámicamente -->
+                        </div>
+                        
+                        <div class="receipt-totals">
+                            <div class="receipt-total">
+                                <span>Subtotal:</span>
+                                <span id="receiptSubtotal">$0.00</span>
+                            </div>
+                            <div class="receipt-total">
+                                <span>IVA (16%):</span>
+                                <span id="receiptTax">$0.00</span>
+                            </div>
+                            <div class="receipt-total grand">
+                                <span>Total:</span>
+                                <span id="receiptTotal">$0.00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="receipt-footer">
+                            <p id="receiptPaymentMethod"></p>
+                            <p id="receiptDeliveryAddress"></p>
+                            <p>¡Gracias por tu compra!</p>
+                            <div class="receipt-actions">
+                                <button id="printReceipt" class="btn" onclick="window.print()">Imprimir Recibo</button>
+                                <button id="newOrder" class="btn" onclick="newOrder()">Nueva Orden</button>
+                            </div>
                         </div>
                     </div>
                 <?php else: ?>
                     <div class="login-required">
                         <p>Debes iniciar sesión para acceder al carrito</p>
-                        <a href="registrar.php" class="btn-outline">Iniciar Sesión</a>
+                        <a href="registrar.php" class="btn">Iniciar Sesión</a>
                     </div>
                 <?php endif; ?>
             </div>
         </div>
     </main>
 
+    <!-- [MANTENER TU FOOTER ACTUAL] -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -748,8 +1005,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <ul class="footer-links">
                         <li><a href="index.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
                         <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
+                        <li><a href="nosotros.php"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
                         <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>
-                        <li><a href="diagrama_procesos.php"><i class="fas fa-chevron-right"></i> Flujo Productos</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -777,6 +1034,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
     </audio>
 
     <script>
+        // [MANTENER TUS SCRIPTS DE TEMA, HEADER, ETC.]
         // Configuración del tema oscuro/claro
         const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
@@ -861,15 +1119,22 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 }
             });
         });
-
+        
         // Funcionalidad del carrito
         document.addEventListener('DOMContentLoaded', function() {
             loadCartFromStorage();
+            updateCartCounter();
             
             // Configurar botón de checkout
-            const checkoutButton = document.getElementById('checkout');
-            if (checkoutButton) {
-                checkoutButton.addEventListener('click', checkout);
+            const proceedToCheckout = document.getElementById('proceedToCheckout');
+            if (proceedToCheckout) {
+                proceedToCheckout.addEventListener('click', showCheckoutForm);
+            }
+            
+            // Configurar botón de completar compra
+            const completePurchase = document.getElementById('completePurchase');
+            if (completePurchase) {
+                completePurchase.addEventListener('click', completePurchaseProcess);
             }
         });
 
@@ -877,15 +1142,15 @@ $usuario_logeado = isset($_SESSION['usuario']);
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const cartItemsList = document.getElementById('cartItems');
             const totalPriceElement = document.getElementById('totalPrice');
-            const cartCounter = document.getElementById('cartCounter');
             
             cartItemsList.innerHTML = '';
             
             if (cart.length === 0) {
                 cartItemsList.innerHTML = '<li>Tu carrito está vacío</li>';
                 totalPriceElement.textContent = 'Total: $0.00';
-                document.getElementById('checkout').disabled = true;
-                cartCounter.textContent = '0';
+                if (document.getElementById('proceedToCheckout')) {
+                    document.getElementById('proceedToCheckout').disabled = true;
+                }
                 return;
             }
             
@@ -914,8 +1179,9 @@ $usuario_logeado = isset($_SESSION['usuario']);
             });
             
             totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
-            document.getElementById('checkout').disabled = false;
-            cartCounter.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (document.getElementById('proceedToCheckout')) {
+                document.getElementById('proceedToCheckout').disabled = false;
+            }
         }
 
         function updateQuantity(index, change) {
@@ -929,6 +1195,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 
                 localStorage.setItem('cart', JSON.stringify(cart));
                 loadCartFromStorage();
+                updateCartCounter();
             }
         }
 
@@ -938,13 +1205,171 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 cart.splice(index, 1);
                 localStorage.setItem('cart', JSON.stringify(cart));
                 loadCartFromStorage();
+                updateCartCounter();
             }
         }
-
-        function checkout() {
-            alert('¡Compra finalizada con éxito! Gracias por tu compra.');
-            localStorage.removeItem('cart');
-            loadCartFromStorage();
+        
+        function updateCartCounter() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (document.getElementById('cartCounter')) {
+                document.getElementById('cartCounter').textContent = totalItems;
+            }
+        }
+        
+        function showCheckoutForm() {
+            document.getElementById('cartContent').style.display = 'none';
+            document.getElementById('checkoutForm').style.display = 'block';
+        }
+        
+        function backToCart() {
+            document.getElementById('checkoutForm').style.display = 'none';
+            document.getElementById('cartContent').style.display = 'block';
+        }
+        
+        function selectPaymentMethod(method) {
+            // Ocultar todos los detalles de pago
+            document.querySelectorAll('.payment-details').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Desmarcar todos los métodos
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Mostrar detalles del método seleccionado
+            document.getElementById(`${method}Details`).classList.add('active');
+            
+            // Marcar como seleccionado
+            event.currentTarget.classList.add('selected');
+        }
+        
+        function completePurchaseProcess() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            let paymentDetails = {};
+            
+            // Obtener detalles según el método de pago
+            if (paymentMethod === 'tarjeta') {
+                paymentDetails = {
+                    cardNumber: document.getElementById('cardNumber').value,
+                    cardName: document.getElementById('cardName').value,
+                    cardExpiry: document.getElementById('cardExpiry').value,
+                    cardCvv: document.getElementById('cardCvv').value
+                };
+            } else if (paymentMethod === 'pago_movil') {
+                paymentDetails = {
+                    mobileNumber: document.getElementById('mobileNumber').value,
+                    mobileBank: document.getElementById('mobileBank').value,
+                    mobileId: document.getElementById('mobileId').value
+                };
+            }
+            
+            const deliveryAddress = document.getElementById('deliveryAddress').value;
+            
+            // Calcular totales
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.16; // IVA 16%
+            const total = subtotal + tax;
+            
+            // Mostrar recibo (simulación)
+            showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
+            
+            // En una aplicación real, aquí enviarías los datos al servidor con fetch()
+            // Ejemplo:
+            /*
+            fetch('php/checkout.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cart: cart,
+                    paymentMethod: paymentMethod,
+                    paymentDetails: paymentDetails,
+                    deliveryAddress: deliveryAddress
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showReceipt(data.order);
+                    localStorage.removeItem('cart');
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            });
+            */
+            
+            // Simulación de éxito
+            setTimeout(() => {
+                document.getElementById('checkoutForm').style.display = 'none';
+                document.getElementById('receipt').classList.add('active');
+                localStorage.removeItem('cart');
+                updateCartCounter();
+            }, 1000);
+        }
+        
+        function showReceipt(items, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress) {
+            // Formatear fecha
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('receiptDate').textContent = now.toLocaleDateString('es-ES', options);
+            
+            // ID de pedido simulado (en una app real vendría del servidor)
+            document.getElementById('receiptOrderId').textContent = Math.floor(Math.random() * 1000000);
+            
+            // Agregar ítems
+            const receiptItems = document.getElementById('receiptItems');
+            receiptItems.innerHTML = '';
+            
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'receipt-item';
+                itemDiv.innerHTML = `
+                    <span>${item.quantity} x ${item.name}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                receiptItems.appendChild(itemDiv);
+            });
+            
+            // Mostrar totales
+            document.getElementById('receiptSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('receiptTax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('receiptTotal').textContent = `$${total.toFixed(2)}`;
+            
+            // Mostrar método de pago
+            let paymentMethodText = '';
+            switch(paymentMethod) {
+                case 'tarjeta':
+                    paymentMethodText = `Tarjeta terminada en ${paymentDetails.cardNumber.slice(-4)}`;
+                    break;
+                case 'transferencia':
+                    paymentMethodText = 'Transferencia Bancaria';
+                    break;
+                case 'pago_movil':
+                    paymentMethodText = `Pago Móvil (${paymentDetails.mobileBank})`;
+                    break;
+                case 'efectivo':
+                    paymentMethodText = 'Efectivo al recibir';
+                    break;
+            }
+            document.getElementById('receiptPaymentMethod').textContent = `Método de pago: ${paymentMethodText}`;
+            
+            // Mostrar dirección si existe
+            if (deliveryAddress) {
+                document.getElementById('receiptDeliveryAddress').textContent = `Dirección: ${deliveryAddress}`;
+            }
+        }
+        
+        function newOrder() {
+            window.location.href = 'catalogo.php';
         }
     </script>
 </body>
