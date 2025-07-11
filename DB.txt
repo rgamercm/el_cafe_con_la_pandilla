@@ -84,3 +84,91 @@ DROP table inventario;
 
 
 
+
+//esta me funciono para borrar tablas completamente
+DROP TABLE IF EXISTS inventario;
+DROP TABLE IF EXISTS usuarios;
+DROP TABLE IF EXISTS pedidos;
+DROP TABLE IF EXISTS detalles_pedido;
+DROP TABLE IF EXISTS metodos_pago;
+
+TRUNCATE TABLE usuarios;
+TRUNCATE TABLE inventario;
+TRUNCATE TABLE pedidos;
+TRUNCATE TABLE detalles_pedido;
+TRUNCATE TABLE metodos_pago;
+
+
+DROP TABLE usuarios;
+DROP TABLE inventario;
+DROP TABLE pedidos;
+DROP TABLE detalles_pedido;
+DROP TABLE metodos_pago;
+
+-- Usa WHERE 1=1 o WHERE id>0 (si tienes columna id)
+-- Ejecuta esto antes de tus DELETE statements
+SET SQL_SAFE_UPDATES = 0;
+
+DELETE FROM usuarios;
+DELETE FROM inventario;
+DELETE FROM pedidos;
+DELETE FROM detalles_pedido;
+DELETE FROM metodos_pago;
+
+SET SQL_SAFE_UPDATES = 1;
+
+DELETE FROM usuarios WHERE 
+DELETE FROM inventario WHERE
+DELETE FROM pedidos WHERE
+DELETE FROM detalles_pedido WHERE
+DELETE FROM metodos_pago WHERE
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
+-- Tabla de pedidos
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    fecha_pedido DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    estado ENUM('pendiente', 'procesando', 'enviado', 'completado', 'cancelado') DEFAULT 'pendiente',
+    subtotal DECIMAL(10, 2) NOT NULL,
+    impuestos DECIMAL(10, 2) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    metodo_pago ENUM('tarjeta', 'transferencia', 'efectivo', 'pago_movil') NOT NULL,
+    datos_pago TEXT,
+    direccion_envio TEXT,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- Tabla de detalles de pedido
+CREATE TABLE detalles_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    cantidad INT NOT NULL,
+    precio_unitario DECIMAL(10, 2) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES inventario(id) ON DELETE CASCADE
+);
+
+SELECT * from detalles_pedido 
+
+-- Tabla de métodos de pago
+CREATE TABLE metodos_pago (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    activo BOOLEAN DEFAULT TRUE
+);
+
+-- Insertar métodos de pago básicos
+INSERT INTO metodos_pago (nombre, descripcion) VALUES 
+('Tarjeta de Crédito/Débito', 'Pago con tarjeta Visa, Mastercard, etc.'),
+('Transferencia Bancaria', 'Transferencia directa desde tu banco'),
+('Pago Móvil', 'Pago a través de sistemas de pago móvil'),
+('Efectivo', 'Pago en efectivo al recibir el pedido');
+
