@@ -491,7 +491,7 @@ if(isset($_SESSION['usuario'])){
     <header class="header">
         <div class="header-container">
             <div class="logo">
-                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <img src="img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
             </div>
             
             <h1 class="header-title">El Café Con La Pan-dilla</h1>

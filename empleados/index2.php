@@ -519,7 +519,7 @@ verificarAutenticacion('empleado');
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <img src="../img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
                 <h1 class="header-title"></h1>
             </div>
             
