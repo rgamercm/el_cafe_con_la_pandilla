@@ -911,7 +911,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-image">
-                                <img src="img/testimonials/person1.jpg" alt="María González">
+                                <img src="img/compradores/maria.jpg" alt="María González">
                             </div>
                             <div class="author-info">
                                 <h4>María González</h4>
@@ -925,7 +925,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-image">
-                                <img src="img/testimonials/person2.jpg" alt="Carlos Rodríguez">
+                                <img src="img/compradores/carlos.jpg" alt="Carlos Rodríguez">
                             </div>
                             <div class="author-info">
                                 <h4>Carlos Rodríguez</h4>
@@ -939,7 +939,7 @@
                         </div>
                         <div class="testimonial-author">
                             <div class="author-image">
-                                <img src="img/testimonials/person3.jpg" alt="Laura Méndez">
+                                <img src="img/compradores/laur.jpg" alt="Laura Méndez">
                             </div>
                             <div class="author-info">
                                 <h4>Laura Méndez</h4>
