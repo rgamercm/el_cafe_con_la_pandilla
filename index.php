@@ -1131,10 +1131,11 @@
         // Configuración del carrusel - AQUÍ DEBES AGREGAR TUS IMÁGENES Y AJUSTAR LA VELOCIDAD
         const carouselSettings = {
             images: [
-                'img/carrusel/imagen1.jpg',
-                'img/carrusel/imagen2.jpg',
-                'img/carrusel/imagen3.jpg',
-                'img/carrusel/imagen4.jpg',
+                'img/carrusel/imagenn1.jpg',
+                'img/carrusel/imagenn2.jpg',
+                'img/carrusel/imagenn3.jpg',
+                'img/carrusel/imagenn4.jpg',
+                'img/carrusel/imagenn5.jpg',
                 // Añade más rutas de imágenes aquí según necesites
                 // Ejemplo: 'img/carrusel/4.jpg', 'img/carrusel/5.jpg'
             ],
