@@ -1,6 +1,5 @@
 <?php
-include '../php/verificar_sesion.php';
-verificarAutenticacion('empleado');
+require_once '../php/verificar_sesion.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -574,7 +573,7 @@ verificarAutenticacion('empleado');
             <div class="header-controls">
                 <button class="theme-toggle" id="themeToggle">🌙</button>
                 
-                <a href="../carrito.php" class="cart-icon">
+                <a href="carrito.php" class="cart-icon">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCounter">0</span>
                 </a>
@@ -609,12 +608,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Popular</div>
                     <div class="product-image">
-                        <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
+                        <a href="p1.php"><img src="../img/productosgeneral/1_Maracaibo Mocha (Chocolate venezolano + espresso + leche cremosa.png" alt="Café Capuchino"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p1.php">Capuchino con Caritas de Gato</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$1.60</span>
+                        <h3><a href="p1.php">Maracaibo Mocha</a></h3>
+                        <p>Chocolate venezolano + espresso + leche cremosa. </p>
+                        <span class="price"></span>
                         <a href="p1.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -623,12 +622,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Recomendado</div>
                     <div class="product-image">
-                        <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
+                        <a href="p2.php"><img src="../img/productosgeneral/2_Café Catire (Leche dorada (cúrcuma) + espresso + miel de abeja).png" alt="Pan Artesanal"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p2.php">Pan Artesanal</a></h3>
-                        <p>Elaborado con técnicas tradicionales, nuestro pan artesanal ofrece un sabor único y una textura esponjosa, perfecto para acompañar cualquier comida.</p>
-                        <span class="price">$3.60</span>
+                        <h3><a href="p2.php">Café Catire</a></h3>
+                        <p>Leche dorada (cúrcuma) + espresso + miel de abeja.</p>
+                        <span class="price"> </span>
                         <a href="p2.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -637,12 +636,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Especial</div>
                     <div class="product-image">
-                        <a href="p3.php"><img src="img/cafe/coffee (4).jpg" alt="Café Expreso"></a>
+                        <a href="p3.php"><img src="../img/productosgeneral/3_Chorreado de Oriente (Café colado en tela con notas de cacao).png" alt="Café Expreso"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p3.php">Café Expreso</a></h3>
-                        <p>Intenso y aromático, nuestro café expreso es perfecto para los amantes del buen café. Disfruta de su sabor robusto y su crema característica.</p>
-                        <span class="price">$1.80</span>
+                        <h3><a href="p3.php">Chorreado de Oriente</a></h3>
+                        <p>Café colado en tela con notas de cacao.</p>
+                        <span class="price"></span>
                         <a href="p3.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -651,12 +650,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Nuevo</div>
                     <div class="product-image">
-                        <a href="p4.php"><img src="img/tortas/tortas (4).jpg" alt="Torta de Chocolate"></a>
+                        <a href="p4.php"><img src="../img/productosgeneral/4_Paragüitas (Café helado con coco rallado y leche de almendras).png"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p4.php">Torta de Chocolate</a></h3>
-                        <p>Elaboradas con los mejores ingredientes, nuestras tortas están pensadas para regalarte dulzura y frescura. Con sabores variados, texturas suaves y una presentación irresistible.</p>
-                        <span class="price">$10.10</span>
+                        <h3><a href="p4.php">Paragüitas</a></h3>
+                        <p>Café helado con coco rallado y leche de almendras.</p>
+                        <span class="price"></span>
                         <a href="p4.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -665,12 +664,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Divertido</div>
                     <div class="product-image">
-                        <a href="p5.php"><img src="img/panes/panes (2).jpg" alt="Pan Con Forma de Gato"></a>
+                        <a href="p5.php"><img src="../img/productosgeneral/5_Café en Piedra (Espresso servido sobre una piedra de chocolate para rallar).png" alt="Pan Con Forma de Gato"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p5.php">Pan Con Forma de Gato</a></h3>
-                        <p>Divertido y delicioso pan con forma de gatito, perfecto para los amantes de los animales y los panes artesanales. Suave por dentro y crujiente por fuera.</p>
-                        <span class="price">$5.00</span>
+                        <h3><a href="p5.php">Café en Piedra</a></h3>
+                        <p>Espresso servido sobre una piedra de chocolate para rallar.</p>
+                        <span class="price"></span>
                         <a href="p5.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -679,12 +678,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p6.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p6.php"><img src="../img/productosgeneral/6_Pan de PANA’ (Pan artesanal con harina de maíz y mantequilla).jpeg.jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p6.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p6.php">Pan de PANA</a></h3>
+                        <p>Pan artesanal con harina de maíz y mantequilla.</p>
+                        <span class="price"></span>
                         <a href="p6.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -693,12 +692,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p7.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p7.php"><img src="../img/productosgeneral/7_Cachitos Rebeldes (Hojaldre relleno de pernil y queso amarillo).jpeg.jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p7.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p7.php">Cachitos Rebeldes</a></h3>
+                        <p>Hojaldre relleno de pernil y queso amarillo.</p>
+                        <span class="price"></span>
                         <a href="p7.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -707,12 +706,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p8.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p8.php"><img src="../img/productosgeneral/8_Bollitos Pelones (Pan de maíz relleno de caraotas negras).jpeg.jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p8.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p8.php">Bollitos Pelones</a></h3>
+                        <p>Pan de maíz relleno de caraotas negras</p>
+                        <span class="price"></span>
                         <a href="p8.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -721,12 +720,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p9.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p9.php"><img src="../img/productosgeneral/9_Pan de Queso Llanero (Qeso de mano derretido en pan campesino).jpeg.jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p9.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p9.php">Pan de Queso Llanero</a></h3>
+                        <p>Qeso de mano derretido en pan campesino</p>
+                        <span class="price"></span>
                         <a href="p9.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -735,12 +734,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p10.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p10.php"><img src="../img/productosgeneral/10_Pan de Coco Punk (Coco rallado y panela en masa esponjosa).jpeg.jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p10.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p10.php">Pan de Coco Punk</a></h3>
+                        <p>Coco rallado y panela en masa esponjosa</p>
+                        <span class="price"></span>
                         <a href="p10.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -749,11 +748,11 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p11.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p11.php"><img src="../img/productosgeneral/11_Palos de Ajo (Bastones de pan con ajo y perejil, estilo venezolano).jpeg.jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p11.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
+                        <h3><a href="p11.php">Palos de Ajo</a></h3>
+                        <p>Bastones de pan con ajo y perejil, estilo venezolano</p>
                         <span class="price">$4.60</span>
                         <a href="p11.php" class="btn">Ver detalles</a>
                     </div>
@@ -763,12 +762,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p12.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p12.php"><img src="../img/productosgeneral/12_Mochila de Chocolate (Torta negra con relleno de ganache y café).png" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p12.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p12.php">Mochila de Chocolate</a></h3>
+                        <p>Torta negra con relleno de ganache y café.</p>
+                        <span class="price"></span>
                         <a href="p12.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -777,12 +776,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p13.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p13.php"><img src="../img/productosgeneral/13_Dulce de Lechosa (Lechosa verde en almíbar con especias).jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p13.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p13.php">Dulce de Lechosa</a></h3>
+                        <p>Lechosa verde en almíbar con especias</p>
+                        <span class="price"></span>
                         <a href="p13.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -791,12 +790,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p14.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p14.php"><img src="../img/productosgeneral/14_conserva de Coco (Cocadas con panela y limón).jpg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p14.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p14.php">Conservas de Coco</a></h3>
+                        <p>dulce tradicional venezolano hecho con coco rallado y azúcar, cocinado hasta obtener una textura caramelizada, y luego moldeado en porciones individuales</p>
+                        <span class="price"></span>
                         <a href="p14.php" class="btn">Ver detalles</a>
                     </div>
                 </div>
@@ -805,12 +804,12 @@ verificarAutenticacion('empleado');
                 <div class="product-card">
                     <div class="product-badge">Fresco</div>
                     <div class="product-image">
-                        <a href="p15.php"><img src="img/tortas/tortas (3).jpg" alt="Helado Con Oreo"></a>
+                        <a href="p15.php"><img src="../img/productosgeneral/15_torta Mandarinas en Miel (Gajos de mandarina caramelizados con anís).jpeg" alt="Helado Con Oreo"></a>
                     </div>
                     <div class="product-content">
-                        <h3><a href="p15.php">Helado Con Oreo</a></h3>
-                        <p>Nuestros dulces Oreo te traen el clásico sabor en un formato único. Estos postres son crujientes y cremosos, perfectos para quienes desean disfrutar de un snack diferente.</p>
-                        <span class="price">$4.60</span>
+                        <h3><a href="p15.php">Torta Mandarinas en Miel </a></h3>
+                        <p>Gajos de mandarina caramelizados con anís</p>
+                        <span class="price"></span>
                         <a href="p15.php" class="btn">Ver detalles</a>
                     </div>
                 </div>

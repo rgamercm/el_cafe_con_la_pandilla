@@ -592,7 +592,7 @@
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="img/cafe/cafe.png" alt="Logotipo" class="logo-image">
+                <img src="../img/cafe/cafe.png" alt="Logotipo" class="logo-image">
             </div>
             
             <div class="header-controls">
@@ -627,7 +627,7 @@
             <div class="container">
                 <div class="about-container">
                     <div class="about-image">
-                        <img src="img/cafe/cafe-shop.jpg" alt="Nuestra cafetería">
+                        <img src="../img/cafe/cafe-shop.jpg" alt="Nuestra cafetería">
                     </div>
                     <div class="about-content">
                         <h2>Nuestra Historia</h2>
@@ -643,7 +643,7 @@
             <div class="container">
                 <div class="card-all">
                     <div class="noso-card">
-                        <img src="img/panes/panes.jpg" alt="panes">
+                        <img src="../img/panes/panes.jpg" alt="panes">
                         <p>En "El Café con La Pan-dilla", creemos que cada bocado cuenta una historia y que cada taza de café
                             puede ser el inicio de algo especial. Nuestra misión es ofrecer productos frescos y auténticos que hagan
                             sentir a cada visitante como en casa. Desde panes artesanales y pasteles delicadamente horneados, hasta el café
@@ -654,10 +654,10 @@
                             personas en torno a una mesa. Con un equipo comprometido y una inspiración en los sabores de siempre, creamos un
                             espacio donde la tradición se encuentra con la innovación, ofreciendo productos que mezclan recetas clásicas con
                             un toque contemporáneo.</p>
-                        <img src="img/postre/postre (3).jpg" alt="postre">
+                        <img src="../img/postre/postre (3).jpg" alt="postre">
                     </div>
                     <div class="noso-card">
-                        <img src="img/cafe/cafe (1).jpg" alt="cafe">
+                        <img src="../img/cafe/cafe (1).jpg" alt="cafe">
                         <p>Nuestros valores están en la calidad, la frescura, y el compromiso de entregar siempre lo mejor. Nos
                             enorgullece trabajar con ingredientes seleccionados cuidadosamente, muchos de ellos locales, para apoyar la
                             economía de nuestra comunidad y reducir nuestro impacto ambiental.</p>
@@ -666,10 +666,10 @@
                         <p>Además, somos una familia unida por el amor a lo que hacemos. Cada miembro de nuestro equipo aporta
                             su entusiasmo y dedicación, asegurándose de que cada detalle esté a la altura de nuestros estándares. Creemos en
                             el poder de una sonrisa, y en que el mejor ingrediente es siempre la pasión por nuestro oficio.</p>
-                        <img src="img/cafe/cafe (2).jpg" alt="cafe">
+                        <img src="../img/cafe/cafe (2).jpg" alt="cafe">
                     </div>
                     <div class="noso-card">
-                        <img src="img/postre/postre.jpg" alt="cafe">
+                        <img src="../img/postre/postre.jpg" alt="cafe">
                         <p>Estamos comprometidos con nuestra comunidad, participando en eventos locales y colaborando con
                             proveedores sostenibles. En El Café con La Pan-dilla, no solo ofrecemos café y pan, sino un rincón
                             acogedor para todos. Además, hemos ampliado nuestro menú con postres especiales, incluyendo tortas y
@@ -722,7 +722,7 @@
     </div>
     
     <audio id="backgroundMusic" loop>
-        <source src="./musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
+        <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
 
     <script>
