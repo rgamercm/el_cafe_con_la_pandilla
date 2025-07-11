@@ -1,6 +1,6 @@
 # El Café Con La Pan-dilla - Panadería/Cafetería
 
-![Project Banner](img/cafe/cafe.png) <!-- Añade una imagen banner si dispones de ella -->
+![Project Banner](img/cafe/cafe1.png) <!-- Añade una imagen banner si dispones de ella -->
 
 ## Descripción del Proyecto
 
