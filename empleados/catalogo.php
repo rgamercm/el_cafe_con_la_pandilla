@@ -753,7 +753,7 @@ require_once '../php/verificar_sesion.php';
                     <div class="product-content">
                         <h3><a href="p11.php">Palos de Ajo</a></h3>
                         <p>Bastones de pan con ajo y perejil, estilo venezolano</p>
-                        <span class="price">$4.60</span>
+                        <span class="price"></span>
                         <a href="p11.php" class="btn">Ver detalles</a>
                     </div>
                 </div>

@@ -622,7 +622,7 @@ require_once 'php/verificar_sesion.php';
                     </div>
                     <div class="product-content">
                         <h3><a href="p2.php">Café Catire</a></h3>
-                        <p>Leche dorada (cúrcuma) + espresso + miel de abeja.</p>
+                        <p>Pan recién horneado con ingredientes naturales, masa madre y larga fermentación.</p>
                         <span class="price"> </span>
                         <a href="p2.php" class="btn">Ver detalles</a>
                     </div>
@@ -749,7 +749,7 @@ require_once 'php/verificar_sesion.php';
                     <div class="product-content">
                         <h3><a href="p11.php">Palos de Ajo</a></h3>
                         <p>Bastones de pan con ajo y perejil, estilo venezolano</p>
-                        <span class="price">$4.60</span>
+                        <span class="price"></span>
                         <a href="p11.php" class="btn">Ver detalles</a>
                     </div>
                 </div>

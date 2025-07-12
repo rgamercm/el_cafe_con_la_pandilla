@@ -43,10 +43,13 @@ paginaweb:
 	cart-icon.png
  js: carrito.js registro.js style.js
  musica: //musica de la pagina
- php: actualizar_estado.php, cerrar_sesion.php, checkout.php, conexion_be.php, login_usuario_be.php, obtener_producto.php, operaciones_inventario.php, verificar_disponibilidad.php, registro_usuario_be.php, verificar_sesion.php
+
+ php: actualizar_estado.php, actualizar_usuario.php, cerrar_sesion.php, checkout.php, conexion_be.php, contenido_producto.php, eliminar_usuario.php, login_usuario_be.php, obtener_producto.php, operaciones_inventario.php, verificar_disponibilidad.php, registro_usuario_be.php, verificar_sesion.php
+
  empleados:  bienvenida_despues_de_iniciarsesion.php
  carrito.php
  catalogo.php
+ editar_usuario.php
  index2.php
  inventario.php
  nosotros.php
@@ -55,9 +58,10 @@ paginaweb:
  p3.php
  p4.php
  p5.php
- p6.php
+ p6.php...
  registrar.php
- test_conexion.php
+ registro_empleado.php
+ usuarios_registrados.php
 
 
  bienvenida_despues_de_iniciarsesion.php
@@ -70,7 +74,7 @@ paginaweb:
  p3.php
  p4.php
  p5.php
- p6.php
+ p6.php...
  registrar.php
  test_conexion.php
 

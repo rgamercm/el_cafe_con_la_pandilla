@@ -857,36 +857,36 @@
                     <div class="card">
                         <div class="card-badge">Más vendido</div>
                         <div class="card-image">
-                            <a href="p1.php"><img src="img/cafe/coffee (3).jpg" alt="Café Capuchino"></a>
+                            <a href="p1.php"><img src="img/productosgeneral/1_Maracaibo Mocha (Chocolate venezolano + espresso + leche cremosa.png" alt="Café Capuchino"></a>
                         </div>
                         <div class="card-text">
-                            <h3><a href="p1.php">Café Capuchino</a></h3>
-                            <p>Delicioso café con espuma cremosa y aroma irresistible, perfecto para empezar el día.</p>
-                            <span class="price">$1.60</span>
+                            <h3><a href="p1.php">Maracaibo Mocha</a></h3>
+                            <p>Chocolate venezolano + espresso + leche cremosa.</p>
+                            <span class="price"></span>
                             <a href="p1.php" class="btn">Ver detalles</a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-badge">Recomendado</div>
                         <div class="card-image">
-                            <a href="p2.php"><img src="img/panes/Sandwich Bread WITHOUT yeast.jpg" alt="Pan Artesanal"></a>
+                            <a href="p2.php"><img src="img/productosgeneral/2_Café Catire (Leche dorada (cúrcuma) + espresso + miel de abeja).png" alt="Pan Artesanal"></a>
                         </div>
                         <div class="card-text">
-                            <h3><a href="p2.php">Pan Artesanal</a></h3>
+                            <h3><a href="p2.php">Café Catire</a></h3>
                             <p>Pan recién horneado con ingredientes naturales, masa madre y larga fermentación.</p>
-                            <span class="price">$3.60</span>
+                            <span class="price"></span>
                             <a href="p2.php" class="btn">Ver detalles</a>
                         </div>
                     </div>
                     <div class="card">
                         <div class="card-badge">Novedad</div>
                         <div class="card-image">
-                            <a href="p3.php"><img src="img/tortas/tortas (3).jpg" alt="Helado con Oreo"></a>
+                            <a href="p3.php"><img src="img/productosgeneral/3_Chorreado de Oriente (Café colado en tela con notas de cacao).png" alt="Helado con Oreo"></a>
                         </div>
                         <div class="card-text">
-                            <h3><a href="p3.php">Helado con Oreo</a></h3>
-                            <p>Delicioso helado artesanal con trozos de galleta Oreo, ideal para días calurosos.</p>
-                            <span class="price">$4.60</span>
+                            <h3><a href="p3.php">Chorreado de Oriente</a></h3>
+                            <p>Café colado en tela con notas de cacao.</p>
+                            <span class="price"></span>
                             <a href="p3.php" class="btn">Ver detalles</a>
                         </div>
                     </div>

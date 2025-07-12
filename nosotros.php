@@ -371,6 +371,84 @@
             flex-direction: row-reverse;
         }
 
+        /* Misión, Visión y Objetivo Section */
+        .mvv-section {
+            padding: var(--section-padding);
+            background-color: var(--background-color-card);
+        }
+
+        .mvv-container {
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        .mvv-item {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--box-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .mvv-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .mvv-content {
+            flex: 1;
+        }
+
+        .mvv-content h3 {
+            font-size: 28px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .mvv-content h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-color);
+        }
+
+        .mvv-content p {
+            margin-bottom: 15px;
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        .mvv-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .mvv-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .mvv-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .mvv-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
         /* Footer */
         .footer {
             background: var(--header-bg);
@@ -509,16 +587,16 @@
                 flex-direction: column;
             }
             
-            .noso-card {
+            .noso-card, .mvv-item {
                 flex-direction: column;
                 gap: 30px;
             }
             
-            .noso-card:nth-child(even) {
+            .noso-card:nth-child(even), .mvv-item:nth-child(even) {
                 flex-direction: column;
             }
             
-            .noso-card img {
+            .noso-card img, .mvv-image img {
                 width: 100%;
                 height: auto;
                 max-height: 300px;
@@ -557,7 +635,7 @@
                 gap: 15px;
             }
             
-            .noso-card {
+            .noso-card, .mvv-item {
                 padding: 20px;
             }
         }
@@ -581,7 +659,7 @@
                 justify-content: center;
             }
             
-            .noso-card {
+            .noso-card, .mvv-item {
                 padding: 15px;
             }
         }
@@ -629,6 +707,51 @@
                         <h2>Nuestra Historia</h2>
                         <p>Desde 2010, "El Café Con La Pan-dilla" ha sido un refugio para los amantes del buen café y el pan artesanal. Lo que comenzó como un pequeño local familiar se ha convertido en un referente de calidad y tradición en nuestra comunidad.</p>
                         <p>Nuestros maestros panaderos trabajan durante la noche para que puedas disfrutar de pan recién horneado cada mañana, mientras que nuestros baristas seleccionan los mejores granos de café para ofrecerte una experiencia única.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Misión, Visión y Objetivo Section -->
+        <section class="mvv-section">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Nuestros Fundamentos</h2>
+                    <p>Conoce los principios que nos guían y nos inspiran cada día</p>
+                </div>
+                
+                <div class="mvv-container">
+                    <div class="mvv-item">
+                        <div class="mvv-content">
+                            <h3>Misión</h3>
+                            <p>En "El Café Con La Pan-dilla", nos comprometemos a ofrecer experiencias gastronómicas memorables a través de productos artesanales de la más alta calidad. Nuestra misión es crear un espacio cálido y acogedor donde cada cliente se sienta como en casa, disfrutando de pan recién horneado, café de especialidad y postres exquisitos, todos elaborados con ingredientes naturales y procesos tradicionales.</p>
+                            <p>Buscamos preservar las recetas auténticas mientras innovamos con sabores contemporáneos, manteniendo siempre nuestro compromiso con la excelencia y la satisfacción de nuestros clientes.</p>
+                        </div>
+                        <div class="mvv-image">
+                            <img src="img/mision/mision.png" alt="Nuestra misión">
+                        </div>
+                    </div>
+                    
+                    <div class="mvv-item">
+                        <div class="mvv-content">
+                            <h3>Visión</h3>
+                            <p>Aspiramos a ser reconocidos como el referente de cafetería-panadería artesanal en nuestra región, destacando por nuestra autenticidad, calidad y servicio excepcional. Visualizamos un futuro donde "El Café Con La Pan-dilla" expanda su presencia manteniendo siempre su esencia familiar y su compromiso con la comunidad.</p>
+                            <p>Nuestra visión incluye ser líderes en prácticas sostenibles, desde el abastecimiento responsable de ingredientes hasta la reducción de nuestro impacto ambiental, convirtiéndonos en un modelo de negocio gastronómico ético y responsable.</p>
+                        </div>
+                        <div class="mvv-image">
+                            <img src="img/mision/vision.png" alt="Nuestra visión">
+                        </div>
+                    </div>
+                    
+                    <div class="mvv-item">
+                        <div class="mvv-content">
+                            <h3>Objetivo</h3>
+                            <p>Nuestro principal objetivo es superar las expectativas de nuestros clientes día tras día, ofreciendo productos frescos, sabrosos y consistentes. Nos esforzamos por mantener los más altos estándares de calidad en cada etapa de nuestro proceso, desde la selección de ingredientes hasta la presentación final.</p>
+                            <p>Buscamos fomentar la cultura del buen comer, educando a nuestros clientes sobre los procesos artesanales y el valor de los productos naturales. Además, aspiramos a ser un pilar en nuestra comunidad, apoyando productores locales y participando activamente en iniciativas sociales que mejoren nuestro entorno.</p>
+                        </div>
+                        <div class="mvv-image">
+                            <img src="img/mision/objetivo.png" alt="Nuestro objetivo">
+                        </div>
                     </div>
                 </div>
             </div>
