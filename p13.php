@@ -301,7 +301,7 @@
         /* Carrito */
         .cart-section {
             background: var(--background-color-card);
-            padding: 40px 0;
+            padding: 40px;
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
         }
@@ -332,7 +332,7 @@
             gap: 10px;
         }
 
-        .remove-one, .remove-all {
+        .remove-one, .remove-all, .add-one {
             border: none;
             padding: 5px 10px;
             border-radius: 4px;
@@ -345,12 +345,17 @@
             color: white;
         }
 
+        .add-one {
+            background: #4CAF50;
+            color: white;
+        }
+
         .remove-all {
             background: #cc0000;
             color: white;
         }
 
-        .remove-one:hover, .remove-all:hover {
+        .remove-one:hover, .remove-all:hover, .add-one:hover {
             opacity: 0.9;
         }
 
@@ -588,46 +593,46 @@
 
     <?php
     require_once 'php/conexion_be.php';
+    require_once 'php/producto_comun.php';
 
     // Obtener el producto para p13.php
-    $query = "SELECT * FROM inventario WHERE pagina = 'p13' AND estado = 'activo' LIMIT 1";
-    $result = mysqli_query($conexion, $query);
+    $producto = obtenerProductoPorPagina('p13');
 
-    $disponible = false;
-    $producto = null;
-
-    if ($result && mysqli_num_rows($result) > 0) {
-        $producto = mysqli_fetch_assoc($result);
-        $disponible = ($producto['unidades_existentes'] > 0);
+    if ($producto) {
+        $nombre = htmlspecialchars($producto['nombre']);
+        $precio = $producto['precio'];
+        $descripcion = htmlspecialchars($producto['descripcion']);
+        $imagen = $producto['imagen'];
+        $id_producto = $producto['id'];
+        $disponible = $producto['disponible'];
+    } else {
+        $nombre = "Producto no configurado";
+        $precio = 0.00;
+        $descripcion = "Este producto no ha sido configurado en el inventario. Por favor, contacte al administrador.";
+        $imagen = "img/cafe/default.jpg";
+        $id_producto = 0;
+        $disponible = false;
     }
-
-    // Datos por defecto si no está en inventario
-    $nombre = $producto ? $producto['nombre'] : "Producto no configurado";
-    $precio = $producto ? $producto['precio'] : 0.00;
-    $descripcion = $producto ? $producto['descripcion'] : "Este producto no ha sido configurado en el inventario. Por favor, contacte al administrador.";
-    $imagen = $producto && file_exists("img/cafe/".$producto['codigo'].".jpg") ? 
-               "img/cafe/".$producto['codigo'].".jpg" : "img/cafe/default.jpg";
-    $id_producto = $producto ? $producto['id'] : 0;
     ?>
 
     <main class="product-section">
         <div class="container">
             <div class="product-container">
                 <div class="product-image">
-                    <img src="<?php echo $imagen; ?>" alt="<?php echo htmlspecialchars($nombre); ?>">
+                    <img src="<?php echo $imagen; ?>" alt="<?php echo $nombre; ?>">
                 </div>
                 <div class="product-content">
-                    <h1><?php echo htmlspecialchars($nombre); ?></h1>
+                    <h1><?php echo $nombre; ?></h1>
                     <span class="product-status"><?php echo $disponible ? 'Disponible' : 'Agotado'; ?></span>
                     <p class="product-price">$<?php echo number_format($precio, 2); ?></p>
-                    <p><?php echo htmlspecialchars($descripcion); ?></p>
+                    <p><?php echo $descripcion; ?></p>
                     <button id="addToCart" class="btn" <?php echo $disponible ? '' : 'disabled'; ?>>
                         <?php echo $disponible ? 'Añadir al carrito' : 'Agotado'; ?>
                     </button>
                 </div>
             </div>
 
-            <div class="cart-section container">
+            <div class="cart-section">
                 <h2>Carrito de Compras</h2>
                 <ul id="cartItems"></ul>
                 <p id="totalPrice">Total: $0.00</p>
@@ -738,12 +743,12 @@
             });
         }
 
-        // Contador del carrito (simulado)
+        // Contador del carrito
         const cartCounter = document.getElementById('cartCounter');
         if (cartCounter) {
-            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
-            const randomCount = Math.floor(Math.random() * 5) + 1;
-            cartCounter.textContent = randomCount;
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCounter.textContent = totalItems;
         }
 
         // Menú hamburguesa
@@ -782,34 +787,58 @@
             
             // Añadir producto al carrito
             addToCartBtn.addEventListener('click', function() {
-                // Verificar disponibilidad antes de añadir
-                fetch(`php/verificar_disponibilidad.php?id=<?php echo $id_producto; ?>`)
+                addToCart(
+                    <?php echo $id_producto; ?>, 
+                    "<?php echo addslashes($nombre); ?>", 
+                    <?php echo $precio; ?>, 
+                    "<?php echo $imagen; ?>"
+                );
+            });
+            
+            // Finalizar compra
+            checkoutBtn.addEventListener('click', function() {
+                proceedToCheckout();
+            });
+            
+            // Función para añadir producto al carrito
+            function addToCart(productId, productName, price, image) {
+                // Verificar disponibilidad primero
+                fetch(`php/verificar_disponibilidad.php?id=${productId}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.disponible) {
-                            const product = {
-                                id: <?php echo $id_producto; ?>,
-                                name: "<?php echo addslashes($nombre); ?>",
-                                price: <?php echo $precio; ?>,
-                                quantity: 1,
-                                image: "<?php echo $imagen; ?>"
-                            };
-                            
-                            // Verificar si el producto ya está en el carrito
-                            const existingItem = cart.find(item => item.id === product.id);
+                            const existingItem = cart.find(item => item.id === productId);
                             
                             if (existingItem) {
-                                existingItem.quantity += 1;
+                                // Verificar si podemos añadir una unidad más
+                                fetch(`php/verificar_disponibilidad.php?id=${productId}&cantidad=${existingItem.quantity + 1}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.disponible) {
+                                            existingItem.quantity += 1;
+                                            localStorage.setItem('cart', JSON.stringify(cart));
+                                            updateCartDisplay();
+                                            updateCartCounter();
+                                        } else {
+                                            alert('No hay suficientes unidades disponibles de este producto');
+                                        }
+                                    });
                             } else {
+                                const product = {
+                                    id: productId,
+                                    name: productName,
+                                    price: price,
+                                    quantity: 1,
+                                    image: image
+                                };
                                 cart.push(product);
+                                localStorage.setItem('cart', JSON.stringify(cart));
+                                updateCartDisplay();
+                                updateCartCounter();
                             }
                             
-                            localStorage.setItem('cart', JSON.stringify(cart));
-                            updateCartDisplay();
-                            updateCartCounter();
-                            
                             // Actualizar estado en la página
-                            fetch(`php/actualizar_estado.php?id=<?php echo $id_producto; ?>`)
+                            fetch(`php/actualizar_estado.php?id=${productId}`)
                                 .then(response => response.json())
                                 .then(data => {
                                     if (!data.disponible) {
@@ -825,12 +854,18 @@
                             addToCartBtn.disabled = true;
                         }
                     });
-            });
+            }
             
-            // Finalizar compra
-            checkoutBtn.addEventListener('click', function() {
+            // Función para proceder al checkout
+            function proceedToCheckout() {
+                if (cart.length === 0) {
+                    alert('Tu carrito está vacío');
+                    return;
+                }
+                
+                // Redirigir a la página de carrito
                 window.location.href = 'carrito.php';
-            });
+            }
             
             // Actualizar visualización del carrito
             function updateCartDisplay() {
@@ -855,6 +890,7 @@
                         <div class="cart-item-controls">
                             <button class="remove-one" data-index="${index}">-</button>
                             <span class="item-quantity">x${item.quantity}</span>
+                            <button class="add-one" data-index="${index}">+</button>
                             <button class="remove-all" data-index="${index}">×</button>
                             <span>$${itemTotal.toFixed(2)}</span>
                         </div>
@@ -863,28 +899,25 @@
                     cartItemsList.appendChild(li);
                 });
                 
-                // Agregar event listeners a los botones de eliminar
+                // Agregar event listeners a los botones
                 document.querySelectorAll('.remove-one').forEach(button => {
                     button.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));
-                        if (cart[index].quantity > 1) {
-                            cart[index].quantity -= 1;
-                        } else {
-                            cart.splice(index, 1);
-                        }
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        updateCartDisplay();
-                        updateCartCounter();
+                        updateCartItem(cart[index].id, -1);
+                    });
+                });
+                
+                document.querySelectorAll('.add-one').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        updateCartItem(cart[index].id, 1);
                     });
                 });
                 
                 document.querySelectorAll('.remove-all').forEach(button => {
                     button.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));
-                        cart.splice(index, 1);
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        updateCartDisplay();
-                        updateCartCounter();
+                        removeCartItem(cart[index].id);
                     });
                 });
                 
@@ -892,6 +925,43 @@
                 checkoutBtn.disabled = false;
             }
             
+            // Función para actualizar cantidad de un item
+            function updateCartItem(productId, change) {
+                const itemIndex = cart.findIndex(item => item.id === productId);
+                
+                if (itemIndex !== -1) {
+                    const newQuantity = cart[itemIndex].quantity + change;
+                    
+                    if (newQuantity <= 0) {
+                        removeCartItem(productId);
+                        return;
+                    }
+                    
+                    // Verificar disponibilidad
+                    fetch(`php/verificar_disponibilidad.php?id=${productId}&cantidad=${newQuantity}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.disponible) {
+                                cart[itemIndex].quantity = newQuantity;
+                                localStorage.setItem('cart', JSON.stringify(cart));
+                                updateCartDisplay();
+                                updateCartCounter();
+                            } else {
+                                alert('No hay suficientes unidades disponibles de este producto');
+                            }
+                        });
+                }
+            }
+            
+            // Función para eliminar un item del carrito
+            function removeCartItem(productId) {
+                cart = cart.filter(item => item.id !== productId);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartDisplay();
+                updateCartCounter();
+            }
+            
+            // Función para actualizar el contador del carrito
             function updateCartCounter() {
                 const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
                 if (cartCounter) cartCounter.textContent = totalItems;

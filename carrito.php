@@ -15,8 +15,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
     <link href="https://fonts.googleapis.com/css2?family=Imperial+Script&family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* [MANTENER TODOS TUS ESTILOS ACTUALES] */
-        /* SOLO AÑADE ESTOS NUEVOS ESTILOS AL FINAL DE TU SECCIÓN CSS */
         /* Variables y estilos base */
         :root {
             --primary-color: #D4A76A;
@@ -37,6 +35,9 @@ $usuario_logeado = isset($_SESSION['usuario']);
             --section-padding: 80px 0;
             --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             --border-radius: 12px;
+            --success-color: #4CAF50;
+            --danger-color: #F44336;
+            --warning-color: #FFC107;
         }
 
         [data-theme="dark"] {
@@ -110,34 +111,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
             color: white;
         }
 
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-            position: relative;
-        }
-
-        .section-title h2 {
-            font-size: 36px;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .section-title p {
-            color: var(--text-color);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 3px;
-            background: var(--primary-color);
-            margin: 20px auto;
-        }
-
-        /* Header Rediseñado */
+        /* Header */
         .header {
             background-color: var(--header-bg);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -173,14 +147,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
 
         .logo-image:hover {
             transform: scale(1.05);
-        }
-
-        .header-title {
-            font-size: 24px;
-            margin: 0;
-            color: var(--primary-color);
-            font-family: "Playfair Display", serif;
-            font-weight: 700;
         }
 
         /* Controles del header */
@@ -289,191 +255,289 @@ $usuario_logeado = isset($_SESSION['usuario']);
             font-weight: bold;
         }
 
-        /* Estilos para el carrito */
+        /* Página de Carrito */
         .cart-page {
             padding: var(--section-padding);
+            min-height: calc(100vh - 200px);
         }
 
         .cart-container {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding: 30px;
             box-shadow: var(--box-shadow);
-            margin-top: 40px;
         }
 
         .cart-container h2 {
-            text-align: center;
             color: var(--primary-color);
             margin-bottom: 30px;
-            font-size: 32px;
+            text-align: center;
         }
 
         .cart-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            margin-bottom: 30px;
         }
 
         #cartItems {
             list-style: none;
             padding: 0;
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
         }
 
         #cartItems li {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: var(--background-color-card);
-            border-radius: var(--border-radius);
-            transition: var(--transition);
-        }
-
-        #cartItems li:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--box-shadow);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
         .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-name {
-            font-weight: bold;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-
-        .cart-item-price {
-            color: var(--primary-color);
-            font-size: 16px;
+            flex: 2;
         }
 
         .cart-item-quantity {
+            flex: 1;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
-            margin: 0 20px;
+        }
+
+        .cart-item-total {
+            flex: 1;
+            text-align: right;
+            font-weight: bold;
+            color: var(--primary-color);
         }
 
         .quantity-btn {
             background: var(--primary-color);
-            color: white;
             border: none;
+            color: white;
             width: 30px;
             height: 30px;
             border-radius: 50%;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-weight: bold;
             transition: var(--transition);
-            font-size: 14px;
         }
 
         .quantity-btn:hover {
             background: var(--secondary-color);
+            transform: translateY(-2px);
         }
 
         .remove-btn {
-            background: #ff4444;
-            color: white;
+            background: var(--danger-color);
             border: none;
-            padding: 10px 20px;
+            color: white;
+            padding: 5px 15px;
             border-radius: 30px;
             cursor: pointer;
+            margin-left: 20px;
             transition: var(--transition);
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
         }
 
         .remove-btn:hover {
-            background: #cc0000;
+            background: #D32F2F;
             transform: translateY(-2px);
         }
 
         .cart-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            margin-top: 20px;
+            text-align: right;
+            margin-top: 30px;
+            font-size: 1.2em;
         }
 
         #totalPrice {
-            font-size: 24px;
             font-weight: bold;
+            font-size: 24px;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        /* Formulario de pago */
+        .checkout-form {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .checkout-form h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(212, 167, 106, 0.2);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .payment-method {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--card-bg);
+        }
+
+        .payment-method.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(212, 167, 106, 0.1);
+        }
+
+        .payment-method input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        .payment-details {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: var(--box-shadow);
+        }
+
+        .payment-details.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Recibo */
+        .receipt {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .receipt.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .receipt-header h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .receipt-items {
+            margin-bottom: 20px;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.1);
+        }
+
+        .receipt-totals {
+            margin-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 20px;
+        }
+
+        .receipt-total {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .receipt-total.grand {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 15px;
             color: var(--primary-color);
         }
 
-        #checkout {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .receipt-footer {
+            margin-top: 30px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.1);
         }
 
-        #checkout:hover {
-            background: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        .receipt-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
 
-        #checkout:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
+        /* Login requerido */
         .login-required {
             text-align: center;
-            padding: 30px;
+            padding: 40px 0;
         }
 
         .login-required p {
+            font-size: 1.2em;
             margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .login-required a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-block;
-            padding: 12px 30px;
-            border: 2px solid var(--primary-color);
-            border-radius: 30px;
-        }
-
-        .login-required a:hover {
-            background: var(--primary-color);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            color: var(--text-color);
         }
 
         /* Footer */
         .footer {
             background: var(--header-bg);
             padding: 80px 0 30px;
-            color: var(--text-color);
+            color: var(--header-text);
         }
 
         .footer-content {
@@ -516,7 +580,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
         }
 
         .footer-links a {
-            color: var(--text-color);
+            color: var(--header-text);
             text-decoration: none;
             transition: all 0.3s ease;
             display: flex;
@@ -560,7 +624,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
         .footer-bottom {
             text-align: center;
             padding-top: 30px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Back to top button */
@@ -596,8 +660,9 @@ $usuario_logeado = isset($_SESSION['usuario']);
 
         /* Media Queries */
         @media (max-width: 992px) {
-            .cart-container {
-                padding: 30px;
+            .form-row {
+                flex-direction: column;
+                gap: 0;
             }
         }
 
@@ -632,37 +697,38 @@ $usuario_logeado = isset($_SESSION['usuario']);
             .header-container {
                 gap: 15px;
             }
-            
+
             #cartItems li {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
+                gap: 10px;
             }
-            
+
             .cart-item-quantity {
-                margin: 15px 0;
+                justify-content: flex-start;
+                width: 100%;
             }
-            
-            .cart-summary {
+
+            .remove-btn {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .payment-methods {
                 flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
+            }
+
+            .payment-method {
+                min-width: 100%;
+            }
+
+            .receipt-actions {
+                flex-direction: column;
+                align-items: center;
             }
         }
 
         @media (max-width: 576px) {
-            .cart-container {
-                padding: 20px;
-            }
-            
-            .cart-container h2 {
-                font-size: 28px;
-            }
-            
-            #cartItems li {
-                padding: 15px;
-            }
-            
             .footer-content {
                 grid-template-columns: 1fr;
                 text-align: center;
@@ -677,135 +743,35 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 justify-content: center;
             }
         }
-        /* Nuevos estilos para el proceso de pago */
-        .checkout-form {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-top: 30px;
-            display: none; /* Inicialmente oculto */
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            background: var(--bg-color);
-            color: var(--text-color);
-            transition: var(--transition);
-        }
-        
-        .payment-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .payment-method {
-            border: 2px solid #ddd;
-            border-radius: var(--border-radius);
-            padding: 15px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        
-        .payment-method:hover, .payment-method.selected {
-            border-color: var(--primary-color);
-        }
-        
-        .payment-method.selected {
-            background-color: rgba(212, 167, 106, 0.1);
-        }
-        
-        .payment-details {
-            display: none;
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(0,0,0,0.05);
-            border-radius: var(--border-radius);
-        }
-        
-        .payment-details.active {
-            display: block;
-        }
-        
-        .receipt {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
-            margin-top: 30px;
-            display: none;
-        }
-        
-        .receipt.active {
-            display: block;
-        }
-        
-        .receipt-header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 20px;
-        }
-        
-        .receipt-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #ddd;
-        }
-        
-        .receipt-totals {
-            border-top: 2px solid var(--primary-color);
-            padding-top: 20px;
-            margin-top: 20px;
-        }
-        
-        .receipt-total {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .receipt-total.grand {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .receipt, .receipt * {
+                visibility: visible;
+            }
+            .receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none;
+                background: white;
+                color: black;
+            }
+            .receipt-actions {
+                display: none;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- [MANTENER TU HEADER ACTUAL] -->
     <header class="header">
         <div class="container header-container">
             <div class="logo">
                 <img src="img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
-                <h1 class="header-title"></h1>
             </div>
             
             <div class="header-controls">
@@ -987,7 +953,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
         </div>
     </main>
 
-    <!-- [MANTENER TU FOOTER ACTUAL] -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -1034,7 +999,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
     </audio>
 
     <script>
-        // [MANTENER TUS SCRIPTS DE TEMA, HEADER, ETC.]
         // Configuración del tema oscuro/claro
         const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
@@ -1091,14 +1055,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
             });
         }
 
-        // Contador del carrito (simulado)
-        const cartCounter = document.getElementById('cartCounter');
-        if (cartCounter) {
-            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
-            const randomCount = Math.floor(Math.random() * 5) + 1;
-            cartCounter.textContent = randomCount;
-        }
-
         // Menú hamburguesa
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
@@ -1119,7 +1075,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 }
             });
         });
-        
+
         // Funcionalidad del carrito
         document.addEventListener('DOMContentLoaded', function() {
             loadCartFromStorage();
@@ -1187,15 +1143,31 @@ $usuario_logeado = isset($_SESSION['usuario']);
         function updateQuantity(index, change) {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (index >= 0 && index < cart.length) {
-                cart[index].quantity += change;
+                const productId = cart[index].id;
+                const newQuantity = cart[index].quantity + change;
                 
-                if (cart[index].quantity <= 0) {
-                    cart.splice(index, 1);
-                }
-                
-                localStorage.setItem('cart', JSON.stringify(cart));
-                loadCartFromStorage();
-                updateCartCounter();
+                // Verificar disponibilidad con el servidor
+                fetch(`php/verificar_disponibilidad.php?id=${productId}&cantidad=${newQuantity}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.disponible) {
+                            cart[index].quantity = newQuantity;
+                            
+                            if (cart[index].quantity <= 0) {
+                                cart.splice(index, 1);
+                            }
+                            
+                            localStorage.setItem('cart', JSON.stringify(cart));
+                            loadCartFromStorage();
+                            updateCartCounter();
+                        } else {
+                            alert('No hay suficientes unidades disponibles de este producto');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al verificar disponibilidad');
+                    });
             }
         }
 
@@ -1257,8 +1229,14 @@ $usuario_logeado = isset($_SESSION['usuario']);
             
             // Obtener detalles según el método de pago
             if (paymentMethod === 'tarjeta') {
+                const cardNumber = document.getElementById('cardNumber').value;
+                if (!cardNumber || cardNumber.length < 16) {
+                    alert('Por favor ingrese un número de tarjeta válido');
+                    return;
+                }
+                
                 paymentDetails = {
-                    cardNumber: document.getElementById('cardNumber').value,
+                    cardNumber: cardNumber,
                     cardName: document.getElementById('cardName').value,
                     cardExpiry: document.getElementById('cardExpiry').value,
                     cardCvv: document.getElementById('cardCvv').value
@@ -1278,12 +1256,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
             const tax = subtotal * 0.16; // IVA 16%
             const total = subtotal + tax;
             
-            // Mostrar recibo (simulación)
-            showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
-            
-            // En una aplicación real, aquí enviarías los datos al servidor con fetch()
-            // Ejemplo:
-            /*
+            // Enviar datos al servidor
             fetch('php/checkout.php', {
                 method: 'POST',
                 headers: {
@@ -1296,24 +1269,28 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     deliveryAddress: deliveryAddress
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    showReceipt(data.order);
+                    showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
+                    document.getElementById('receiptOrderId').textContent = data.pedido_id;
+                    document.getElementById('checkoutForm').style.display = 'none';
+                    document.getElementById('receipt').classList.add('active');
                     localStorage.removeItem('cart');
+                    updateCartCounter();
                 } else {
-                    alert('Error: ' + data.message);
+                    throw new Error(data.message || 'Error al procesar el pago');
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
             });
-            */
-            
-            // Simulación de éxito
-            setTimeout(() => {
-                document.getElementById('checkoutForm').style.display = 'none';
-                document.getElementById('receipt').classList.add('active');
-                localStorage.removeItem('cart');
-                updateCartCounter();
-            }, 1000);
         }
         
         function showReceipt(items, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress) {
@@ -1321,9 +1298,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
             const now = new Date();
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
             document.getElementById('receiptDate').textContent = now.toLocaleDateString('es-ES', options);
-            
-            // ID de pedido simulado (en una app real vendría del servidor)
-            document.getElementById('receiptOrderId').textContent = Math.floor(Math.random() * 1000000);
             
             // Agregar ítems
             const receiptItems = document.getElementById('receiptItems');
