@@ -1,23 +1,21 @@
 <?php
 require_once 'conexion_be.php';
+require_once 'producto_comun.php';
 
 header('Content-Type: application/json');
 
 if (!isset($_GET['id'])) {
-    echo json_encode(['disponible' => false]);
+    echo json_encode(['disponible' => false, 'existencias' => 0]);
     exit();
 }
 
 $id_producto = intval($_GET['id']);
-$query = "SELECT unidades_existentes, estado FROM inventario WHERE id = $id_producto";
-$result = mysqli_query($conexion, $query);
+$cantidad = isset($_GET['cantidad']) ? intval($_GET['cantidad']) : 1;
 
-if ($result && mysqli_num_rows($result) > 0) {
-    $producto = mysqli_fetch_assoc($result);
-    echo json_encode([
-        'disponible' => ($producto['unidades_existentes'] > 0 && $producto['estado'] == 'activo')
-    ]);
-} else {
-    echo json_encode(['disponible' => false]);
-}
+$disponibilidad = verificarDisponibilidad($id_producto, $cantidad);
+
+echo json_encode([
+    'disponible' => $disponibilidad['disponible'],
+    'existencias' => $disponibilidad['existencias']
+]);
 ?>

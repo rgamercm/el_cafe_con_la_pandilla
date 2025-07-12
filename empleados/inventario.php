@@ -705,7 +705,10 @@ if (!isset($_SESSION['usuario'])) {
                     <?php
                     include '../php/conexion_be.php';
                     
-                    $query = "SELECT * FROM inventario ORDER BY categoria, nombre";
+                    $query = "SELECT i.*, c.nombre AS categoria_nombre 
+                            FROM inventario i
+                            LEFT JOIN categorias c ON i.categoria_id = c.id
+                            ORDER BY c.nombre, i.nombre";
                     $result = mysqli_query($conexion, $query);
                     
                     if(mysqli_num_rows($result) > 0) {
@@ -723,7 +726,7 @@ if (!isset($_SESSION['usuario'])) {
                                 <td>{$row['codigo']}</td>
                                 <td>{$row['nombre']}</td>
                                 <td>{$row['descripcion']}</td>
-                                <td>{$row['categoria']}</td>
+                                <td>{$row['categoria_nombre']}</td>
                                 <td>\${$row['precio']}</td>
                                 <td class='{$lowStockClass}'>{$row['unidades_existentes']}";
                             
@@ -898,192 +901,150 @@ if (!isset($_SESSION['usuario'])) {
         <source src="../musica/videoplayback (online-audio-converter.com).mp3" type="audio/mp3">
     </audio>
 
-    <script>
-        // Configuración del tema oscuro/claro
-        const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
-        document.body.setAttribute('data-theme', currentTheme);
+<script>
+    // Configuración del tema oscuro/claro
+    const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const currentTheme = localStorage.getItem('theme') || (userPrefersDark ? 'dark' : 'light');
+    document.body.setAttribute('data-theme', currentTheme);
 
-        const themeToggle = document.getElementById('themeToggle');
-        if (themeToggle) {
-            themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
 
-            themeToggle.addEventListener('click', () => {
-                const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-                document.body.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
-            });
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+    }
+
+    // Header scroll effect
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
         }
+    });
 
-        // Header scroll effect
-        const header = document.querySelector('.header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
+    // Back to top button
+    const backToTopButton = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopButton.classList.add('active');
+        } else {
+            backToTopButton.classList.remove('active');
+        }
+    });
+
+    backToTopButton.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    // Música de fondo
+    const audio = document.getElementById("backgroundMusic");
+    if (audio) {
+        audio.volume = 0.03;
+        const lastTime = localStorage.getItem("audioCurrentTime") || 0;
+        audio.currentTime = lastTime;
+        audio.play().catch(e => console.log("Autoplay prevented:", e));
+        audio.addEventListener("timeupdate", () => {
+            localStorage.setItem("audioCurrentTime", audio.currentTime);
+        });
+    }
+
+    // Contador del carrito (simulado)
+    const cartCounter = document.getElementById('cartCounter');
+    if (cartCounter) {
+        // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
+        const randomCount = Math.floor(Math.random() * 5) + 1;
+        cartCounter.textContent = randomCount;
+    }
+
+    // Menú hamburguesa
+    const menuToggle = document.getElementById('menuToggle');
+    const navMenu = document.getElementById('navMenu');
+
+    menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        menuToggle.innerHTML = navMenu.classList.contains('active') ? 
+            '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+    });
+
+    // Cerrar menú al hacer clic en un enlace (para móviles)
+    const navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                navMenu.classList.remove('active');
+                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
             }
         });
+    });
 
-        // Back to top button
-        const backToTopButton = document.getElementById('backToTop');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopButton.classList.add('active');
-            } else {
-                backToTopButton.classList.remove('active');
-            }
-        });
+    // Modal para agregar/editar productos
+    const modal = document.getElementById("productModal");
+    const addProductBtn = document.getElementById("addProductBtn");
+    const addSampleBtn = document.getElementById("addSampleBtn");
+    const closeBtn = document.querySelector(".close-btn");
+    const productForm = document.getElementById("productForm");
+    const modalTitle = document.getElementById("modalTitle");
 
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // Música de fondo
-        const audio = document.getElementById("backgroundMusic");
-        if (audio) {
-            audio.volume = 0.03;
-            const lastTime = localStorage.getItem("audioCurrentTime") || 0;
-            audio.currentTime = lastTime;
-            audio.play().catch(e => console.log("Autoplay prevented:", e));
-            audio.addEventListener("timeupdate", () => {
-                localStorage.setItem("audioCurrentTime", audio.currentTime);
-            });
-        }
-
-        // Contador del carrito (simulado)
-        const cartCounter = document.getElementById('cartCounter');
-        if (cartCounter) {
-            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
-            const randomCount = Math.floor(Math.random() * 5) + 1;
-            cartCounter.textContent = randomCount;
-        }
-
-        // Menú hamburguesa
-        const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.getElementById('navMenu');
-
-        menuToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            menuToggle.innerHTML = navMenu.classList.contains('active') ? 
-                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-        });
-
-        // Cerrar menú al hacer clic en un enlace (para móviles)
-        const navLinks = document.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    navMenu.classList.remove('active');
-                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+    // Cargar categorías al iniciar
+    function cargarCategorias() {
+        fetch('../php/obtener_categorias.php')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar categorías');
                 }
-            });
-        });
-
-        // Modal para agregar/editar productos
-        const modal = document.getElementById("productModal");
-        const addProductBtn = document.getElementById("addProductBtn");
-        const addSampleBtn = document.getElementById("addSampleBtn");
-        const closeBtn = document.querySelector(".close-btn");
-        const productForm = document.getElementById("productForm");
-        const modalTitle = document.getElementById("modalTitle");
-
-        // Mostrar modal para agregar producto
-        addProductBtn.onclick = function() {
-            modalTitle.textContent = "Agregar Nuevo Producto";
-            document.getElementById('action').value = 'agregar';
-            productForm.reset();
-            
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0');
-            const day = String(today.getDate()).padStart(2, '0');
-            document.getElementById('fecha_ingreso').value = `${year}-${month}-${day}`;
-            
-            document.getElementById('unidades_existentes').value = document.getElementById('cantidad').value || '0';
-            modal.style.display = "block";
-        }
-
-        // Agregar productos de ejemplo
-        addSampleBtn.onclick = function() {
-            if (confirm('¿Deseas agregar los productos de ejemplo al inventario?')) {
-                const formData = new FormData();
-                formData.append('action', 'agregar_ejemplos');
+                return response.json();
+            })
+            .then(categorias => {
+                const select = document.getElementById('categoria');
+                select.innerHTML = '';
                 
-                fetch('../php/operaciones_inventario.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload();
-                    } else {
-                        throw new Error(data.message || 'Error al agregar ejemplos');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error: ' + error.message);
+                categorias.forEach(categoria => {
+                    const option = document.createElement('option');
+                    option.value = categoria.nombre;
+                    option.textContent = categoria.nombre;
+                    select.appendChild(option);
                 });
-            }
-        }
+            })
+            .catch(error => {
+                console.error('Error al cargar categorías:', error);
+            });
+    }
 
-        // Cerrar modal
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        }
+    // Mostrar modal para agregar producto
+    addProductBtn.onclick = function() {
+        modalTitle.textContent = "Agregar Nuevo Producto";
+        document.getElementById('action').value = 'agregar';
+        productForm.reset();
+        
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        document.getElementById('fecha_ingreso').value = `${year}-${month}-${day}`;
+        
+        document.getElementById('unidades_existentes').value = document.getElementById('cantidad').value || '0';
+        modal.style.display = "block";
+    }
 
-        // Cerrar modal al hacer clic fuera
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Sincronizar cantidad con existencias
-        document.getElementById('cantidad').addEventListener('input', function() {
-            const existentes = document.getElementById('unidades_existentes');
-            if (!existentes.value || existentes.value === "0") {
-                existentes.value = this.value;
-            }
-        });
-
-        // Manejar envío del formulario
-        productForm.onsubmit = function(e) {
-            e.preventDefault();
+    // Agregar productos de ejemplo
+    addSampleBtn.onclick = function() {
+        if (confirm('¿Deseas agregar los productos de ejemplo al inventario?')) {
+            const formData = new FormData();
+            formData.append('action', 'agregar_ejemplos');
             
-            // Validar campos obligatorios
-            if (!document.getElementById('codigo').value || 
-                !document.getElementById('nombre').value || 
-                !document.getElementById('precio').value ||
-                !document.getElementById('pagina').value) {
-                alert('Complete los campos obligatorios (Código, Nombre, Precio y Página)');
-                return;
-            }
-            
-            if (parseFloat(document.getElementById('precio').value) <= 0) {
-                alert('El precio debe ser mayor a cero');
-                return;
-            }
-            
-            const formData = new FormData(productForm);
-            
-            // Asegurarnos de incluir el ID cuando es una edición
-            const productId = document.getElementById('productId').value;
-            if (productId && document.getElementById('action').value === 'editar') {
-                formData.append('id', productId);
-            }
+            // Mostrar loader
+            addSampleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            addSampleBtn.disabled = true;
             
             fetch('../php/operaciones_inventario.php', {
                 method: 'POST',
@@ -1098,23 +1059,157 @@ if (!isset($_SESSION['usuario'])) {
             .then(data => {
                 if (data.success) {
                     alert(data.message);
-                    modal.style.display = "none";
                     location.reload();
                 } else {
-                    throw new Error(data.message || 'Error al guardar');
+                    throw new Error(data.message || 'Error al agregar ejemplos');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error: ' + error.message);
+            })
+            .finally(() => {
+                addSampleBtn.innerHTML = '<i class="fas fa-vial"></i> Agregar Ejemplos';
+                addSampleBtn.disabled = false;
             });
-        };
+        }
+    }
 
-        // Eliminar todos los productos
-        document.getElementById('removeAllBtn').addEventListener('click', function() {
-            if (confirm('¿Estás seguro de eliminar TODOS los productos? Esta acción no se puede deshacer.')) {
+    // Cerrar modal
+    closeBtn.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Cerrar modal al hacer clic fuera
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // Sincronizar cantidad con existencias
+    document.getElementById('cantidad').addEventListener('input', function() {
+        const existentes = document.getElementById('unidades_existentes');
+        if (!existentes.value || existentes.value === "0") {
+            existentes.value = this.value;
+        }
+    });
+
+    // Manejar envío del formulario
+    productForm.onsubmit = function(e) {
+        e.preventDefault();
+        
+        // Validar campos obligatorios
+        if (!document.getElementById('codigo').value || 
+            !document.getElementById('nombre').value || 
+            !document.getElementById('precio').value ||
+            !document.getElementById('pagina').value ||
+            !document.getElementById('categoria').value) {
+            alert('Complete los campos obligatorios (Código, Nombre, Precio, Página y Categoría)');
+            return;
+        }
+        
+        if (parseFloat(document.getElementById('precio').value) <= 0) {
+            alert('El precio debe ser mayor a cero');
+            return;
+        }
+        
+        if (!/^p\d+$/.test(document.getElementById('pagina').value)) {
+            alert('El formato de página debe ser p1, p2, etc.');
+            return;
+        }
+        
+        const formData = new FormData(productForm);
+        
+        // Mostrar loader
+        const submitBtn = productForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        submitBtn.disabled = true;
+        
+        fetch('../php/operaciones_inventario.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                modal.style.display = "none";
+                location.reload();
+            } else {
+                throw new Error(data.message || 'Error al guardar');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error: ' + error.message);
+        })
+        .finally(() => {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        });
+    };
+
+    // Eliminar todos los productos
+    document.getElementById('removeAllBtn').addEventListener('click', function() {
+        if (confirm('¿Estás seguro de eliminar TODOS los productos? Esta acción no se puede deshacer.')) {
+            const formData = new FormData();
+            formData.append('action', 'quitar_todos');
+            
+            // Mostrar loader
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+            this.disabled = true;
+            
+            fetch('../php/operaciones_inventario.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    document.querySelector('.inventory-table tbody').innerHTML = 
+                        '<tr><td colspan="9" style="text-align: center;">No hay productos en el inventario</td></tr>';
+                    alert(data.message);
+                } else {
+                    throw new Error(data.message || 'Error al eliminar');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            })
+            .finally(() => {
+                this.innerHTML = '<i class="fas fa-minus"></i> Quitar Todos';
+                this.disabled = false;
+            });
+        }
+    });
+
+    // Eliminar producto individual
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            const productName = this.closest('tr').querySelector('td:nth-child(2)').textContent;
+            
+            if(confirm(`¿Eliminar el producto "${productName}"?`)) {
                 const formData = new FormData();
-                formData.append('action', 'quitar_todos');
+                formData.append('action', 'quitar');
+                formData.append('id', productId);
+                
+                // Mostrar loader
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                this.disabled = true;
                 
                 fetch('../php/operaciones_inventario.php', {
                     method: 'POST',
@@ -1128,8 +1223,13 @@ if (!isset($_SESSION['usuario'])) {
                 })
                 .then(data => {
                     if (data.success) {
-                        document.querySelector('.inventory-table tbody').innerHTML = 
-                            '<tr><td colspan="9" style="text-align: center;">No hay productos en el inventario</td></tr>';
+                        this.closest('tr').remove();
+                        
+                        const tbody = document.querySelector('.inventory-table tbody');
+                        if (tbody.querySelectorAll('tr').length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos en el inventario</td></tr>';
+                        }
+                        
                         alert(data.message);
                     } else {
                         throw new Error(data.message || 'Error al eliminar');
@@ -1138,134 +1238,107 @@ if (!isset($_SESSION['usuario'])) {
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Error: ' + error.message);
+                })
+                .finally(() => {
+                    this.innerHTML = '<i class="fas fa-trash"></i>';
+                    this.disabled = false;
                 });
             }
         });
+    });
 
-        // Eliminar producto individual
-        document.querySelectorAll('.delete-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const productId = this.getAttribute('data-id');
-                const productName = this.closest('tr').querySelector('td:nth-child(2)').textContent;
-                
-                if(confirm(`¿Eliminar el producto "${productName}"?`)) {
-                    const formData = new FormData();
-                    formData.append('action', 'quitar');
-                    formData.append('id', productId);
-                    
-                    fetch('../php/operaciones_inventario.php', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            this.closest('tr').remove();
-                            
-                            const tbody = document.querySelector('.inventory-table tbody');
-                            if (tbody.querySelectorAll('tr').length === 0) {
-                                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No hay productos en el inventario</td></tr>';
-                            }
-                            
-                            alert(data.message);
-                        } else {
-                            throw new Error(data.message || 'Error al eliminar');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error: ' + error.message);
-                    });
+    // Editar producto
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.getAttribute('data-id');
+            
+            // Mostrar loader
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            this.disabled = true;
+            
+            fetch(`../php/obtener_producto.php?id=${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
                 }
-            });
-        });
-
-        // Editar producto
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const productId = this.getAttribute('data-id');
-                
-                fetch(`../php/obtener_producto.php?id=${productId}`)
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
-                    }
-                    return response.json();
-                })
-                .then(product => {
-                    if (product.error) {
-                        throw new Error(product.error);
-                    }
-                    
-                    modalTitle.textContent = "Editar Producto";
-                    document.getElementById('action').value = 'editar';
-                    document.getElementById('productId').value = product.id;
-                    document.getElementById('codigo').value = product.codigo;
-                    document.getElementById('nombre').value = product.nombre;
-                    document.getElementById('descripcion').value = product.descripcion;
-                    document.getElementById('categoria').value = product.categoria;
-                    document.getElementById('precio').value = product.precio;
-                    document.getElementById('pagina').value = product.pagina || '';
-                    document.getElementById('cantidad').value = product.cantidad;
-                    document.getElementById('unidades_existentes').value = product.unidades_existentes;
-                    document.getElementById('unidades_minimas').value = product.unidades_minimas;
-                    document.getElementById('fecha_ingreso').value = product.fecha_ingreso;
-                    document.getElementById('estado').value = product.estado;
-                    
-                    modal.style.display = "block";
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error: ' + error.message);
-                });
-            });
-        });
-
-        // Exportar a CSV
-        document.getElementById('exportBtn').addEventListener('click', function() {
-            let csvContent = "Código,Nombre,Descripción,Categoría,Precio,Existencias,Mínimo,Estado\n";
-            
-            document.querySelectorAll('.inventory-table tbody tr').forEach(row => {
-                if (row.cells.length > 1) {
-                    const cells = row.cells;
-                    csvContent += `"${cells[0].textContent}","${cells[1].textContent}","${cells[2].textContent}",` +
-                                  `"${cells[3].textContent}","${cells[4].textContent.replace('$', '')}",` +
-                                  `"${cells[5].textContent}","${cells[6].textContent}","${cells[7].textContent}"\n`;
+                return response.json();
+            })
+            .then(product => {
+                if (product.error) {
+                    throw new Error(product.error);
                 }
+                
+                modalTitle.textContent = "Editar Producto";
+                document.getElementById('action').value = 'editar';
+                document.getElementById('productId').value = product.id;
+                document.getElementById('codigo').value = product.codigo;
+                document.getElementById('nombre').value = product.nombre;
+                document.getElementById('descripcion').value = product.descripcion;
+                document.getElementById('categoria').value = product.categoria_nombre;
+                document.getElementById('precio').value = product.precio;
+                document.getElementById('pagina').value = product.pagina || '';
+                document.getElementById('cantidad').value = product.cantidad;
+                document.getElementById('unidades_existentes').value = product.unidades_existentes;
+                document.getElementById('unidades_minimas').value = product.unidades_minimas;
+                document.getElementById('fecha_ingreso').value = product.fecha_ingreso;
+                document.getElementById('estado').value = product.estado;
+                
+                modal.style.display = "block";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error: ' + error.message);
+            })
+            .finally(() => {
+                this.innerHTML = '<i class="fas fa-edit"></i>';
+                this.disabled = false;
             });
-            
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.setAttribute('href', url);
-            link.setAttribute('download', 'inventario.csv');
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         });
+    });
 
-        // Imprimir inventario
-        document.getElementById('printBtn').addEventListener('click', function() {
-            const originalContents = document.body.innerHTML;
-            const printContents = document.querySelector('.inventory-section').outerHTML;
-            
-            document.body.innerHTML = `
-                <h1 style="text-align:center;margin:20px 0;">Inventario - El Café Con La Pan-dilla</h1>
-                ${printContents}
-                <div style="text-align:center;margin:20px;font-size:12px;">
-                    Impreso el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}
-                </div>
-            `;
-            
-            window.print();
-            document.body.innerHTML = originalContents;
+    // Exportar a CSV
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        let csvContent = "Código,Nombre,Descripción,Categoría,Precio,Existencias,Mínimo,Estado,Página\n";
+        
+        document.querySelectorAll('.inventory-table tbody tr').forEach(row => {
+            if (row.cells.length > 1) {
+                const cells = row.cells;
+                csvContent += `"${cells[0].textContent}","${cells[1].textContent}","${cells[2].textContent}",` +
+                              `"${cells[3].textContent}","${cells[4].textContent.replace('$', '')}",` +
+                              `"${cells[5].textContent}","${cells[6].textContent}","${cells[7].textContent}","${cells[8].textContent}"\n`;
+            }
         });
-    </script>
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'inventario.csv');
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    });
+
+    // Imprimir inventario
+    document.getElementById('printBtn').addEventListener('click', function() {
+        const originalContents = document.body.innerHTML;
+        const printContents = document.querySelector('.inventory-table').outerHTML;
+        
+        document.body.innerHTML = `
+            <h1 style="text-align:center;margin:20px 0;">Inventario - El Café Con La Pan-dilla</h1>
+            ${printContents}
+            <div style="text-align:center;margin:20px;font-size:12px;">
+                Impreso el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}
+            </div>
+        `;
+        
+        window.print();
+        document.body.innerHTML = originalContents;
+    });
+
+    // Cargar categorías al cargar la página
+    document.addEventListener('DOMContentLoaded', cargarCategorias);
+</script>
 </body>
 </html>

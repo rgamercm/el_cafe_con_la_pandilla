@@ -32,7 +32,7 @@ switch ($action) {
 }
 
 function agregarProducto($conexion) {
-    $required_fields = ['codigo', 'nombre', 'precio', 'pagina'];
+    $required_fields = ['codigo', 'nombre', 'precio', 'pagina', 'categoria'];
     foreach ($required_fields as $field) {
         if (empty($_POST[$field])) {
             echo json_encode(['success' => false, 'message' => "El campo $field es requerido"]);
@@ -43,7 +43,7 @@ function agregarProducto($conexion) {
     $codigo = mysqli_real_escape_string($conexion, trim($_POST['codigo']));
     $nombre = mysqli_real_escape_string($conexion, trim($_POST['nombre']));
     $descripcion = mysqli_real_escape_string($conexion, trim($_POST['descripcion'] ?? ''));
-    $categoria = mysqli_real_escape_string($conexion, trim($_POST['categoria'] ?? 'Otros'));
+    $categoria = mysqli_real_escape_string($conexion, trim($_POST['categoria']));
     $precio = floatval($_POST['precio']);
     $pagina = mysqli_real_escape_string($conexion, trim($_POST['pagina']));
     $cantidad = intval($_POST['cantidad'] ?? 0);
@@ -56,6 +56,17 @@ function agregarProducto($conexion) {
         echo json_encode(['success' => false, 'message' => 'El formato de página debe ser p1, p2, etc.']);
         exit();
     }
+
+    // Obtener ID de categoría
+    $query_categoria = "SELECT id FROM categorias WHERE nombre = '$categoria' LIMIT 1";
+    $result_categoria = mysqli_query($conexion, $query_categoria);
+    
+    if (!$result_categoria || mysqli_num_rows($result_categoria) === 0) {
+        echo json_encode(['success' => false, 'message' => 'Categoría no válida']);
+        exit();
+    }
+    
+    $categoria_id = mysqli_fetch_assoc($result_categoria)['id'];
 
     $fecha_ingreso = date('Y-m-d');
     if (!empty($_POST['fecha_ingreso']) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $_POST['fecha_ingreso'])) {
@@ -72,9 +83,15 @@ function agregarProducto($conexion) {
         exit();
     }
 
-    $verificar_codigo = mysqli_query($conexion, "SELECT * FROM inventario WHERE codigo='$codigo'");
+    $verificar_codigo = mysqli_query($conexion, "SELECT id FROM inventario WHERE codigo='$codigo'");
     if (mysqli_num_rows($verificar_codigo) > 0) {
         echo json_encode(['success' => false, 'message' => 'Este código de producto ya existe']);
+        exit();
+    }
+
+    $verificar_pagina = mysqli_query($conexion, "SELECT id FROM inventario WHERE pagina='$pagina'");
+    if (mysqli_num_rows($verificar_pagina) > 0) {
+        echo json_encode(['success' => false, 'message' => 'Esta página ya está asignada a otro producto']);
         exit();
     }
 
@@ -82,10 +99,10 @@ function agregarProducto($conexion) {
         $estado = 'agotado';
     }
 
-    $query = "INSERT INTO inventario (codigo, nombre, descripcion, categoria, cantidad, precio, 
-              unidades_existentes, unidades_minimas, fecha_ingreso, estado, pagina) 
-              VALUES ('$codigo', '$nombre', '$descripcion', '$categoria', $cantidad, $precio, 
-              $unidades_existentes, $unidades_minimas, '$fecha_ingreso', '$estado', '$pagina')";
+    $query = "INSERT INTO inventario (codigo, nombre, descripcion, categoria_id, precio, pagina, 
+              cantidad, unidades_existentes, unidades_minimas, fecha_ingreso, estado) 
+              VALUES ('$codigo', '$nombre', '$descripcion', $categoria_id, $precio, '$pagina', 
+              $cantidad, $unidades_existentes, $unidades_minimas, '$fecha_ingreso', '$estado')";
 
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Producto agregado exitosamente']);
@@ -101,7 +118,7 @@ function editarProducto($conexion) {
     }
 
     $id = intval($_POST['id']);
-    $required_fields = ['codigo', 'nombre', 'precio', 'pagina'];
+    $required_fields = ['codigo', 'nombre', 'precio', 'pagina', 'categoria'];
     foreach ($required_fields as $field) {
         if (empty($_POST[$field])) {
             echo json_encode(['success' => false, 'message' => "El campo $field es requerido"]);
@@ -112,7 +129,7 @@ function editarProducto($conexion) {
     $codigo = mysqli_real_escape_string($conexion, trim($_POST['codigo']));
     $nombre = mysqli_real_escape_string($conexion, trim($_POST['nombre']));
     $descripcion = mysqli_real_escape_string($conexion, trim($_POST['descripcion'] ?? ''));
-    $categoria = mysqli_real_escape_string($conexion, trim($_POST['categoria'] ?? 'Otros'));
+    $categoria = mysqli_real_escape_string($conexion, trim($_POST['categoria']));
     $precio = floatval($_POST['precio']);
     $pagina = mysqli_real_escape_string($conexion, trim($_POST['pagina']));
     $cantidad = intval($_POST['cantidad'] ?? 0);
@@ -120,11 +137,16 @@ function editarProducto($conexion) {
     $unidades_minimas = intval($_POST['unidades_minimas'] ?? 10);
     $estado = mysqli_real_escape_string($conexion, trim($_POST['estado'] ?? 'activo'));
 
-    // Validar formato de página
-    if (!preg_match('/^p\d+$/', $pagina)) {
-        echo json_encode(['success' => false, 'message' => 'El formato de página debe ser p1, p2, etc.']);
+    // Obtener ID de categoría
+    $query_categoria = "SELECT id FROM categorias WHERE nombre = '$categoria' LIMIT 1";
+    $result_categoria = mysqli_query($conexion, $query_categoria);
+    
+    if (!$result_categoria || mysqli_num_rows($result_categoria) === 0) {
+        echo json_encode(['success' => false, 'message' => 'Categoría no válida']);
         exit();
     }
+    
+    $categoria_id = mysqli_fetch_assoc($result_categoria)['id'];
 
     if ($precio <= 0) {
         echo json_encode(['success' => false, 'message' => 'El precio debe ser mayor a cero']);
@@ -136,9 +158,15 @@ function editarProducto($conexion) {
         exit();
     }
 
-    $verificar_codigo = mysqli_query($conexion, "SELECT * FROM inventario WHERE codigo='$codigo' AND id != $id");
+    $verificar_codigo = mysqli_query($conexion, "SELECT id FROM inventario WHERE codigo='$codigo' AND id != $id");
     if (mysqli_num_rows($verificar_codigo) > 0) {
         echo json_encode(['success' => false, 'message' => 'Este código de producto ya existe en otro registro']);
+        exit();
+    }
+
+    $verificar_pagina = mysqli_query($conexion, "SELECT id FROM inventario WHERE pagina='$pagina' AND id != $id");
+    if (mysqli_num_rows($verificar_pagina) > 0) {
+        echo json_encode(['success' => false, 'message' => 'Esta página ya está asignada a otro producto']);
         exit();
     }
 
@@ -150,13 +178,13 @@ function editarProducto($conexion) {
               codigo = '$codigo',
               nombre = '$nombre',
               descripcion = '$descripcion',
-              categoria = '$categoria',
-              cantidad = $cantidad,
+              categoria_id = $categoria_id,
               precio = $precio,
+              pagina = '$pagina',
+              cantidad = $cantidad,
               unidades_existentes = $unidades_existentes,
               unidades_minimas = $unidades_minimas,
-              estado = '$estado',
-              pagina = '$pagina'
+              estado = '$estado'
               WHERE id = $id";
 
     if (mysqli_query($conexion, $query)) {
@@ -167,8 +195,8 @@ function editarProducto($conexion) {
 }
 
 function quitarProducto($conexion) {
-    if (empty($_POST['action']) || empty($_POST['id'])) {
-        echo json_encode(['success' => false, 'message' => 'Parámetros incompletos']);
+    if (empty($_POST['id'])) {
+        echo json_encode(['success' => false, 'message' => 'ID de producto no especificado']);
         exit();
     }
 
@@ -190,11 +218,6 @@ function quitarProducto($conexion) {
 }
 
 function quitarTodosProductos($conexion) {
-    if (empty($_POST['action'])) {
-        echo json_encode(['success' => false, 'message' => 'Acción no especificada']);
-        exit();
-    }
-
     $verificar = mysqli_query($conexion, "SELECT COUNT(*) as total FROM inventario");
     $row = mysqli_fetch_assoc($verificar);
     
@@ -203,7 +226,7 @@ function quitarTodosProductos($conexion) {
         exit();
     }
 
-    $query = "TRUNCATE TABLE inventario";
+    $query = "DELETE FROM inventario";
     
     if (mysqli_query($conexion, $query)) {
         echo json_encode(['success' => true, 'message' => 'Todos los productos han sido eliminados']);
@@ -213,12 +236,47 @@ function quitarTodosProductos($conexion) {
 }
 
 function agregarProductosEjemplo($conexion) {
+    // Primero verificar si ya hay productos
+    $verificar = mysqli_query($conexion, "SELECT COUNT(*) as total FROM inventario");
+    $row = mysqli_fetch_assoc($verificar);
+    
+    if ($row['total'] > 0) {
+        echo json_encode(['success' => false, 'message' => 'No se pueden agregar ejemplos porque ya existen productos']);
+        exit();
+    }
+
+    // Obtener IDs de categorías
+    $categorias = [
+        'Bebidas' => null,
+        'Panadería' => null,
+        'Postres' => null
+    ];
+    
+    foreach ($categorias as $nombre => $id) {
+        $query = "SELECT id FROM categorias WHERE nombre = '$nombre' LIMIT 1";
+        $result = mysqli_query($conexion, $query);
+        
+        if ($result && mysqli_num_rows($result) > 0) {
+            $categorias[$nombre] = mysqli_fetch_assoc($result)['id'];
+        } else {
+            // Si la categoría no existe, crearla
+            $insert = "INSERT INTO categorias (nombre) VALUES ('$nombre')";
+            if (mysqli_query($conexion, $insert)) {
+                $categorias[$nombre] = mysqli_insert_id($conexion);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Error al crear categoría: ' . mysqli_error($conexion)]);
+                exit();
+            }
+        }
+    }
+
     $productosEjemplo = [
         [
             'codigo' => 'CAFE-001',
             'nombre' => 'Café Capuchino',
             'descripcion' => 'Café espresso con leche vaporizada y espuma',
             'categoria' => 'Bebidas',
+            'categoria_id' => $categorias['Bebidas'],
             'cantidad' => 100,
             'precio' => 1.60,
             'unidades_existentes' => 100,
@@ -232,6 +290,7 @@ function agregarProductosEjemplo($conexion) {
             'nombre' => 'Pan Artesanal',
             'descripcion' => 'Pan elaborado con masa madre y fermentación lenta',
             'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
             'cantidad' => 50,
             'precio' => 3.60,
             'unidades_existentes' => 50,
@@ -245,6 +304,7 @@ function agregarProductosEjemplo($conexion) {
             'nombre' => 'Torta de Chocolate',
             'descripcion' => 'Torta de chocolate con relleno cremoso',
             'categoria' => 'Postres',
+            'categoria_id' => $categorias['Postres'],
             'cantidad' => 30,
             'precio' => 10.10,
             'unidades_existentes' => 30,
@@ -259,13 +319,13 @@ function agregarProductosEjemplo($conexion) {
     $errores = 0;
 
     foreach ($productosEjemplo as $producto) {
-        $query = "INSERT INTO inventario (codigo, nombre, descripcion, categoria, cantidad, precio, 
+        $query = "INSERT INTO inventario (codigo, nombre, descripcion, categoria_id, cantidad, precio, 
                   unidades_existentes, unidades_minimas, fecha_ingreso, estado, pagina) 
                   VALUES (
                   '".mysqli_real_escape_string($conexion, $producto['codigo'])."',
                   '".mysqli_real_escape_string($conexion, $producto['nombre'])."',
                   '".mysqli_real_escape_string($conexion, $producto['descripcion'])."',
-                  '".mysqli_real_escape_string($conexion, $producto['categoria'])."',
+                  ".$producto['categoria_id'].",
                   ".$producto['cantidad'].",
                   ".$producto['precio'].",
                   ".$producto['unidades_existentes'].",
@@ -276,6 +336,13 @@ function agregarProductosEjemplo($conexion) {
 
         if (mysqli_query($conexion, $query)) {
             $agregados++;
+            
+            // Insertar imagen por defecto
+            $producto_id = mysqli_insert_id($conexion);
+            $imagen_url = "img/cafe/".$producto['codigo'].".jpg";
+            $query_img = "INSERT INTO imagenes_producto (producto_id, url_imagen, es_principal) 
+                         VALUES ($producto_id, '$imagen_url', TRUE)";
+            mysqli_query($conexion, $query_img);
         } else {
             $errores++;
         }
