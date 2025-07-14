@@ -1051,12 +1051,12 @@ if(isset($_SESSION['usuario'])){
         <div class="container">
             <div class="footer-content">
                 <div class="footer-column">
-                    <h3>El Café Con La Pan-dilla</h3>
+                    <h3>Pana' Cafeteria</h3>
                     <p>Desde 2010 ofreciendo los mejores productos artesanales de panadería y cafetería, elaborados con ingredientes naturales y mucho amor.</p>
                     <div class="social-media">
-                        <a href="https://www.facebook.com/profile.php?id=100089772800592" class="social-link"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/carlosgz9477/" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="https://github.com/NoobCoderMaster69" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="https://www.facebook.com/" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/" class="social-link"><i class="fab fa-instagram"></i></a>
+                        <a href="https://github.com/rgamercm/" class="social-link"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
                 <div class="footer-column">
@@ -1072,14 +1072,14 @@ if(isset($_SESSION['usuario'])){
                     <h3>Contacto</h3>
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-map-marker-alt"></i> Av. Principal 123, Ciudad</a></li>
-                        <li><a href="tel:+584244258944"><i class="fas fa-phone"></i> +58 424-4258944</a></li>
-                        <li><a href="mailto:cg9477083@gmail.com"><i class="fas fa-envelope"></i> cg9477083@gmail.com</a></li>
+                        <li><a href="tel:+584244258944"><i class="fas fa-phone"></i> +58000-0000000</a></li>
+                        <li><a href="mailto:panacafeteria@gmail.com"><i class="fas fa-envelope"></i> panacafeteria@gmail.com</a></li>
                         <li><a href="#"><i class="fas fa-clock"></i> Lunes a Domingo: 7am - 8pm</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 El Café Con La Pan-dilla C.A. Todos los Derechos Reservados.</p>
+                <p>&copy; Pana' Cafeteria. Todos los Derechos Reservados.</p>
             </div>
         </div>
     </footer>
