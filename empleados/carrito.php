@@ -1223,7 +1223,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
             event.currentTarget.classList.add('selected');
         }
         
-        function completePurchaseProcess() {
+                function completePurchaseProcess() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) {
                 alert('Tu carrito está vacío');
@@ -1262,7 +1262,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
             const tax = subtotal * 0.16; // IVA 16%
             const total = subtotal + tax;
             
-            // Enviar datos al servidor
+            // Enviar datos al servidor - ESTA ES LA PARTE MODIFICADA
             fetch('../php/checkout.php', {
                 method: 'POST',
                 headers: {
@@ -1270,9 +1270,12 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 },
                 body: JSON.stringify({
                     cart: cart,
-                    paymentMethod: paymentMethod,
+                    paymentMethodType: paymentMethod, // Cambiado de paymentMethod a paymentMethodType
                     paymentDetails: paymentDetails,
-                    deliveryAddress: deliveryAddress
+                    deliveryAddress: deliveryAddress,
+                    subtotal: subtotal,
+                    tax: tax,
+                    total: total
                 })
             })
             .then(response => {
@@ -1295,7 +1298,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error: ' + error.message);
+                alert('Error al procesar el pedido: ' + error.message);
             });
         }
         
