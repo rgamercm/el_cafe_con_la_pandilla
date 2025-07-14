@@ -638,13 +638,13 @@ if(!$usuario) {
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
                     <input type="text" class="form-control" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required 
-                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios" onkeypress="return soloLetras(event)">
                 </div>
                 
                 <div class="form-group">
                     <label for="apellido">Apellido:</label>
                     <input type="text" class="form-control" name="apellido" value="<?php echo htmlspecialchars($usuario['apellido']); ?>" required
-                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
+                           pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios" onkeypress="return soloLetras(event)">
                 </div>
                 
                 <!-- Nuevo campo para tipo de cédula -->
@@ -661,7 +661,7 @@ if(!$usuario) {
                     <label for="cedula">Número de Cédula:</label>
                     <input type="text" class="form-control numero-cedula" name="cedula" 
                            value="<?php echo htmlspecialchars($usuario['cedula'] ?? ''); ?>" required
-                           pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)">
+                           pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)" onkeypress="return soloNumeros(event)">
                 </div>
                 
                 <div class="form-group">
@@ -828,6 +828,36 @@ if(!$usuario) {
                 }
             });
         });
+
+        // Validación para solo letras en nombre y apellido
+        function soloLetras(event) {
+            const charCode = event.which || event.keyCode;
+            const char = String.fromCharCode(charCode);
+            
+            // Permitir letras (mayúsculas y minúsculas), espacios, y caracteres especiales en español
+            const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+            
+            if (!regex.test(char)) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
+
+        // Validación para solo números en cédula
+        function soloNumeros(event) {
+            const charCode = event.which || event.keyCode;
+            const char = String.fromCharCode(charCode);
+            
+            // Solo permitir números
+            const regex = /^[0-9]+$/;
+            
+            if (!regex.test(char)) {
+                event.preventDefault();
+                return false;
+            }
+            return true;
+        }
     </script>
 </body>
 </html>

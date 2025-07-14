@@ -593,12 +593,16 @@ verificarAutenticacion('empleado');
             <form action="../php/registro_usuario_be.php" method="POST">
                 <div class="form-group">
                     <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required 
+                           pattern="[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo se permiten letras y espacios"
+                           onkeypress="return soloLetras(event)">
                 </div>
                 
                 <div class="form-group">
                     <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo letras y espacios">
+                    <input type="text" id="apellido" name="apellido" class="form-control" placeholder="Apellido" required 
+                           pattern="[A-Za-záéíóúÁÉÍÓÚñÑüÜ\s]+" title="Solo se permiten letras y espacios"
+                           onkeypress="return soloLetras(event)">
                 </div>
                 
                 <div class="form-group">
@@ -611,7 +615,9 @@ verificarAutenticacion('empleado');
                 
                 <div class="form-group">
                     <label for="cedula">Número de Cédula:</label>
-                    <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ej: 12345678" required pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)">
+                    <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ej: 12345678" required 
+                           pattern="[0-9]{6,15}" title="Solo se permiten números (6-15 dígitos)"
+                           onkeypress="return soloNumeros(event)">
                 </div>
                 
                 <div class="form-group">
@@ -770,6 +776,40 @@ verificarAutenticacion('empleado');
                     menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
                 }
             });
+        });
+
+        // Validación de campos
+        function soloLetras(event) {
+            const charCode = event.which ? event.which : event.keyCode;
+            if (charCode === 8 || charCode === 32) { // Permitir espacio y retroceso
+                return true;
+            }
+            const char = String.fromCharCode(charCode);
+            const regex = /^[A-Za-záéíóúÁÉÍÓÚñÑüÜ]+$/;
+            return regex.test(char);
+        }
+
+        function soloNumeros(event) {
+            const charCode = event.which ? event.which : event.keyCode;
+            if (charCode === 8) { // Permitir retroceso
+                return true;
+            }
+            const char = String.fromCharCode(charCode);
+            const regex = /^[0-9]+$/;
+            return regex.test(char);
+        }
+
+        // Asignar eventos para prevenir pegar contenido no válido
+        document.getElementById('nombre').addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('apellido').addEventListener('paste', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('cedula').addEventListener('paste', function(e) {
+            e.preventDefault();
         });
     </script>
 </body>
