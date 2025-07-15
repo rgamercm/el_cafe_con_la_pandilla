@@ -566,7 +566,7 @@
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
+                <img src="../img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
             </div>
             
             <div class="header-controls">

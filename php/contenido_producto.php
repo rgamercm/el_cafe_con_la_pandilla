@@ -20,8 +20,8 @@ if ($result && mysqli_num_rows($result) > 0) {
 $nombre = $producto ? $producto['nombre'] : "Producto no configurado";
 $precio = $producto ? $producto['precio'] : 0.00;
 $descripcion = $producto ? $producto['descripcion'] : "Este producto no ha sido configurado en el inventario. Por favor, contacte al administrador.";
-$imagen = $producto && file_exists("img/cafe/".$producto['codigo'].".jpg") ? 
-           "img/cafe/".$producto['codigo'].".jpg" : "img/cafe/default.jpg";
+$imagen = $producto && file_exists("img/codigo/".$producto['codigo'].".jpg") ? 
+           "img/codigo/".$producto['codigo'].".jpg" : "img/cafe/default.jpg";
 $id_producto = $producto ? $producto['id'] : 0;
 ?>
 

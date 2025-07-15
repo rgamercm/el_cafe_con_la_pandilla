@@ -449,6 +449,31 @@ $usuario_logeado = isset($_SESSION['usuario']);
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Estilos para campos de teléfono y cédula */
+        .input-group {
+            position: relative;
+        }
+
+        .prefix {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            pointer-events: none;
+        }
+
+        .form-control.with-prefix {
+            padding-left: 40px;
+        }
+
+        .format-hint {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+            display: block;
+        }
+
         /* Recibo */
         .receipt {
             display: none;
@@ -844,7 +869,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                         <div class="payment-details active" id="tarjetaDetails">
                             <div class="form-group">
                                 <label for="cardNumber">Número de Tarjeta</label>
-                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="16">
+                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+                                <span class="format-hint">Formato: 1234 5678 9012 3456</span>
                             </div>
                             <div class="form-group">
                                 <label for="cardName">Nombre en la Tarjeta</label>
@@ -853,11 +879,13 @@ $usuario_logeado = isset($_SESSION['usuario']);
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="cardExpiry">Fecha de Expiración</label>
-                                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" maxlength="5">
+                                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" maxlength="5" oninput="formatExpiryDate(this)">
+                                    <span class="format-hint">Formato: MM/AA (ej. 12/25)</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="cardCvv">CVV</label>
-                                    <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3">
+                                    <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <span class="format-hint">3 dígitos en el reverso de tu tarjeta</span>
                                 </div>
                             </div>
                         </div>
@@ -876,8 +904,11 @@ $usuario_logeado = isset($_SESSION['usuario']);
                         <div class="payment-details" id="pago_movilDetails">
                             <div class="form-group">
                                 <label for="mobileNumber">Número de Teléfono</label>
-                                <input type="text" id="mobileNumber" class="form-control" placeholder="+58000-0000000" 
-                                       pattern="^\+58[0-9]{3}-[0-9]{7}$" title="Formato: +58XXX-XXXXXXX" required>
+                                <div class="input-group">
+                                    <span class="prefix">+58</span>
+                                    <input type="text" id="mobileNumber" class="form-control with-prefix" placeholder="424-1234567" maxlength="12" oninput="formatPhoneNumber(this)">
+                                </div>
+                                <span class="format-hint">Formato: 412-1234567 o 424-1234567</span>
                             </div>
                             <div class="form-group">
                                 <label for="mobileBank">Banco</label>
@@ -885,11 +916,15 @@ $usuario_logeado = isset($_SESSION['usuario']);
                                     <option value="banco_nacional">Banco Nacional</option>
                                     <option value="banco_provincial">Banco Provincial</option>
                                     <option value="banco_venezuela">Banco de Venezuela</option>
+                                    <option value="banco_bancaribe">Bancaribe</option>
+                                    <option value="banco_bicentenario">Bicentenario</option>
+                                    <option value="banco_mercantil">Mercantil</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="mobileId">Cédula/Pasaporte</label>
-                                <input type="text" id="mobileId" class="form-control" placeholder="V-12345678">
+                                <input type="text" id="mobileId" class="form-control" placeholder="V-12345678" maxlength="10" oninput="formatCedula(this)">
+                                <span class="format-hint">Formato: V-12345678 o E-12345678</span>
                             </div>
                         </div>
                         
@@ -967,7 +1002,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <div class="social-media">
                         <a href="https://www.facebook.com/" class="social-link"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="https://github.com/rgamercm" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="https://github.com/rgamercm/" class="social-link"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
                 <div class="footer-column">
@@ -975,10 +1010,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <ul class="footer-links">
                         <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
                         <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
+                        <li><a href="nosotros.php"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
                         <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>
-                        <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] === 'administrador'): ?>
-                            <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
-                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -992,7 +1025,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy;Pana' Cafeteria. Todos los Derechos Reservados.</p>
+                <p>&copy; Pana' Cafeteria. Todos los Derechos Reservados.</p>
             </div>
         </div>
     </footer>
@@ -1062,14 +1095,6 @@ $usuario_logeado = isset($_SESSION['usuario']);
             });
         }
 
-        // Contador del carrito (simulado)
-        const cartCounter = document.getElementById('cartCounter');
-        if (cartCounter) {
-            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
-            const randomCount = Math.floor(Math.random() * 5) + 1;
-            cartCounter.textContent = randomCount;
-        }
-
         // Menú hamburguesa
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
@@ -1091,244 +1116,367 @@ $usuario_logeado = isset($_SESSION['usuario']);
             });
         });
 
+        // Funciones para formatear campos
+        function formatCardNumber(input) {
+            // Eliminar todos los caracteres que no sean números
+            let value = input.value.replace(/\D/g, '');
+            
+            // Agregar espacios cada 4 dígitos
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            
+            // Limitar a 16 dígitos (19 caracteres incluyendo espacios)
+            if (value.length > 19) {
+                value = value.substring(0, 19);
+            }
+            
+            input.value = value;
+        }
+
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            
+            // Agregar / después de 2 dígitos
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            // Limitar a 5 caracteres (MM/AA)
+            if (value.length > 5) {
+                value = value.substring(0, 5);
+            }
+            
+            input.value = value;
+        }
+
+        function formatPhoneNumber(input) {
+            // Eliminar todo excepto números y guiones
+            let value = input.value.replace(/[^\d-]/g, '');
+            
+            // Asegurar que solo haya un guión
+            const parts = value.split('-');
+            if (parts.length > 2) {
+                value = parts[0] + '-' + parts.slice(1).join('');
+            }
+            
+            // Limitar la longitud según el formato (0424-1234567)
+            if (value.length > 12) {
+                value = value.substring(0, 12);
+            }
+            
+            input.value = value;
+        }
+
+        function formatCedula(input) {
+            let value = input.value.toUpperCase();
+            
+            // Permitir solo V, E o J al inicio, seguido de números
+            value = value.replace(/^([VEJ])?([^0-9]*)([0-9]*)/, function(match, p1, p2, p3) {
+                return (p1 || '') + p3;
+            });
+            
+            // Limitar a 9 caracteres (V-12345678)
+            if (value.length > 9) {
+                value = value.substring(0, 9);
+            }
+            
+            // Agregar guión después de la letra si no está presente
+            if (value.length > 1 && value[1] !== '-') {
+                value = value[0] + '-' + value.substring(1);
+            }
+            
+            input.value = value;
+        }
+
         // Funcionalidad del carrito
         document.addEventListener('DOMContentLoaded', function() {
+            loadCartFromStorage();
+            updateCartCounter();
+            
+            // Configurar botón de checkout
+            const proceedToCheckout = document.getElementById('proceedToCheckout');
+            if (proceedToCheckout) {
+                proceedToCheckout.addEventListener('click', showCheckoutForm);
+            }
+            
+            // Configurar botón de completar compra
+            const completePurchase = document.getElementById('completePurchase');
+            if (completePurchase) {
+                completePurchase.addEventListener('click', completePurchaseProcess);
+            }
+        });
+
+        function loadCartFromStorage() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const cartItemsList = document.getElementById('cartItems');
             const totalPriceElement = document.getElementById('totalPrice');
-            const proceedToCheckoutBtn = document.getElementById('proceedToCheckout');
-            const checkoutForm = document.getElementById('checkoutForm');
-            const receipt = document.getElementById('receipt');
-            const completePurchaseBtn = document.getElementById('completePurchase');
-            const mobileNumberInput = document.getElementById('mobileNumber');
-
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            // Función para formatear el número de celular
-            function formatMobileNumber(input) {
-                let value = input.value.replace(/[^0-9]/g, ''); // Eliminar caracteres no numéricos
+            
+            cartItemsList.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '<li>Tu carrito está vacío</li>';
+                totalPriceElement.textContent = 'Total: $0.00';
+                if (document.getElementById('proceedToCheckout')) {
+                    document.getElementById('proceedToCheckout').disabled = true;
+                }
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
                 
-                if (!value.startsWith('58')) {
-                    value = '58' + value; // Asegurar que empiece con 58
-                }
-
-                if (value.length > 10) { // 58 + 3 (código) + 7 (número)
-                    value = value.substring(0, 10);
-                }
-
-                let formattedValue = '+';
-                if (value.length > 0) {
-                    formattedValue += value.substring(0, 2); // +58
-                }
-                if (value.length > 2) {
-                    formattedValue += value.substring(2, 5); // +58XXX
-                }
-                if (value.length > 5) {
-                    formattedValue += '-' + value.substring(5, 12); // +58XXX-XXXXXXX
-                }
-                input.value = formattedValue;
-            }
-
-            // Aplicar el formato al cargar y al escribir
-            if (mobileNumberInput) {
-                mobileNumberInput.addEventListener('input', function() {
-                    formatMobileNumber(this);
-                });
-                // Asegurar el formato inicial si ya hay un valor
-                if (mobileNumberInput.value) {
-                    formatMobileNumber(mobileNumberInput);
-                }
-            }
-
-            // Actualizar el carrito al cargar la página
-            updateCartDisplay();
-
-            proceedToCheckoutBtn.addEventListener('click', function() {
-                if (cart.length === 0) {
-                    alert('Tu carrito está vacío. Agrega productos antes de proceder al pago.');
-                    return;
-                }
-                document.getElementById('cartContent').style.display = 'none';
-                checkoutForm.style.display = 'block';
-                selectPaymentMethod('tarjeta'); // Seleccionar tarjeta por defecto
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">$${item.price.toFixed(2)} c/u</div>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                    </div>
+                    <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
+                    <button class="remove-btn" onclick="removeItem(${index})">Eliminar</button>
+                `;
+                
+                cartItemsList.appendChild(li);
             });
+            
+            totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
+            if (document.getElementById('proceedToCheckout')) {
+                document.getElementById('proceedToCheckout').disabled = false;
+            }
+        }
 
-            completePurchaseBtn.addEventListener('click', function() {
-                // Aquí iría la lógica para procesar el pago
-                // Por ahora, solo mostramos el recibo
-                displayReceipt();
-            });
-
-            function updateCartDisplay() {
-                cartItemsList.innerHTML = '';
-                let total = 0;
-
-                if (cart.length === 0) {
-                    cartItemsList.innerHTML = '<li>Tu carrito está vacío.</li>';
-                    totalPriceElement.textContent = 'Total: $0.00';
-                    proceedToCheckoutBtn.disabled = true;
-                    return;
-                }
-
-                cart.forEach(item => {
-                    const li = document.createElement('li');
-                    const itemTotal = item.price * item.quantity;
-                    total += itemTotal;
-
-                    li.innerHTML = `
-                        <div class="cart-item-info">
-                            <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
-                            <span>${item.name}</span>
-                        </div>
-                        <div class="cart-item-quantity">
-                            <button class="quantity-btn" data-id="${item.id}" data-change="-1">-</button>
-                            <span>${item.quantity}</span>
-                            <button class="quantity-btn" data-id="${item.id}" data-change="1">+</button>
-                            <button class="remove-btn" data-id="${item.id}">Eliminar</button>
-                        </div>
-                        <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
-                    `;
-                    cartItemsList.appendChild(li);
-                });
-
-                totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
-                proceedToCheckoutBtn.disabled = false;
-
-                // Add event listeners for quantity buttons
-                document.querySelectorAll('.quantity-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productId = parseInt(this.dataset.id);
-                        const change = parseInt(this.dataset.change);
-                        updateCartItemQuantity(productId, change);
+        function updateQuantity(index, change) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (index >= 0 && index < cart.length) {
+                const productId = cart[index].id;
+                const newQuantity = cart[index].quantity + change;
+                
+                // Verificar disponibilidad con el servidor
+                fetch(`../php/verificar_disponibilidad.php?id=${productId}&cantidad=${newQuantity}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.disponible) {
+                            cart[index].quantity = newQuantity;
+                            
+                            if (cart[index].quantity <= 0) {
+                                cart.splice(index, 1);
+                            }
+                            
+                            localStorage.setItem('cart', JSON.stringify(cart));
+                            loadCartFromStorage();
+                            updateCartCounter();
+                        } else {
+                            alert('No hay suficientes unidades disponibles de este producto');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al verificar disponibilidad');
                     });
-                });
+            }
+        }
 
-                // Add event listeners for remove buttons
-                document.querySelectorAll('.remove-btn').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const productId = parseInt(this.dataset.id);
-                        removeCartItem(productId);
-                    });
-                });
+        function removeItem(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (index >= 0 && index < cart.length) {
+                cart.splice(index, 1);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCartFromStorage();
                 updateCartCounter();
             }
-
-            function updateCartItemQuantity(productId, change) {
-                const itemIndex = cart.findIndex(item => item.id === productId);
-                if (itemIndex > -1) {
-                    const currentItem = cart[itemIndex];
-                    const newQuantity = currentItem.quantity + change;
-
-                    if (newQuantity <= 0) {
-                        removeCartItem(productId);
-                    } else {
-                        // Simulate checking stock (in a real app, this would be an AJAX call to backend)
-                        // For now, assume infinite stock or handle client-side
-                        cart[itemIndex].quantity = newQuantity;
-                        localStorage.setItem('cart', JSON.stringify(cart));
-                        updateCartDisplay();
-                    }
-                }
+        }
+        
+        function updateCartCounter() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (document.getElementById('cartCounter')) {
+                document.getElementById('cartCounter').textContent = totalItems;
             }
-
-            function removeCartItem(productId) {
-                cart = cart.filter(item => item.id !== productId);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartDisplay();
+        }
+        
+        function showCheckoutForm() {
+            document.getElementById('cartContent').style.display = 'none';
+            document.getElementById('checkoutForm').style.display = 'block';
+        }
+        
+        function backToCart() {
+            document.getElementById('checkoutForm').style.display = 'none';
+            document.getElementById('cartContent').style.display = 'block';
+        }
+        
+        function selectPaymentMethod(method) {
+            // Ocultar todos los detalles de pago
+            document.querySelectorAll('.payment-details').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Desmarcar todos los métodos
+            document.querySelectorAll('.payment-method').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Mostrar detalles del método seleccionado
+            document.getElementById(`${method}Details`).classList.add('active');
+            
+            // Marcar como seleccionado
+            event.currentTarget.classList.add('selected');
+        }
+        
+function completePurchaseProcess() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    let paymentDetails = {};
+    
+    // Validar campos según el método de pago
+    if (paymentMethod === 'tarjeta') {
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        if (!cardNumber || cardNumber.length < 16) {
+            alert('Por favor ingrese un número de tarjeta válido (16 dígitos)');
+            return;
+        }
+        
+        const cardExpiry = document.getElementById('cardExpiry').value;
+        if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            alert('Por favor ingrese una fecha de expiración válida (MM/AA)');
+            return;
+        }
+        
+        paymentDetails = {
+            cardNumber: cardNumber,
+            cardName: document.getElementById('cardName').value,
+            cardExpiry: cardExpiry,
+            cardCvv: document.getElementById('cardCvv').value
+        };
+    } else if (paymentMethod === 'pago_movil') {
+        const mobileNumber = document.getElementById('mobileNumber').value;
+        if (!mobileNumber || !/^\d{3,4}-\d{7}$/.test(mobileNumber)) {
+            alert('Por favor ingrese un número de teléfono válido (ej. 424-1234567)');
+            return;
+        }
+        
+        const mobileId = document.getElementById('mobileId').value;
+        if (!mobileId || !/^[VEJ]-\d{7,8}$/.test(mobileId)) {
+            alert('Por favor ingrese una cédula válida (ej. V-12345678)');
+            return;
+        }
+        
+        paymentDetails = {
+            mobileNumber: mobileNumber,
+            mobileBank: document.getElementById('mobileBank').value,
+            mobileId: mobileId
+        };
+    } else if (paymentMethod === 'transferencia' || paymentMethod === 'efectivo') {
+        // No se necesitan detalles adicionales para estos métodos
+        paymentDetails = {};
+    }
+    
+    const deliveryAddress = document.getElementById('deliveryAddress').value;
+    
+    // Calcular totales
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = subtotal * 0.16; // IVA 16%
+    const total = subtotal + tax;
+    
+    // Enviar datos al servidor
+    fetch('../php/checkout.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            cart: cart,
+            paymentMethod: paymentMethod,
+            paymentDetails: paymentDetails,
+            deliveryAddress: deliveryAddress
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
+            document.getElementById('receiptOrderId').textContent = data.pedido_id;
+            document.getElementById('checkoutForm').style.display = 'none';
+            document.getElementById('receipt').classList.add('active');
+            localStorage.removeItem('cart');
+            updateCartCounter();
+        } else {
+            throw new Error(data.message || 'Error al procesar el pago');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    });
+}
+        
+        function showReceipt(items, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress) {
+            // Formatear fecha
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            document.getElementById('receiptDate').textContent = now.toLocaleDateString('es-ES', options);
+            
+            // Agregar ítems
+            const receiptItems = document.getElementById('receiptItems');
+            receiptItems.innerHTML = '';
+            
+            items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'receipt-item';
+                itemDiv.innerHTML = `
+                    <span>${item.quantity} x ${item.name}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                receiptItems.appendChild(itemDiv);
+            });
+            
+            // Mostrar totales
+            document.getElementById('receiptSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('receiptTax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('receiptTotal').textContent = `$${total.toFixed(2)}`;
+            
+            // Mostrar método de pago
+            let paymentMethodText = '';
+            switch(paymentMethod) {
+                case 'tarjeta':
+                    paymentMethodText = `Tarjeta terminada en ${paymentDetails.cardNumber.slice(-4)}`;
+                    break;
+                case 'transferencia':
+                    paymentMethodText = 'Transferencia Bancaria';
+                    break;
+                case 'pago_movil':
+                    paymentMethodText = `Pago Móvil (${paymentDetails.mobileBank}) - Tel: +58${paymentDetails.mobileNumber}`;
+                    break;
+                case 'efectivo':
+                    paymentMethodText = 'Efectivo al recibir';
+                    break;
             }
-
-            function updateCartCounter() {
-                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-                const cartCounterElement = document.getElementById('cartCounter');
-                if (cartCounterElement) {
-                    cartCounterElement.textContent = totalItems;
-                }
+            document.getElementById('receiptPaymentMethod').textContent = `Método de pago: ${paymentMethodText}`;
+            
+            // Mostrar dirección si existe
+            if (deliveryAddress) {
+                document.getElementById('receiptDeliveryAddress').textContent = `Dirección: ${deliveryAddress}`;
             }
-
-            window.selectPaymentMethod = function(method) {
-                document.querySelectorAll('.payment-method').forEach(pm => {
-                    pm.classList.remove('selected');
-                    pm.querySelector('input[type="radio"]').checked = false;
-                });
-                document.getElementById(method).checked = true;
-                document.getElementById(method).closest('.payment-method').classList.add('selected');
-
-                document.querySelectorAll('.payment-details').forEach(pd => {
-                    pd.classList.remove('active');
-                });
-                document.getElementById(method + 'Details').classList.add('active');
-            };
-
-            window.backToCart = function() {
-                checkoutForm.style.display = 'none';
-                document.getElementById('cartContent').style.display = 'block';
-            };
-
-            function displayReceipt() {
-                checkoutForm.style.display = 'none';
-                receipt.style.display = 'block';
-                receipt.classList.add('active');
-
-                const now = new Date();
-                document.getElementById('receiptDate').textContent = now.toLocaleString();
-                document.getElementById('receiptOrderId').textContent = Math.floor(Math.random() * 1000000); // Random order ID
-
-                const receiptItemsList = document.getElementById('receiptItems');
-                receiptItemsList.innerHTML = '';
-                let subtotal = 0;
-
-                cart.forEach(item => {
-                    const itemTotal = item.price * item.quantity;
-                    subtotal += itemTotal;
-                    const div = document.createElement('div');
-                    div.classList.add('receipt-item');
-                    div.innerHTML = `
-                        <span>${item.name} (x${item.quantity})</span>
-                        <span>$${itemTotal.toFixed(2)}</span>
-                    `;
-                    receiptItemsList.appendChild(div);
-                });
-
-                const taxRate = 0.16; // 16% IVA
-                const tax = subtotal * taxRate;
-                const total = subtotal + tax;
-
-                document.getElementById('receiptSubtotal').textContent = `$${subtotal.toFixed(2)}`;
-                document.getElementById('receiptTax').textContent = `$${tax.toFixed(2)}`;
-                document.getElementById('receiptTotal').textContent = `$${total.toFixed(2)}`;
-
-                const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-                let paymentMethodText = '';
-                switch (selectedPaymentMethod) {
-                    case 'tarjeta':
-                        paymentMethodText = 'Método de Pago: Tarjeta de Crédito/Débito';
-                        break;
-                    case 'transferencia':
-                        paymentMethodText = 'Método de Pago: Transferencia Bancaria';
-                        break;
-                    case 'pago_movil':
-                        paymentMethodText = 'Método de Pago: Pago Móvil';
-                        break;
-                    case 'efectivo':
-                        paymentMethodText = 'Método de Pago: Efectivo';
-                        break;
-                }
-                document.getElementById('receiptPaymentMethod').textContent = paymentMethodText;
-
-                const deliveryAddress = document.getElementById('deliveryAddress').value;
-                document.getElementById('receiptDeliveryAddress').textContent = deliveryAddress ? `Dirección de Envío: ${deliveryAddress}` : 'Sin dirección de envío especificada.';
-
-                // Clear cart after successful purchase
-                cart = [];
-                localStorage.setItem('cart', JSON.stringify(cart));
-                updateCartCounter();
-            }
-
-            window.newOrder = function() {
-                receipt.style.display = 'none';
-                document.getElementById('cartContent').style.display = 'block';
-                updateCartDisplay(); // Refresh cart display to show it's empty
-            };
-        });
+        }
+        
+        function newOrder() {
+            window.location.href = 'catalogo.php';
+        }
     </script>
 </body>
 </html>

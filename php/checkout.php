@@ -4,39 +4,62 @@ require_once 'verificar_sesion.php';
 
 header('Content-Type: application/json');
 
+// Verificar sesión
 if (!isset($_SESSION['usuario'])) {
+    http_response_code(401);
     echo json_encode(['success' => false, 'message' => 'Debes iniciar sesión']);
     exit();
 }
 
+// Verificar método de la petición
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit();
+}
+
+// Obtener y validar datos JSON
 $input = json_decode(file_get_contents('php://input'), true);
 if (json_last_error() !== JSON_ERROR_NONE) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Datos inválidos']);
     exit();
 }
 
+// Extraer y validar datos básicos
 $cart = $input['cart'] ?? [];
-$paymentMethodType = $input['paymentMethodType'] ?? '';
+$paymentMethod = $input['paymentMethod'] ?? ''; // Cambiado de paymentMethodType
 $paymentDetails = $input['paymentDetails'] ?? [];
 $deliveryAddress = $input['deliveryAddress'] ?? '';
-$subtotal = $input['subtotal'] ?? 0;
-$tax = $input['tax'] ?? 0;
-$total = $input['total'] ?? 0;
 
 if (empty($cart)) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Carrito vacío']);
     exit();
 }
 
+// Validar método de pago
 $metodosPermitidos = ['tarjeta', 'transferencia', 'pago_movil', 'efectivo'];
-if (!in_array($paymentMethodType, $metodosPermitidos)) {
+if (!in_array($paymentMethod, $metodosPermitidos)) {
+    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Método de pago no válido']);
     exit();
 }
 
-ini_set('display_errors', 0);
-error_reporting(0);
+// Calcular totales (mejor hacerlo en el backend)
+$subtotal = 0;
+foreach ($cart as $item) {
+    if (!isset($item['price'], $item['quantity'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'Datos del carrito incompletos']);
+        exit();
+    }
+    $subtotal += floatval($item['price']) * intval($item['quantity']);
+}
+$tax = $subtotal * 0.16; // IVA 16%
+$total = $subtotal + $tax;
 
+// Iniciar transacción
 mysqli_begin_transaction($conexion);
 
 try {
@@ -48,7 +71,7 @@ try {
         throw new Exception('Error al preparar la consulta: ' . mysqli_error($conexion));
     }
     
-    mysqli_stmt_bind_param($stmt, "s", $paymentMethodType);
+    mysqli_stmt_bind_param($stmt, "s", $paymentMethod);
     
     if (!mysqli_stmt_execute($stmt)) {
         throw new Exception('Error al ejecutar la consulta: ' . mysqli_stmt_error($stmt));
@@ -74,17 +97,7 @@ try {
                 metodo_pago_id,
                 datos_pago,
                 direccion_envio
-              ) VALUES (
-                ?,
-                NOW(),  -- Usamos NOW() para la fecha actual
-                'pendiente',
-                ?,
-                ?,
-                ?,
-                ?,
-                ?,
-                ?
-              )";
+              ) VALUES (?, NOW(), 'pendiente', ?, ?, ?, ?, ?, ?)";
     
     $stmt = mysqli_prepare($conexion, $query);
     
@@ -92,7 +105,7 @@ try {
         throw new Exception('Error al preparar la consulta: ' . mysqli_error($conexion));
     }
     
-    $paymentData = json_encode($paymentDetails);
+    $paymentData = json_encode($paymentDetails, JSON_UNESCAPED_UNICODE);
     mysqli_stmt_bind_param(
         $stmt, 
         "idddiss", 
@@ -113,12 +126,9 @@ try {
     
     // 3. Procesar cada item del carrito
     foreach ($cart as $item) {
-        if (!isset($item['id'], $item['price'], $item['quantity'])) {
-            throw new Exception('Datos del carrito incompletos');
-        }
-        
         $producto_id = intval($item['id']);
         $cantidad = intval($item['quantity']);
+        $precio_unitario = floatval($item['price']);
         
         // Verificar disponibilidad con bloqueo
         $verificar = mysqli_query($conexion, 
@@ -135,7 +145,6 @@ try {
         }
         
         // Insertar detalle del pedido
-        $precio_unitario = floatval($item['price']);
         $subtotal_item = $precio_unitario * $cantidad;
         
         $query = "INSERT INTO detalles_pedido (
@@ -188,6 +197,7 @@ try {
     // Confirmar transacción
     mysqli_commit($conexion);
     
+    http_response_code(200);
     echo json_encode([
         'success' => true,
         'message' => 'Pedido completado con éxito',
@@ -197,11 +207,15 @@ try {
 } catch (Exception $e) {
     // Revertir transacción en caso de error
     mysqli_rollback($conexion);
-    error_log('Error en checkout: ' . $e->getMessage());
     
+    http_response_code(500);
     echo json_encode([
         'success' => false,
-        'message' => 'Error al procesar el pedido: ' . $e->getMessage()
+        'message' => 'Error al procesar el pedido',
+        'error' => $e->getMessage()
     ]);
+    
+    // Registrar error para depuración
+    error_log('Error en checkout: ' . $e->getMessage());
 }
 ?>

@@ -449,6 +449,31 @@ $usuario_logeado = isset($_SESSION['usuario']);
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* Estilos para campos de teléfono y cédula */
+        .input-group {
+            position: relative;
+        }
+
+        .prefix {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+            pointer-events: none;
+        }
+
+        .form-control.with-prefix {
+            padding-left: 40px;
+        }
+
+        .format-hint {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+            display: block;
+        }
+
         /* Recibo */
         .receipt {
             display: none;
@@ -771,7 +796,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
     <header class="header">
         <div class="container header-container">
             <div class="logo">
-                <img src="../img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
+                <img src="img/cafe/cafe1.png" alt="Logotipo" class="logo-image">
             </div>
             
             <div class="header-controls">
@@ -793,8 +818,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <a href="registrar.php" class="nav-link">Registrarse</a>
                     <a href="inventario.php" class="nav-link">Inventario</a>
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                    <a href="estadisticas.php" class="nav-link">Estadísticas</a>
                 </nav>
             </div>
         </div>
@@ -844,7 +869,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                         <div class="payment-details active" id="tarjetaDetails">
                             <div class="form-group">
                                 <label for="cardNumber">Número de Tarjeta</label>
-                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="16">
+                                <input type="text" id="cardNumber" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+                                <span class="format-hint">Formato: 1234 5678 9012 3456</span>
                             </div>
                             <div class="form-group">
                                 <label for="cardName">Nombre en la Tarjeta</label>
@@ -853,11 +879,13 @@ $usuario_logeado = isset($_SESSION['usuario']);
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="cardExpiry">Fecha de Expiración</label>
-                                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" maxlength="5">
+                                    <input type="text" id="cardExpiry" class="form-control" placeholder="MM/AA" maxlength="5" oninput="formatExpiryDate(this)">
+                                    <span class="format-hint">Formato: MM/AA (ej. 12/25)</span>
                                 </div>
                                 <div class="form-group">
                                     <label for="cardCvv">CVV</label>
-                                    <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3">
+                                    <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                    <span class="format-hint">3 dígitos en el reverso de tu tarjeta</span>
                                 </div>
                             </div>
                         </div>
@@ -876,7 +904,11 @@ $usuario_logeado = isset($_SESSION['usuario']);
                         <div class="payment-details" id="pago_movilDetails">
                             <div class="form-group">
                                 <label for="mobileNumber">Número de Teléfono</label>
-                                <input type="text" id="mobileNumber" class="form-control" placeholder="0424-1234567">
+                                <div class="input-group">
+                                    <span class="prefix">+58</span>
+                                    <input type="text" id="mobileNumber" class="form-control with-prefix" placeholder="424-1234567" maxlength="12" oninput="formatPhoneNumber(this)">
+                                </div>
+                                <span class="format-hint">Formato: 412-1234567 o 424-1234567</span>
                             </div>
                             <div class="form-group">
                                 <label for="mobileBank">Banco</label>
@@ -884,11 +916,15 @@ $usuario_logeado = isset($_SESSION['usuario']);
                                     <option value="banco_nacional">Banco Nacional</option>
                                     <option value="banco_provincial">Banco Provincial</option>
                                     <option value="banco_venezuela">Banco de Venezuela</option>
+                                    <option value="banco_bancaribe">Bancaribe</option>
+                                    <option value="banco_bicentenario">Bicentenario</option>
+                                    <option value="banco_mercantil">Mercantil</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="mobileId">Cédula/Pasaporte</label>
-                                <input type="text" id="mobileId" class="form-control" placeholder="V-12345678">
+                                <input type="text" id="mobileId" class="form-control" placeholder="V-12345678" maxlength="10" oninput="formatCedula(this)">
+                                <span class="format-hint">Formato: V-12345678 o E-12345678</span>
                             </div>
                         </div>
                         
@@ -966,7 +1002,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <div class="social-media">
                         <a href="https://www.facebook.com/" class="social-link"><i class="fab fa-facebook-f"></i></a>
                         <a href="https://www.instagram.com/" class="social-link"><i class="fab fa-instagram"></i></a>
-                        <a href="https://github.com/rgamercm" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="https://github.com/rgamercm/" class="social-link"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
                 <div class="footer-column">
@@ -974,10 +1010,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <ul class="footer-links">
                         <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
                         <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
+                        <li><a href="nosotros.php"><i class="fas fa-chevron-right"></i> Nosotros</a></li>
                         <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>
-                        <?php if ($_SESSION['usuario']['rol'] === 'empleado'): ?>
-                            <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
-                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="footer-column">
@@ -991,7 +1025,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy;Pana' Cafeteria. Todos los Derechos Reservados.</p>
+                <p>&copy; Pana' Cafeteria. Todos los Derechos Reservados.</p>
             </div>
         </div>
     </footer>
@@ -1081,6 +1115,77 @@ $usuario_logeado = isset($_SESSION['usuario']);
                 }
             });
         });
+
+        // Funciones para formatear campos
+        function formatCardNumber(input) {
+            // Eliminar todos los caracteres que no sean números
+            let value = input.value.replace(/\D/g, '');
+            
+            // Agregar espacios cada 4 dígitos
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            
+            // Limitar a 16 dígitos (19 caracteres incluyendo espacios)
+            if (value.length > 19) {
+                value = value.substring(0, 19);
+            }
+            
+            input.value = value;
+        }
+
+        function formatExpiryDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            
+            // Agregar / después de 2 dígitos
+            if (value.length > 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            // Limitar a 5 caracteres (MM/AA)
+            if (value.length > 5) {
+                value = value.substring(0, 5);
+            }
+            
+            input.value = value;
+        }
+
+        function formatPhoneNumber(input) {
+            // Eliminar todo excepto números y guiones
+            let value = input.value.replace(/[^\d-]/g, '');
+            
+            // Asegurar que solo haya un guión
+            const parts = value.split('-');
+            if (parts.length > 2) {
+                value = parts[0] + '-' + parts.slice(1).join('');
+            }
+            
+            // Limitar la longitud según el formato (0424-1234567)
+            if (value.length > 12) {
+                value = value.substring(0, 12);
+            }
+            
+            input.value = value;
+        }
+
+        function formatCedula(input) {
+            let value = input.value.toUpperCase();
+            
+            // Permitir solo V, E o J al inicio, seguido de números
+            value = value.replace(/^([VEJ])?([^0-9]*)([0-9]*)/, function(match, p1, p2, p3) {
+                return (p1 || '') + p3;
+            });
+            
+            // Limitar a 9 caracteres (V-12345678)
+            if (value.length > 9) {
+                value = value.substring(0, 9);
+            }
+            
+            // Agregar guión después de la letra si no está presente
+            if (value.length > 1 && value[1] !== '-') {
+                value = value[0] + '-' + value.substring(1);
+            }
+            
+            input.value = value;
+        }
 
         // Funcionalidad del carrito
         document.addEventListener('DOMContentLoaded', function() {
@@ -1223,84 +1328,102 @@ $usuario_logeado = isset($_SESSION['usuario']);
             event.currentTarget.classList.add('selected');
         }
         
-                function completePurchaseProcess() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cart.length === 0) {
-                alert('Tu carrito está vacío');
-                return;
-            }
-            
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            let paymentDetails = {};
-            
-            // Obtener detalles según el método de pago
-            if (paymentMethod === 'tarjeta') {
-                const cardNumber = document.getElementById('cardNumber').value;
-                if (!cardNumber || cardNumber.length < 16) {
-                    alert('Por favor ingrese un número de tarjeta válido');
-                    return;
-                }
-                
-                paymentDetails = {
-                    cardNumber: cardNumber,
-                    cardName: document.getElementById('cardName').value,
-                    cardExpiry: document.getElementById('cardExpiry').value,
-                    cardCvv: document.getElementById('cardCvv').value
-                };
-            } else if (paymentMethod === 'pago_movil') {
-                paymentDetails = {
-                    mobileNumber: document.getElementById('mobileNumber').value,
-                    mobileBank: document.getElementById('mobileBank').value,
-                    mobileId: document.getElementById('mobileId').value
-                };
-            }
-            
-            const deliveryAddress = document.getElementById('deliveryAddress').value;
-            
-            // Calcular totales
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.16; // IVA 16%
-            const total = subtotal + tax;
-            
-            // Enviar datos al servidor - ESTA ES LA PARTE MODIFICADA
-            fetch('../php/checkout.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cart: cart,
-                    paymentMethodType: paymentMethod, // Cambiado de paymentMethod a paymentMethodType
-                    paymentDetails: paymentDetails,
-                    deliveryAddress: deliveryAddress,
-                    subtotal: subtotal,
-                    tax: tax,
-                    total: total
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
-                    document.getElementById('receiptOrderId').textContent = data.pedido_id;
-                    document.getElementById('checkoutForm').style.display = 'none';
-                    document.getElementById('receipt').classList.add('active');
-                    localStorage.removeItem('cart');
-                    updateCartCounter();
-                } else {
-                    throw new Error(data.message || 'Error al procesar el pago');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al procesar el pedido: ' + error.message);
-            });
+function completePurchaseProcess() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cart.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    let paymentDetails = {};
+    
+    // Validar campos según el método de pago
+    if (paymentMethod === 'tarjeta') {
+        const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        if (!cardNumber || cardNumber.length < 16) {
+            alert('Por favor ingrese un número de tarjeta válido (16 dígitos)');
+            return;
         }
+        
+        const cardExpiry = document.getElementById('cardExpiry').value;
+        if (!cardExpiry || !/^\d{2}\/\d{2}$/.test(cardExpiry)) {
+            alert('Por favor ingrese una fecha de expiración válida (MM/AA)');
+            return;
+        }
+        
+        paymentDetails = {
+            cardNumber: cardNumber,
+            cardName: document.getElementById('cardName').value,
+            cardExpiry: cardExpiry,
+            cardCvv: document.getElementById('cardCvv').value
+        };
+    } else if (paymentMethod === 'pago_movil') {
+        const mobileNumber = document.getElementById('mobileNumber').value;
+        if (!mobileNumber || !/^\d{3,4}-\d{7}$/.test(mobileNumber)) {
+            alert('Por favor ingrese un número de teléfono válido (ej. 424-1234567)');
+            return;
+        }
+        
+        const mobileId = document.getElementById('mobileId').value;
+        if (!mobileId || !/^[VEJ]-\d{7,8}$/.test(mobileId)) {
+            alert('Por favor ingrese una cédula válida (ej. V-12345678)');
+            return;
+        }
+        
+        paymentDetails = {
+            mobileNumber: mobileNumber,
+            mobileBank: document.getElementById('mobileBank').value,
+            mobileId: mobileId
+        };
+    } else if (paymentMethod === 'transferencia' || paymentMethod === 'efectivo') {
+        // No se necesitan detalles adicionales para estos métodos
+        paymentDetails = {};
+    }
+    
+    const deliveryAddress = document.getElementById('deliveryAddress').value;
+    
+    // Calcular totales
+    const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = subtotal * 0.16; // IVA 16%
+    const total = subtotal + tax;
+    
+    // Enviar datos al servidor
+    fetch('../php/checkout.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            cart: cart,
+            paymentMethod: paymentMethod,
+            paymentDetails: paymentDetails,
+            deliveryAddress: deliveryAddress
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
+            document.getElementById('receiptOrderId').textContent = data.pedido_id;
+            document.getElementById('checkoutForm').style.display = 'none';
+            document.getElementById('receipt').classList.add('active');
+            localStorage.removeItem('cart');
+            updateCartCounter();
+        } else {
+            throw new Error(data.message || 'Error al procesar el pago');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    });
+}
         
         function showReceipt(items, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress) {
             // Formatear fecha
@@ -1337,7 +1460,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     paymentMethodText = 'Transferencia Bancaria';
                     break;
                 case 'pago_movil':
-                    paymentMethodText = `Pago Móvil (${paymentDetails.mobileBank})`;
+                    paymentMethodText = `Pago Móvil (${paymentDetails.mobileBank}) - Tel: +58${paymentDetails.mobileNumber}`;
                     break;
                 case 'efectivo':
                     paymentMethodText = 'Efectivo al recibir';

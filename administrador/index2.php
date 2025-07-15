@@ -575,12 +575,6 @@ verificarAutenticacion('administrador');
                     <p>Administra los usuarios del sistema</p>
                 </a>
                 
-                <a href="../diagrama_procesos.php" class="dashboard-card">
-                    <i class="fas fa-project-diagram"></i>
-                    <h3>Flujo de Productos</h3>
-                    <p>Visualiza el proceso de producción</p>
-                </a>
-                
                 <a href="../diagrama_bd.php" class="dashboard-card">
                     <i class="fas fa-database"></i>
                     <h3>Estructura BD</h3>

@@ -542,9 +542,9 @@ verificarAutenticacion('empleado');
                     <a href="registrar.php" class="nav-link">Registrarse</a>
                     <a href="inventario.php" class="nav-link">Inventario</a>
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
                     <a href="estadisticas.php" class="nav-link">Estadísticas</a>
+                </nav>
                 </nav>
             </div>
         </div>
@@ -574,14 +574,7 @@ verificarAutenticacion('empleado');
                     <i class="fas fa-users"></i>
                     <h3>Usuarios Registrados</h3>
                     <p>Administra los usuarios del sistema</p>
-                </a>
-                
-                <a href="../diagrama_procesos.php" class="dashboard-card">
-                    <i class="fas fa-project-diagram"></i>
-                    <h3>Flujo de Productos</h3>
-                    <p>Visualiza el proceso de producción</p>
-                </a>
-                
+                </a>                
                 <a href="../diagrama_bd.php" class="dashboard-card">
                     <i class="fas fa-database"></i>
                     <h3>Estructura BD</h3>

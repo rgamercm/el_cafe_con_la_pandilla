@@ -235,6 +235,8 @@ function quitarTodosProductos($conexion) {
     }
 }
 
+// ... (código anterior se mantiene igual)
+
 function agregarProductosEjemplo($conexion) {
     // Primero verificar si ya hay productos
     $verificar = mysqli_query($conexion, "SELECT COUNT(*) as total FROM inventario");
@@ -271,14 +273,15 @@ function agregarProductosEjemplo($conexion) {
     }
 
     $productosEjemplo = [
+        // Bebidas
         [
             'codigo' => 'CAFE-001',
-            'nombre' => 'Café Capuchino',
-            'descripcion' => 'Café espresso con leche vaporizada y espuma',
+            'nombre' => 'Maracaibo Mocha',
+            'descripcion' => 'Chocolate venezolano + espresso + leche cremosa',
             'categoria' => 'Bebidas',
             'categoria_id' => $categorias['Bebidas'],
             'cantidad' => 100,
-            'precio' => 1.60,
+            'precio' => 3.50,
             'unidades_existentes' => 100,
             'unidades_minimas' => 20,
             'fecha_ingreso' => date('Y-m-d'),
@@ -286,32 +289,204 @@ function agregarProductosEjemplo($conexion) {
             'pagina' => 'p1'
         ],
         [
-            'codigo' => 'PAN-001',
-            'nombre' => 'Pan Artesanal',
-            'descripcion' => 'Pan elaborado con masa madre y fermentación lenta',
-            'categoria' => 'Panadería',
-            'categoria_id' => $categorias['Panadería'],
-            'cantidad' => 50,
-            'precio' => 3.60,
-            'unidades_existentes' => 50,
+            'codigo' => 'CAFE-002',
+            'nombre' => 'Café Catire',
+            'descripcion' => 'Leche dorada (cúrcuma) + espresso + miel de abeja',
+            'categoria' => 'Bebidas',
+            'categoria_id' => $categorias['Bebidas'],
+            'cantidad' => 80,
+            'precio' => 3.20,
+            'unidades_existentes' => 80,
             'unidades_minimas' => 15,
             'fecha_ingreso' => date('Y-m-d'),
             'estado' => 'activo',
             'pagina' => 'p2'
         ],
         [
+            'codigo' => 'CAFE-003',
+            'nombre' => 'Chorreado de Oriente',
+            'descripcion' => 'Café colado en tela con notas de cacao',
+            'categoria' => 'Bebidas',
+            'categoria_id' => $categorias['Bebidas'],
+            'cantidad' => 60,
+            'precio' => 2.80,
+            'unidades_existentes' => 60,
+            'unidades_minimas' => 10,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p3'
+        ],
+        [
+            'codigo' => 'CAFE-004',
+            'nombre' => 'Paragüitas',
+            'descripcion' => 'Café helado con coco rallado y leche de almendras',
+            'categoria' => 'Bebidas',
+            'categoria_id' => $categorias['Bebidas'],
+            'cantidad' => 70,
+            'precio' => 3.75,
+            'unidades_existentes' => 70,
+            'unidades_minimas' => 15,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p4'
+        ],
+        [
+            'codigo' => 'CAFE-005',
+            'nombre' => 'Café en Piedra',
+            'descripcion' => 'Espresso servido sobre una piedra de chocolate para rallar',
+            'categoria' => 'Bebidas',
+            'categoria_id' => $categorias['Bebidas'],
+            'cantidad' => 50,
+            'precio' => 4.00,
+            'unidades_existentes' => 50,
+            'unidades_minimas' => 10,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p5'
+        ],
+        
+        // Panadería
+        [
+            'codigo' => 'PAN-001',
+            'nombre' => 'Pan de PANA',
+            'descripcion' => 'Pan artesanal con harina de maíz y mantequilla',
+            'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
+            'cantidad' => 50,
+            'precio' => 2.50,
+            'unidades_existentes' => 50,
+            'unidades_minimas' => 15,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p6'
+        ],
+        [
+            'codigo' => 'PAN-002',
+            'nombre' => 'Cachitos Rebeldes',
+            'descripcion' => 'Hojaldre relleno de pernil y queso amarillo',
+            'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
+            'cantidad' => 40,
+            'precio' => 3.00,
+            'unidades_existentes' => 40,
+            'unidades_minimas' => 10,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p7'
+        ],
+        [
+            'codigo' => 'PAN-003',
+            'nombre' => 'Bollitos Pelones',
+            'descripcion' => 'Pan de maíz relleno de caraotas negras',
+            'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
+            'cantidad' => 45,
+            'precio' => 2.75,
+            'unidades_existentes' => 45,
+            'unidades_minimas' => 12,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p8'
+        ],
+        [
+            'codigo' => 'PAN-004',
+            'nombre' => 'Pan de Queso Llanero',
+            'descripcion' => 'Queso de mano derretido en pan campesino',
+            'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
+            'cantidad' => 35,
+            'precio' => 3.25,
+            'unidades_existentes' => 35,
+            'unidades_minimas' => 10,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p9'
+        ],
+        [
+            'codigo' => 'PAN-005',
+            'nombre' => 'Pan de Coco Punk',
+            'descripcion' => 'Coco rallado y panela en masa esponjosa',
+            'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
+            'cantidad' => 30,
+            'precio' => 2.80,
+            'unidades_existentes' => 30,
+            'unidades_minimas' => 8,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p10'
+        ],
+        [
+            'codigo' => 'PAN-006',
+            'nombre' => 'Palos de Ajo',
+            'descripcion' => 'Bastones de pan con ajo y perejil, estilo venezolano',
+            'categoria' => 'Panadería',
+            'categoria_id' => $categorias['Panadería'],
+            'cantidad' => 55,
+            'precio' => 2.90,
+            'unidades_existentes' => 55,
+            'unidades_minimas' => 15,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p11'
+        ],
+        
+        // Postres
+        [
             'codigo' => 'POST-001',
-            'nombre' => 'Torta de Chocolate',
-            'descripcion' => 'Torta de chocolate con relleno cremoso',
+            'nombre' => 'Mochila de Chocolate',
+            'descripcion' => 'Torta negra con relleno de ganache y café',
+            'categoria' => 'Postres',
+            'categoria_id' => $categorias['Postres'],
+            'cantidad' => 25,
+            'precio' => 12.50,
+            'unidades_existentes' => 25,
+            'unidades_minimas' => 5,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p12'
+        ],
+        [
+            'codigo' => 'POST-002',
+            'nombre' => 'Dulce de Lechosa',
+            'descripcion' => 'Lechosa verde en almíbar con especias',
             'categoria' => 'Postres',
             'categoria_id' => $categorias['Postres'],
             'cantidad' => 30,
-            'precio' => 10.10,
+            'precio' => 8.00,
             'unidades_existentes' => 30,
             'unidades_minimas' => 10,
             'fecha_ingreso' => date('Y-m-d'),
             'estado' => 'activo',
-            'pagina' => 'p4'
+            'pagina' => 'p13'
+        ],
+        [
+            'codigo' => 'POST-003',
+            'nombre' => 'Conservas de Coco',
+            'descripcion' => 'Dulce tradicional venezolano hecho con coco rallado y azúcar',
+            'categoria' => 'Postres',
+            'categoria_id' => $categorias['Postres'],
+            'cantidad' => 40,
+            'precio' => 7.50,
+            'unidades_existentes' => 40,
+            'unidades_minimas' => 10,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p14'
+        ],
+        [
+            'codigo' => 'POST-004',
+            'nombre' => 'Torta Mandarinas en Miel',
+            'descripcion' => 'Gajos de mandarina caramelizados con anís',
+            'categoria' => 'Postres',
+            'categoria_id' => $categorias['Postres'],
+            'cantidad' => 20,
+            'precio' => 14.00,
+            'unidades_existentes' => 20,
+            'unidades_minimas' => 5,
+            'fecha_ingreso' => date('Y-m-d'),
+            'estado' => 'activo',
+            'pagina' => 'p15'
         ]
     ];
 
@@ -319,27 +494,27 @@ function agregarProductosEjemplo($conexion) {
     $errores = 0;
 
     foreach ($productosEjemplo as $producto) {
-        $query = "INSERT INTO inventario (codigo, nombre, descripcion, categoria_id, cantidad, precio, 
-                  unidades_existentes, unidades_minimas, fecha_ingreso, estado, pagina) 
+        $query = "INSERT INTO inventario (codigo, nombre, descripcion, categoria_id, precio, pagina, 
+                  cantidad, unidades_existentes, unidades_minimas, fecha_ingreso, estado) 
                   VALUES (
                   '".mysqli_real_escape_string($conexion, $producto['codigo'])."',
                   '".mysqli_real_escape_string($conexion, $producto['nombre'])."',
                   '".mysqli_real_escape_string($conexion, $producto['descripcion'])."',
                   ".$producto['categoria_id'].",
-                  ".$producto['cantidad'].",
                   ".$producto['precio'].",
+                  '".$producto['pagina']."',
+                  ".$producto['cantidad'].",
                   ".$producto['unidades_existentes'].",
                   ".$producto['unidades_minimas'].",
                   '".$producto['fecha_ingreso']."',
-                  '".$producto['estado']."',
-                  '".$producto['pagina']."')";
+                  '".$producto['estado']."')";
 
         if (mysqli_query($conexion, $query)) {
             $agregados++;
             
             // Insertar imagen por defecto
             $producto_id = mysqli_insert_id($conexion);
-            $imagen_url = "img/cafe/".$producto['codigo'].".jpg";
+            $imagen_url = "../img/".strtolower($producto['categoria'])."/".$producto['codigo'].".jpg";
             $query_img = "INSERT INTO imagenes_producto (producto_id, url_imagen, es_principal) 
                          VALUES ($producto_id, '$imagen_url', TRUE)";
             mysqli_query($conexion, $query_img);
@@ -354,6 +529,7 @@ function agregarProductosEjemplo($conexion) {
         echo json_encode(['success' => false, 'message' => "Se agregaron $agregados productos, pero hubo $errores errores"]);
     }
 }
+
 
 mysqli_close($conexion);
 ?>

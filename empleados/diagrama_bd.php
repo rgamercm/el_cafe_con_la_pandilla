@@ -772,8 +772,8 @@ function mostrarDatosEnTabla($datos, $camposMostrar = null) {
                     <a href="registrar.php" class="nav-link">Registrarse</a>
                     <a href="inventario.php" class="nav-link">Inventario</a>
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                    <a href="estadisticas.php" class="nav-link">Estadísticas</a>
                 </nav>
             </div>
         </div>

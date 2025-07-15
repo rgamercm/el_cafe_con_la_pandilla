@@ -15,17 +15,36 @@ function obtenerProductoPorPagina($pagina) {
         $producto = mysqli_fetch_assoc($result);
         $producto['disponible'] = ($producto['unidades_existentes'] > 0);
         
-        // Obtener imagen principal
-        $query_img = "SELECT url_imagen FROM imagenes_producto 
-                      WHERE producto_id = {$producto['id']} AND es_principal = TRUE
-                      LIMIT 1";
-        $result_img = mysqli_query($conexion, $query_img);
+        // Normalizar nombre de categoría para la ruta
+        $categoria = strtolower($producto['categoria_nombre']);
+        $categoria = str_replace(
+            ['á', 'é', 'í', 'ó', 'ú', 'ñ'],
+            ['a', 'e', 'i', 'o', 'u', 'n'],
+            $categoria
+        );
         
-        if ($result_img && mysqli_num_rows($result_img) > 0) {
-            $imagen = mysqli_fetch_assoc($result_img);
-            $producto['imagen'] = $imagen['url_imagen'];
-        } else {
-            $producto['imagen'] = "img/cafe/default.jpg";
+        // Construir ruta de imagen
+        $imagen_ruta = "img/$categoria/" . $producto['codigo'] . ".jpg";
+        
+        // Verificar si existe la imagen específica
+        if (file_exists($imagen_ruta)) {
+            $producto['imagen'] = $imagen_ruta;
+        } 
+        // Si no existe, buscar imagen principal en la base de datos
+        else {
+            $query_img = "SELECT url_imagen FROM imagenes_producto 
+                          WHERE producto_id = {$producto['id']} AND es_principal = TRUE
+                          LIMIT 1";
+            $result_img = mysqli_query($conexion, $query_img);
+            
+            if ($result_img && mysqli_num_rows($result_img) > 0) {
+                $imagen = mysqli_fetch_assoc($result_img);
+                $producto['imagen'] = $imagen['url_imagen'];
+            } 
+            // Si no hay imagen en BD, usar default
+            else {
+                $producto['imagen'] = "img/cafe/default.jpg";
+            }
         }
         
         return $producto;
@@ -83,15 +102,39 @@ function obtenerProductoPorId($id) {
     if ($result && mysqli_num_rows($result) > 0) {
         $producto = mysqli_fetch_assoc($result);
         
-        // Obtener imágenes
+        // Normalizar categoría para ruta de imágenes
+        $categoria = strtolower($producto['categoria_nombre']);
+        $categoria = str_replace(
+            ['á', 'é', 'í', 'ó', 'ú', 'ñ'],
+            ['a', 'e', 'i', 'o', 'u', 'n'],
+            $categoria
+        );
+        
+        // Obtener todas las imágenes del producto
         $query_img = "SELECT * FROM imagenes_producto WHERE producto_id = $id";
         $result_img = mysqli_query($conexion, $query_img);
         
         $producto['imagenes'] = [];
         if ($result_img && mysqli_num_rows($result_img) > 0) {
             while ($img = mysqli_fetch_assoc($result_img)) {
+                // Si la imagen no tiene ruta absoluta, construirla según categoría
+                if (!filter_var($img['url_imagen'], FILTER_VALIDATE_URL)) {
+                    $img_ruta = "img/$categoria/" . basename($img['url_imagen']);
+                    if (file_exists($img_ruta)) {
+                        $img['url_imagen'] = $img_ruta;
+                    }
+                }
                 $producto['imagenes'][] = $img;
             }
+        }
+        
+        // Si no hay imágenes, usar imagen por defecto
+        if (empty($producto['imagenes'])) {
+            $default_img = "img/cafe/default.jpg";
+            $producto['imagenes'][] = [
+                'url_imagen' => $default_img,
+                'es_principal' => true
+            ];
         }
         
         return $producto;
