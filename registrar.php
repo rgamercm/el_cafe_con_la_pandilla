@@ -2,7 +2,19 @@
 session_start();
 
 if(isset($_SESSION['usuario'])){
-    header("location: bienvenida_despues_de_iniciarsesion.php");
+    // Redirigir según el rol del usuario
+    switch($_SESSION['usuario']['rol']) {
+        case 'empleado':
+            header("location: empleados/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        case 'administrador':
+            header("location: administrador/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        default: // cliente
+            header("location: bienvenida_despues_de_iniciarsesion.php");
+            break;
+    }
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -1005,7 +1017,6 @@ if(isset($_SESSION['usuario'])){
                         <select name="rol" required>
                             <option value="" disabled selected>Seleccione su rol</option>
                             <option value="cliente">Cliente</option>
-                            <option value="empleado">Empleado</option>
                         </select>
                         
                         <button type="submit">Crear cuenta</button>

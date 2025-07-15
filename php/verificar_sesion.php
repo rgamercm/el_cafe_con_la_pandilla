@@ -46,10 +46,12 @@ function verificarAutenticacion($rolRequerido = null) {
     }
     
     if($rolRequerido && $_SESSION['usuario']['rol'] !== $rolRequerido) {
-        // Usuario no tiene el rol requerido - redirigir a página de inicio con mensaje
-        $_SESSION['error_acceso'] = "No tienes permisos para acceder a esta sección";
-        header("Location: ../index.php");
-        exit();
+        // Permitir que administradores accedan a secciones de empleados
+        if(!($rolRequerido === 'empleado' && $_SESSION['usuario']['rol'] === 'administrador')) {
+            $_SESSION['error_acceso'] = "No tienes permisos para acceder a esta sección";
+            header("Location: ../index.php");
+            exit();
+        }
     }
 }
 ?>

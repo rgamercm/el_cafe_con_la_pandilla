@@ -1097,12 +1097,12 @@
         }
 
         // Contador del carrito (simulado)
-        const cartCounter = document.getElementById('cartCounter');
-        if (cartCounter) {
-            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
-            const randomCount = Math.floor(Math.random() * 5) + 1;
-            cartCounter.textContent = randomCount;
-        }
+       //  const cartCounter = document.getElementById('cartCounter');
+     //    if (cartCounter) {
+     //        // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
+     //        const randomCount = Math.floor(Math.random() * 5) + 1;
+     //        cartCounter.textContent = randomCount;
+    //     }
 
         // Menú hamburguesa
         const menuToggle = document.getElementById('menuToggle');

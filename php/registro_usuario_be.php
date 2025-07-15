@@ -112,12 +112,18 @@ if (mysqli_query($conexion, $query)) {
         'rol' => $rol
     ];
     
-    // Redirigir según rol
-    $redirect = ($rol === 'empleado') ? 
-        "../empleados/bienvenida_despues_de_iniciarsesion.php" : 
-        "../bienvenida_despues_de_iniciarsesion.php";
-    
-    header("Location: $redirect");
+    // Redirigir según el rol
+    switch($rol) {
+        case 'empleado':
+            header("Location: ../empleados/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        case 'administrador':
+            header("Location: ../administrador/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        default: // cliente
+            header("Location: ../bienvenida_despues_de_iniciarsesion.php");
+            break;
+    }
     exit();
 } else {
     mostrarError("Error al registrar usuario: ".mysqli_error($conexion));

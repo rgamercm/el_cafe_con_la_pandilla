@@ -1,134 +1,56 @@
-//PARA BORRAR UNA TABLA
-TRUNCATE TABLE usuarios;
-
-//para añadir nuevos elementos a una tabla
-ALTER TABLE usuarios 
-ADD COLUMN codigo_acceso VARCHAR(32) DEFAULT NULL AFTER rol,
-ADD UNIQUE KEY (codigo_acceso);
-
-//crear tabla usuarios
-CREATE TABLE IF NOT EXISTS usuarios(
-  id int(11) NOT NULL AUTO_INCREMENT,
-  nombre varchar(70) NOT NULL,
-  apellido varchar(70) NOT NULL,
-  correo varchar(30) NOT NULL,
-  usuario varchar(20) NOT NULL,
-  contrasena varchar(128) NOT NULL,
-  fecha_reg varchar(20) NOT NULL,
-  rol ENUM('administrador','cliente', 'empleado') NOT NULL DEFAULT 'cliente',
-  codigo_acceso varchar(32) DEFAULT NULL,
-  cedula VARCHAR(15) NOT NULL,
-  tipo_cedula ENUM('V', 'E') NOT NULL DEFAULT 'V',
-  PRIMARY KEY (id),
-  UNIQUE KEY (cedula),
-  UNIQUE KEY (correo),
-  UNIQUE KEY (usuario),
-  UNIQUE KEY (codigo_acceso),
-  UNIQUE INDEX idx_cedula (cedula)
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(70) NOT NULL,
+    apellido VARCHAR(70) NOT NULL,
+    correo VARCHAR(30) NOT NULL,
+    usuario VARCHAR(20) NOT NULL,
+    contrasena VARCHAR(128) NOT NULL,
+    fecha_reg VARCHAR(20) NOT NULL,
+    rol ENUM('administrador','cliente', 'empleado') NOT NULL DEFAULT 'cliente',
+    codigo_acceso VARCHAR(32) DEFAULT NULL,
+    cedula VARCHAR(15) NOT NULL,
+    tipo_cedula ENUM('V', 'E') NOT NULL DEFAULT 'V',
+    PRIMARY KEY (id),
+    UNIQUE KEY (cedula),
+    UNIQUE KEY (correo),
+    UNIQUE KEY (usuario),
+    UNIQUE KEY (codigo_acceso),
+    UNIQUE INDEX idx_cedula (cedula)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-SELECT * from usuarios 
+CREATE TABLE IF NOT EXISTS categorias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    UNIQUE KEY (nombre)
+);
 
-
-//alteral una tabla modificanso su campo rol
-ALTER TABLE usuarios MODIFY rol ENUM('admin','administrador','cliente','empleado') NOT NULL DEFAULT 'cliente';
-
-
-//PARA INGRESAR NUEVOS USUARIOS CON CONTRASEÑA HASH
-INSERT INTO usuarios(nombre, apellido, correo, usuario, contrasena, fecha_reg, rol) 
-VALUES ('Nombre', 'Apellido', 'email@ejemplo.com', 'usuario', 
-SHA2('contraseña', 512), '2023-11-15', 'empleado');
-
-//no usado código acceso
-CREATE TABLE IF NOT EXISTS codigos_acceso (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  codigo varchar(32) NOT NULL,
-  usado tinyint(1) NOT NULL DEFAULT 0,
-  fecha_creacion datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  fecha_uso datetime DEFAULT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY (codigo)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
-
-//NO USADO
-INSERT INTO codigos_acceso (codigo) VALUES 
-('EMP1234567890'),
-('EMP0987654321'),
-('EMP1122334455');
+CREATE TABLE metodos_pago (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    tipo ENUM('tarjeta', 'transferencia', 'efectivo', 'pago_movil') NOT NULL,
+    activo BOOLEAN DEFAULT TRUE,
+    UNIQUE KEY (nombre)
+);
 
 CREATE TABLE inventario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(20) NOT NULL UNIQUE,
     nombre VARCHAR(100) NOT NULL,
     descripcion TEXT,
-    categoria VARCHAR(50),
-    cantidad INT NOT NULL DEFAULT 0,
     precio DECIMAL(10, 2) NOT NULL,
     unidades_existentes INT NOT NULL DEFAULT 0,
     unidades_minimas INT DEFAULT 10,
     fecha_ingreso DATE NOT NULL,
     fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    estado ENUM('activo', 'inactivo', 'agotado') DEFAULT 'activo'
+    estado ENUM('activo', 'inactivo', 'agotado') DEFAULT 'activo',
+    pagina VARCHAR(10),
+    categoria_id INT,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id),
+    INDEX idx_inventario_categoria (categoria_id)
 );
 
-INSERT INTO inventario 
-(codigo, nombre, descripcion, categoria, cantidad, precio, unidades_existentes, unidades_minimas, fecha_ingreso, estado) 
-VALUES
-('CAFE-001', 'Café Capuchino', 'Café espresso con leche vaporizada y espuma', 'Bebidas', 100, 1.60, 100, 20, '2023-01-15', 'activo'),
-('PAN-001', 'Pan Artesanal', 'Pan elaborado con masa madre y fermentación lenta', 'Panadería', 50, 3.60, 50, 15, '2023-01-10', 'activo'),
-('POST-001', 'Torta de Chocolate', 'Torta de chocolate con relleno cremoso', 'Postres', 30, 10.10, 30, 10, '2023-01-05', 'activo');
-
-DROP table inventario;
-
-
-
-
-
-//esta me funciono para borrar tablas completamente
-DROP TABLE IF EXISTS inventario;
-DROP TABLE IF EXISTS usuarios;
-DROP TABLE IF EXISTS pedidos;
-DROP TABLE IF EXISTS detalles_pedido;
-DROP TABLE IF EXISTS metodos_pago;
-
-TRUNCATE TABLE usuarios;
-TRUNCATE TABLE inventario;
-TRUNCATE TABLE pedidos;
-TRUNCATE TABLE detalles_pedido;
-TRUNCATE TABLE metodos_pago;
-
-
-DROP TABLE usuarios;
-DROP TABLE inventario;
-DROP TABLE pedidos;
-DROP TABLE detalles_pedido;
-DROP TABLE metodos_pago;
-
--- Usa WHERE 1=1 o WHERE id>0 (si tienes columna id)
--- Ejecuta esto antes de tus DELETE statements
-SET SQL_SAFE_UPDATES = 0;
-
-DELETE FROM usuarios;
-DELETE FROM inventario;
-DELETE FROM pedidos;
-DELETE FROM detalles_pedido;
-DELETE FROM metodos_pago;
-
-SET SQL_SAFE_UPDATES = 1;
-
-DELETE FROM usuarios WHERE 
-DELETE FROM inventario WHERE
-DELETE FROM pedidos WHERE
-DELETE FROM detalles_pedido WHERE
-DELETE FROM metodos_pago WHERE
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-
-
-
--- Tabla de pedidos
 CREATE TABLE pedidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT NOT NULL,
@@ -137,13 +59,16 @@ CREATE TABLE pedidos (
     subtotal DECIMAL(10, 2) NOT NULL,
     impuestos DECIMAL(10, 2) NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
-    metodo_pago ENUM('tarjeta', 'transferencia', 'efectivo', 'pago_movil') NOT NULL,
+    metodo_pago_id INT NOT NULL,
     datos_pago TEXT,
     direccion_envio TEXT,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
-);
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (metodo_pago_id) REFERENCES metodos_pago(id),
+    INDEX idx_pedidos_usuario (usuario_id),
+    INDEX idx_pedidos_metodo_pago (metodo_pago_id),
+    INDEX idx_pedidos_fecha (fecha_pedido)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Tabla de detalles de pedido
 CREATE TABLE detalles_pedido (
     id INT AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT NOT NULL,
@@ -152,23 +77,87 @@ CREATE TABLE detalles_pedido (
     precio_unitario DECIMAL(10, 2) NOT NULL,
     subtotal DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
-    FOREIGN KEY (producto_id) REFERENCES inventario(id) ON DELETE CASCADE
+    FOREIGN KEY (producto_id) REFERENCES inventario(id) ON DELETE CASCADE,
+    INDEX idx_detalles_pedido (pedido_id),
+    INDEX idx_detalles_producto (producto_id)
 );
 
-SELECT * from detalles_pedido 
-
--- Tabla de métodos de pago
-CREATE TABLE metodos_pago (
+CREATE TABLE IF NOT EXISTS imagenes_producto (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    descripcion TEXT,
-    activo BOOLEAN DEFAULT TRUE
+    producto_id INT NOT NULL,
+    url_imagen VARCHAR(255) NOT NULL,
+    es_principal BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (producto_id) REFERENCES inventario(id) ON DELETE CASCADE,
+    INDEX idx_imagenes_producto (producto_id)
 );
 
--- Insertar métodos de pago básicos
+CREATE TABLE carrito_productos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    producto_id INT NOT NULL,
+    cantidad INT NOT NULL DEFAULT 1,
+    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES inventario(id) ON DELETE CASCADE,
+    UNIQUE KEY (usuario_id, producto_id),
+    INDEX idx_carrito_usuario (usuario_id)
+);
+
+-- Datos iniciales actualizados
+INSERT INTO metodos_pago (nombre, descripcion, tipo) VALUES 
+('Tarjeta de Crédito/Débito', 'Pago con tarjeta Visa, Mastercard, etc.', 'tarjeta'),
+('Transferencia Bancaria', 'Transferencia directa desde tu banco', 'transferencia'),
+('Pago Móvil', 'Pago a través de sistemas de pago móvil', 'pago_movil'),
+('Efectivo', 'Pago en efectivo al recibir el pedido', 'efectivo');
+
+-- Luego creamos las tablas que dependen de las anteriores
+
+
+DESCRIBE pedidos;
+
+-- Insertar categorías básicas
+INSERT INTO categorias (nombre, descripcion) VALUES 
+('Bebidas', 'Cafés, tés y otras bebidas'),
+('Panadería', 'Panes y productos de panadería'),
+('Postres', 'Tortas, galletas y otros postres'),
+('Otros', 'Otros productos');
+
+-- Insertar métodos de pago
+INSERT INTO metodos_pago (nombre, descripcion, tipo) VALUES 
+('Tarjeta de Crédito/Débito', 'Pago con tarjeta Visa, Mastercard, etc.', 'tarjeta'),
+('Transferencia Bancaria', 'Transferencia directa desde tu banco', 'transferencia'),
+('Pago Móvil', 'Pago a través de sistemas de pago móvil', 'pago_movil'),
+('Efectivo', 'Pago en efectivo al recibir el pedido', 'efectivo');
+
+-- Insertar usuario administrador inicial (cambia la contraseña)
+INSERT INTO usuarios (nombre, apellido, correo, usuario, contrasena, fecha_reg, rol, cedula) VALUES 
+('Admin', 'Principal', 'admin@example.com', 'admin', SHA2('admin123', 256), NOW(), 'administrador', 'V-12345678');
+
+
+-- Finalmente insertamos los datos iniciales
+INSERT INTO categorias (nombre, descripcion) VALUES 
+('Bebidas', 'Cafés, tés y otras bebidas'),
+('Panadería', 'Panes y productos de panadería'),
+('Postres', 'Tortas, galletas y otros postres'),
+('Otros', 'Otros productos');
+
 INSERT INTO metodos_pago (nombre, descripcion) VALUES 
 ('Tarjeta de Crédito/Débito', 'Pago con tarjeta Visa, Mastercard, etc.'),
 ('Transferencia Bancaria', 'Transferencia directa desde tu banco'),
 ('Pago Móvil', 'Pago a través de sistemas de pago móvil'),
 ('Efectivo', 'Pago en efectivo al recibir el pedido');
 
+-- Eliminar el ENUM y usar solo la relación con metodos_pago
+ALTER TABLE pedidos 
+ADD COLUMN metodo_pago_id INT NOT NULL AFTER total,
+ADD FOREIGN KEY (metodo_pago_id) REFERENCES metodos_pago(id);
+
+-- Actualizar la tabla metodos_pago para incluir el tipo correspondiente
+ALTER TABLE metodos_pago 
+ADD COLUMN tipo ENUM('tarjeta', 'transferencia', 'efectivo', 'pago_movil') NOT NULL;
+
+-- Actualizar los registros existentes
+UPDATE metodos_pago SET tipo = 'tarjeta' WHERE nombre LIKE '%Tarjeta%';
+UPDATE metodos_pago SET tipo = 'transferencia' WHERE nombre LIKE '%Transferencia%';
+UPDATE metodos_pago SET tipo = 'pago_movil' WHERE nombre LIKE '%Móvil%';
+UPDATE metodos_pago SET tipo = 'efectivo' WHERE nombre LIKE '%Efectivo%';

@@ -5,10 +5,16 @@ include 'conexion_be.php';
 // Verificar si ya hay una sesión activa
 if(isset($_SESSION['usuario'])) {
     // Redirigir según el rol del usuario
-    if($_SESSION['usuario']['rol'] === 'empleado') {
-        header("Location: ../empleados/index2.php");
-    } else {
-        header("Location: ../index.php");
+    switch($_SESSION['usuario']['rol']) {
+        case 'empleado':
+            header("Location: ../empleados/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        case 'administrador':
+            header("Location: ../administrador/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        default: // cliente
+            header("Location: ../bienvenida_despues_de_iniciarsesion.php");
+            break;
     }
     exit();
 }
@@ -29,22 +35,29 @@ $email = mysqli_real_escape_string($conexion, trim($_POST['email']));
 $contrasena = trim($_POST['contrasena']);
 $contrasena_hash = hash('sha512', $contrasena);
 
-// Consulta para verificar las credenciales
-$query = "SELECT * FROM usuarios WHERE correo = '$email' AND contrasena = '$contrasena_hash'";
-$resultado = mysqli_query($conexion, $query);
+// Consulta para verificar las credenciales usando consulta preparada
+$query = "SELECT * FROM usuarios WHERE correo = ? AND contrasena = ?";
+$stmt = mysqli_prepare($conexion, $query);
+
+if ($stmt === false) {
+    die('Error en la preparación de la consulta: ' . mysqli_error($conexion));
+}
+
+mysqli_stmt_bind_param($stmt, "ss", $email, $contrasena_hash);
+mysqli_stmt_execute($stmt);
+$resultado = mysqli_stmt_get_result($stmt);
 
 // Verificar si se encontró el usuario
-if(mysqli_num_rows($resultado) > 0) {
+if($resultado && mysqli_num_rows($resultado) > 0) {
     $usuario = mysqli_fetch_assoc($resultado);
     
-    // Crear la sesión del usuario con todos los datos necesarios
     $_SESSION['usuario'] = array(
         'id' => $usuario['id'],
         'nombre' => $usuario['nombre'],
         'apellido' => $usuario['apellido'],
         'usuario' => $usuario['usuario'],
         'email' => $usuario['correo'],
-        'rol' => $usuario['rol'] // Asegurar que el rol se guarda en la sesión
+        'rol' => $usuario['rol']
     );
     
     // Configurar cookie de sesión persistente si marcó "Recordar"
@@ -54,10 +67,16 @@ if(mysqli_num_rows($resultado) > 0) {
     }
     
     // Redirección basada en el rol del usuario
-    if($usuario['rol'] === 'empleado') {
-        header("Location: ../empleados/bienvenida_despues_de_iniciarsesion.php");  // Redirige a la interfaz de empleados
-    } else {
-        header("Location: ../bienvenida_despues_de_iniciarsesion.php");           // Redirige a la interfaz normal
+    switch($usuario['rol']) {
+        case 'empleado':
+            header("Location: ../empleados/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        case 'administrador':
+            header("Location: ../administrador/bienvenida_despues_de_iniciarsesion.php");
+            break;
+        default: // cliente
+            header("Location: ../bienvenida_despues_de_iniciarsesion.php");
+            break;
     }
     exit();
 } else {
