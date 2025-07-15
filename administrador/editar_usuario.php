@@ -616,8 +616,8 @@ if(!$usuario) {
                     <a href="registrar.php" class="nav-link">Registrarse</a>
                     <a href="inventario.php" class="nav-link">Inventario</a>
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                    <a href="estadisticas.php" class="nav-link">Estadísticas</a>
                 </nav>
             </div>
         </div>
@@ -661,7 +661,7 @@ if(!$usuario) {
                     <label for="cedula">Número de Cédula:</label>
                     <input type="text" class="form-control numero-cedula" name="cedula" 
                            value="<?php echo htmlspecialchars($usuario['cedula'] ?? ''); ?>" required
-                           pattern="[0-9]{6,15}" title="Solo números (6-15 dígitos)" onkeypress="return soloNumeros(event)">
+                           pattern="[0-9]{7,11}" title="Solo números (7-11 dígitos)" onkeypress="return soloNumeros(event)">
                 </div>
                 
                 <div class="form-group">

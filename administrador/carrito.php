@@ -793,8 +793,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                     <a href="registrar.php" class="nav-link">Registrarse</a>
                     <a href="inventario.php" class="nav-link">Inventario</a>
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                    <a href="estadisticas.php" class="nav-link">Estadísticas</a>
                 </nav>
             </div>
         </div>
@@ -876,7 +876,8 @@ $usuario_logeado = isset($_SESSION['usuario']);
                         <div class="payment-details" id="pago_movilDetails">
                             <div class="form-group">
                                 <label for="mobileNumber">Número de Teléfono</label>
-                                <input type="text" id="mobileNumber" class="form-control" placeholder="0424-1234567">
+                                <input type="text" id="mobileNumber" class="form-control" placeholder="+58000-0000000" 
+                                       pattern="^\+58[0-9]{3}-[0-9]{7}$" title="Formato: +58XXX-XXXXXXX" required>
                             </div>
                             <div class="form-group">
                                 <label for="mobileBank">Banco</label>
@@ -975,7 +976,7 @@ $usuario_logeado = isset($_SESSION['usuario']);
                         <li><a href="index2.php"><i class="fas fa-chevron-right"></i> Inicio</a></li>
                         <li><a href="catalogo.php"><i class="fas fa-chevron-right"></i> Productos</a></li>
                         <li><a href="registrar.php"><i class="fas fa-chevron-right"></i> Registrarse</a></li>
-                        <?php if ($_SESSION['usuario']['rol'] === 'administrador'): ?>
+                        <?php if (isset($_SESSION['usuario']) && $_SESSION['usuario']['rol'] === 'administrador'): ?>
                             <li><a href="inventario.php"><i class="fas fa-chevron-right"></i> Inventario</a></li>
                         <?php endif; ?>
                     </ul>
@@ -1061,6 +1062,14 @@ $usuario_logeado = isset($_SESSION['usuario']);
             });
         }
 
+        // Contador del carrito (simulado)
+        const cartCounter = document.getElementById('cartCounter');
+        if (cartCounter) {
+            // Simular productos en el carrito (en una aplicación real esto vendría de tu backend)
+            const randomCount = Math.floor(Math.random() * 5) + 1;
+            cartCounter.textContent = randomCount;
+        }
+
         // Menú hamburguesa
         const menuToggle = document.getElementById('menuToggle');
         const navMenu = document.getElementById('navMenu');
@@ -1084,276 +1093,242 @@ $usuario_logeado = isset($_SESSION['usuario']);
 
         // Funcionalidad del carrito
         document.addEventListener('DOMContentLoaded', function() {
-            loadCartFromStorage();
-            updateCartCounter();
-            
-            // Configurar botón de checkout
-            const proceedToCheckout = document.getElementById('proceedToCheckout');
-            if (proceedToCheckout) {
-                proceedToCheckout.addEventListener('click', showCheckoutForm);
-            }
-            
-            // Configurar botón de completar compra
-            const completePurchase = document.getElementById('completePurchase');
-            if (completePurchase) {
-                completePurchase.addEventListener('click', completePurchaseProcess);
-            }
-        });
-
-        function loadCartFromStorage() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const cartItemsList = document.getElementById('cartItems');
             const totalPriceElement = document.getElementById('totalPrice');
-            
-            cartItemsList.innerHTML = '';
-            
-            if (cart.length === 0) {
-                cartItemsList.innerHTML = '<li>Tu carrito está vacío</li>';
-                totalPriceElement.textContent = 'Total: $0.00';
-                if (document.getElementById('proceedToCheckout')) {
-                    document.getElementById('proceedToCheckout').disabled = true;
+            const proceedToCheckoutBtn = document.getElementById('proceedToCheckout');
+            const checkoutForm = document.getElementById('checkoutForm');
+            const receipt = document.getElementById('receipt');
+            const completePurchaseBtn = document.getElementById('completePurchase');
+            const mobileNumberInput = document.getElementById('mobileNumber');
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Función para formatear el número de celular
+            function formatMobileNumber(input) {
+                let value = input.value.replace(/[^0-9]/g, ''); // Eliminar caracteres no numéricos
+                
+                if (!value.startsWith('58')) {
+                    value = '58' + value; // Asegurar que empiece con 58
                 }
-                return;
-            }
-            
-            let total = 0;
-            
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">$${item.price.toFixed(2)} c/u</div>
-                    </div>
-                    <div class="cart-item-quantity">
-                        <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
-                        <span>${item.quantity}</span>
-                        <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
-                    </div>
-                    <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
-                    <button class="remove-btn" onclick="removeItem(${index})">Eliminar</button>
-                `;
-                
-                cartItemsList.appendChild(li);
-            });
-            
-            totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
-            if (document.getElementById('proceedToCheckout')) {
-                document.getElementById('proceedToCheckout').disabled = false;
-            }
-        }
 
-        function updateQuantity(index, change) {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (index >= 0 && index < cart.length) {
-                const productId = cart[index].id;
-                const newQuantity = cart[index].quantity + change;
-                
-                // Verificar disponibilidad con el servidor
-                fetch(`../php/verificar_disponibilidad.php?id=${productId}&cantidad=${newQuantity}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.disponible) {
-                            cart[index].quantity = newQuantity;
-                            
-                            if (cart[index].quantity <= 0) {
-                                cart.splice(index, 1);
-                            }
-                            
-                            localStorage.setItem('cart', JSON.stringify(cart));
-                            loadCartFromStorage();
-                            updateCartCounter();
-                        } else {
-                            alert('No hay suficientes unidades disponibles de este producto');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('Error al verificar disponibilidad');
-                    });
-            }
-        }
+                if (value.length > 10) { // 58 + 3 (código) + 7 (número)
+                    value = value.substring(0, 10);
+                }
 
-        function removeItem(index) {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (index >= 0 && index < cart.length) {
-                cart.splice(index, 1);
-                localStorage.setItem('cart', JSON.stringify(cart));
-                loadCartFromStorage();
-                updateCartCounter();
+                let formattedValue = '+';
+                if (value.length > 0) {
+                    formattedValue += value.substring(0, 2); // +58
+                }
+                if (value.length > 2) {
+                    formattedValue += value.substring(2, 5); // +58XXX
+                }
+                if (value.length > 5) {
+                    formattedValue += '-' + value.substring(5, 12); // +58XXX-XXXXXXX
+                }
+                input.value = formattedValue;
             }
-        }
-        
-        function updateCartCounter() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            if (document.getElementById('cartCounter')) {
-                document.getElementById('cartCounter').textContent = totalItems;
+
+            // Aplicar el formato al cargar y al escribir
+            if (mobileNumberInput) {
+                mobileNumberInput.addEventListener('input', function() {
+                    formatMobileNumber(this);
+                });
+                // Asegurar el formato inicial si ya hay un valor
+                if (mobileNumberInput.value) {
+                    formatMobileNumber(mobileNumberInput);
+                }
             }
-        }
-        
-        function showCheckoutForm() {
-            document.getElementById('cartContent').style.display = 'none';
-            document.getElementById('checkoutForm').style.display = 'block';
-        }
-        
-        function backToCart() {
-            document.getElementById('checkoutForm').style.display = 'none';
-            document.getElementById('cartContent').style.display = 'block';
-        }
-        
-        function selectPaymentMethod(method) {
-            // Ocultar todos los detalles de pago
-            document.querySelectorAll('.payment-details').forEach(el => {
-                el.classList.remove('active');
-            });
-            
-            // Desmarcar todos los métodos
-            document.querySelectorAll('.payment-method').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Mostrar detalles del método seleccionado
-            document.getElementById(`${method}Details`).classList.add('active');
-            
-            // Marcar como seleccionado
-            event.currentTarget.classList.add('selected');
-        }
-        
-                function completePurchaseProcess() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            if (cart.length === 0) {
-                alert('Tu carrito está vacío');
-                return;
-            }
-            
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            let paymentDetails = {};
-            
-            // Obtener detalles según el método de pago
-            if (paymentMethod === 'tarjeta') {
-                const cardNumber = document.getElementById('cardNumber').value;
-                if (!cardNumber || cardNumber.length < 16) {
-                    alert('Por favor ingrese un número de tarjeta válido');
+
+            // Actualizar el carrito al cargar la página
+            updateCartDisplay();
+
+            proceedToCheckoutBtn.addEventListener('click', function() {
+                if (cart.length === 0) {
+                    alert('Tu carrito está vacío. Agrega productos antes de proceder al pago.');
                     return;
                 }
-                
-                paymentDetails = {
-                    cardNumber: cardNumber,
-                    cardName: document.getElementById('cardName').value,
-                    cardExpiry: document.getElementById('cardExpiry').value,
-                    cardCvv: document.getElementById('cardCvv').value
-                };
-            } else if (paymentMethod === 'pago_movil') {
-                paymentDetails = {
-                    mobileNumber: document.getElementById('mobileNumber').value,
-                    mobileBank: document.getElementById('mobileBank').value,
-                    mobileId: document.getElementById('mobileId').value
-                };
-            }
-            
-            const deliveryAddress = document.getElementById('deliveryAddress').value;
-            
-            // Calcular totales
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.16; // IVA 16%
-            const total = subtotal + tax;
-            
-            // Enviar datos al servidor - ESTA ES LA PARTE MODIFICADA
-            fetch('../php/checkout.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    cart: cart,
-                    paymentMethodType: paymentMethod, // Cambiado de paymentMethod a paymentMethodType
-                    paymentDetails: paymentDetails,
-                    deliveryAddress: deliveryAddress,
-                    subtotal: subtotal,
-                    tax: tax,
-                    total: total
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.text().then(text => { throw new Error(text || 'Error en el servidor'); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    showReceipt(cart, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress);
-                    document.getElementById('receiptOrderId').textContent = data.pedido_id;
-                    document.getElementById('checkoutForm').style.display = 'none';
-                    document.getElementById('receipt').classList.add('active');
-                    localStorage.removeItem('cart');
-                    updateCartCounter();
-                } else {
-                    throw new Error(data.message || 'Error al procesar el pago');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Error al procesar el pedido: ' + error.message);
+                document.getElementById('cartContent').style.display = 'none';
+                checkoutForm.style.display = 'block';
+                selectPaymentMethod('tarjeta'); // Seleccionar tarjeta por defecto
             });
-        }
-        
-        function showReceipt(items, subtotal, tax, total, paymentMethod, paymentDetails, deliveryAddress) {
-            // Formatear fecha
-            const now = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-            document.getElementById('receiptDate').textContent = now.toLocaleDateString('es-ES', options);
-            
-            // Agregar ítems
-            const receiptItems = document.getElementById('receiptItems');
-            receiptItems.innerHTML = '';
-            
-            items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'receipt-item';
-                itemDiv.innerHTML = `
-                    <span>${item.quantity} x ${item.name}</span>
-                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
-                `;
-                receiptItems.appendChild(itemDiv);
+
+            completePurchaseBtn.addEventListener('click', function() {
+                // Aquí iría la lógica para procesar el pago
+                // Por ahora, solo mostramos el recibo
+                displayReceipt();
             });
-            
-            // Mostrar totales
-            document.getElementById('receiptSubtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('receiptTax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('receiptTotal').textContent = `$${total.toFixed(2)}`;
-            
-            // Mostrar método de pago
-            let paymentMethodText = '';
-            switch(paymentMethod) {
-                case 'tarjeta':
-                    paymentMethodText = `Tarjeta terminada en ${paymentDetails.cardNumber.slice(-4)}`;
-                    break;
-                case 'transferencia':
-                    paymentMethodText = 'Transferencia Bancaria';
-                    break;
-                case 'pago_movil':
-                    paymentMethodText = `Pago Móvil (${paymentDetails.mobileBank})`;
-                    break;
-                case 'efectivo':
-                    paymentMethodText = 'Efectivo al recibir';
-                    break;
+
+            function updateCartDisplay() {
+                cartItemsList.innerHTML = '';
+                let total = 0;
+
+                if (cart.length === 0) {
+                    cartItemsList.innerHTML = '<li>Tu carrito está vacío.</li>';
+                    totalPriceElement.textContent = 'Total: $0.00';
+                    proceedToCheckoutBtn.disabled = true;
+                    return;
+                }
+
+                cart.forEach(item => {
+                    const li = document.createElement('li');
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+
+                    li.innerHTML = `
+                        <div class="cart-item-info">
+                            <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px; margin-right: 10px;">
+                            <span>${item.name}</span>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="quantity-btn" data-id="${item.id}" data-change="-1">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="quantity-btn" data-id="${item.id}" data-change="1">+</button>
+                            <button class="remove-btn" data-id="${item.id}">Eliminar</button>
+                        </div>
+                        <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
+                    `;
+                    cartItemsList.appendChild(li);
+                });
+
+                totalPriceElement.textContent = `Total: $${total.toFixed(2)}`;
+                proceedToCheckoutBtn.disabled = false;
+
+                // Add event listeners for quantity buttons
+                document.querySelectorAll('.quantity-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = parseInt(this.dataset.id);
+                        const change = parseInt(this.dataset.change);
+                        updateCartItemQuantity(productId, change);
+                    });
+                });
+
+                // Add event listeners for remove buttons
+                document.querySelectorAll('.remove-btn').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const productId = parseInt(this.dataset.id);
+                        removeCartItem(productId);
+                    });
+                });
+                updateCartCounter();
             }
-            document.getElementById('receiptPaymentMethod').textContent = `Método de pago: ${paymentMethodText}`;
-            
-            // Mostrar dirección si existe
-            if (deliveryAddress) {
-                document.getElementById('receiptDeliveryAddress').textContent = `Dirección: ${deliveryAddress}`;
+
+            function updateCartItemQuantity(productId, change) {
+                const itemIndex = cart.findIndex(item => item.id === productId);
+                if (itemIndex > -1) {
+                    const currentItem = cart[itemIndex];
+                    const newQuantity = currentItem.quantity + change;
+
+                    if (newQuantity <= 0) {
+                        removeCartItem(productId);
+                    } else {
+                        // Simulate checking stock (in a real app, this would be an AJAX call to backend)
+                        // For now, assume infinite stock or handle client-side
+                        cart[itemIndex].quantity = newQuantity;
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        updateCartDisplay();
+                    }
+                }
             }
-        }
-        
-        function newOrder() {
-            window.location.href = 'catalogo.php';
-        }
+
+            function removeCartItem(productId) {
+                cart = cart.filter(item => item.id !== productId);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartDisplay();
+            }
+
+            function updateCartCounter() {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const cartCounterElement = document.getElementById('cartCounter');
+                if (cartCounterElement) {
+                    cartCounterElement.textContent = totalItems;
+                }
+            }
+
+            window.selectPaymentMethod = function(method) {
+                document.querySelectorAll('.payment-method').forEach(pm => {
+                    pm.classList.remove('selected');
+                    pm.querySelector('input[type="radio"]').checked = false;
+                });
+                document.getElementById(method).checked = true;
+                document.getElementById(method).closest('.payment-method').classList.add('selected');
+
+                document.querySelectorAll('.payment-details').forEach(pd => {
+                    pd.classList.remove('active');
+                });
+                document.getElementById(method + 'Details').classList.add('active');
+            };
+
+            window.backToCart = function() {
+                checkoutForm.style.display = 'none';
+                document.getElementById('cartContent').style.display = 'block';
+            };
+
+            function displayReceipt() {
+                checkoutForm.style.display = 'none';
+                receipt.style.display = 'block';
+                receipt.classList.add('active');
+
+                const now = new Date();
+                document.getElementById('receiptDate').textContent = now.toLocaleString();
+                document.getElementById('receiptOrderId').textContent = Math.floor(Math.random() * 1000000); // Random order ID
+
+                const receiptItemsList = document.getElementById('receiptItems');
+                receiptItemsList.innerHTML = '';
+                let subtotal = 0;
+
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    subtotal += itemTotal;
+                    const div = document.createElement('div');
+                    div.classList.add('receipt-item');
+                    div.innerHTML = `
+                        <span>${item.name} (x${item.quantity})</span>
+                        <span>$${itemTotal.toFixed(2)}</span>
+                    `;
+                    receiptItemsList.appendChild(div);
+                });
+
+                const taxRate = 0.16; // 16% IVA
+                const tax = subtotal * taxRate;
+                const total = subtotal + tax;
+
+                document.getElementById('receiptSubtotal').textContent = `$${subtotal.toFixed(2)}`;
+                document.getElementById('receiptTax').textContent = `$${tax.toFixed(2)}`;
+                document.getElementById('receiptTotal').textContent = `$${total.toFixed(2)}`;
+
+                const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                let paymentMethodText = '';
+                switch (selectedPaymentMethod) {
+                    case 'tarjeta':
+                        paymentMethodText = 'Método de Pago: Tarjeta de Crédito/Débito';
+                        break;
+                    case 'transferencia':
+                        paymentMethodText = 'Método de Pago: Transferencia Bancaria';
+                        break;
+                    case 'pago_movil':
+                        paymentMethodText = 'Método de Pago: Pago Móvil';
+                        break;
+                    case 'efectivo':
+                        paymentMethodText = 'Método de Pago: Efectivo';
+                        break;
+                }
+                document.getElementById('receiptPaymentMethod').textContent = paymentMethodText;
+
+                const deliveryAddress = document.getElementById('deliveryAddress').value;
+                document.getElementById('receiptDeliveryAddress').textContent = deliveryAddress ? `Dirección de Envío: ${deliveryAddress}` : 'Sin dirección de envío especificada.';
+
+                // Clear cart after successful purchase
+                cart = [];
+                localStorage.setItem('cart', JSON.stringify(cart));
+                updateCartCounter();
+            }
+
+            window.newOrder = function() {
+                receipt.style.display = 'none';
+                document.getElementById('cartContent').style.display = 'block';
+                updateCartDisplay(); // Refresh cart display to show it's empty
+            };
+        });
     </script>
 </body>
 </html>

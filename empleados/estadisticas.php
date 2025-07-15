@@ -1,7 +1,14 @@
-<?php
-include '../php/verificar_sesion.php';
-verificarAutenticacion('empleado'); // Solo empleados pueden ver las estadísticas
-?>
+    <?php
+    session_start(); // Asegúrate de que la sesión esté iniciada
+
+    if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'administrador') {
+        echo json_encode(['success' => false, 'message' => 'Acceso denegado. Solo administradores pueden ver las estadísticas.']); // <-- Mensaje actualizado
+        exit();
+    }
+
+    // Resto del código para obtener estadísticas
+    ?>
+    
 <!DOCTYPE html>
 <html lang="es">
 

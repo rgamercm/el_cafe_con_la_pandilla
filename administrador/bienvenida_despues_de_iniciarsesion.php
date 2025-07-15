@@ -8,7 +8,7 @@ require_once '../php/verificar_sesion.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido - El Café Con La Pan-dilla</title>
+    <title>Bienvenido - Pana' Cafeteria</title>
     <link rel="shortcut icon" href="../img/cafe.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -572,8 +572,8 @@ require_once '../php/verificar_sesion.php';
                         <a href="inventario.php" class="nav-link">Inventario</a>
                         <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
                     <?php endif; ?>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
+                    <a href="estadisticas.php" class="nav-link">Estadísticas</a>
 
                 </nav>
             </div>

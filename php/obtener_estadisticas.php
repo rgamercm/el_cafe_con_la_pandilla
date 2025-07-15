@@ -4,7 +4,7 @@ include 'conexion_be.php'; // Asegúrate de que la ruta sea correcta
 include 'verificar_sesion.php'; // Asegúrate de que la ruta sea correcta
 
 // Verificar autenticación para empleados
-if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'empleado') {
+if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'administrador') {
     echo json_encode(['success' => false, 'message' => 'Acceso denegado. Solo empleados pueden ver las estadísticas.']);
     exit();
 }

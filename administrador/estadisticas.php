@@ -1,7 +1,14 @@
-<?php
-include '../php/verificar_sesion.php';
-verificarAutenticacion('administrador'); // Solo empleados pueden ver las estadísticas
-?>
+    <?php
+    session_start(); // Asegúrate de que la sesión esté iniciada
+
+    if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['rol'] !== 'administrador') {
+        echo json_encode(['success' => false, 'message' => 'Acceso denegado. Solo administradores pueden ver las estadísticas.']); // <-- Mensaje actualizado
+        exit();
+    }
+
+    // Resto del código para obtener estadísticas
+    ?>
+    
 <!DOCTYPE html>
 <html lang="es">
 
@@ -682,7 +689,6 @@ verificarAutenticacion('administrador'); // Solo empleados pueden ver las estad�
                     <a href="registrar.php" class="nav-link">Registrarse</a>
                     <a href="inventario.php" class="nav-link">Inventario</a>
                     <a href="registro_empleado.php" class="nav-link">Generar Acceso</a>
-                    <a href="diagrama_procesos.php" class="nav-link">Flujo Productos</a>
                     <a href="diagrama_bd.php" class="nav-link">Estructura BD</a>
                     <a href="estadisticas.php" class="nav-link">Estadísticas</a>
                 </nav>
